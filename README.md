@@ -6,7 +6,7 @@ Pi target: `<user>@<pi-ip>` (Pi 5, 16GB, Debian 13 trixie, kernel 6.12.75+rpt-rp
 
 ## TL;DR verdict (May 2026, empirically verified)
 
-**Use Pi 5 CPU + Ollama + `qwen3:8b` (or `qwen3:4b` for faster turnaround) for Claude Code. Don't use Hailo for Claude Code.**
+**Use Pi 5 CPU + Ollama + `qwen3:8b` for Claude Code (best quality at Pi 5 ceiling). Fall back to `qwen3:4b` if 2 tok/s is too slow. Don't use Hailo for Claude Code.**
 
 The original plan was Qwen2.5-Coder-7B. **It does not work for Claude Code** — Ollama's tool-use parser fails to extract structured tool calls from Qwen2.5-Coder's output (model emits bare JSON instead of the `<tool_call>` XML wrapper its template expects). Anthropic `/v1/messages` endpoint returns the tool call inside a `text` block, not a `tool_use` block. Claude Code can't dispatch it.
 
@@ -33,12 +33,12 @@ Claude Code CLI
 |---|---|---|---|---|---|
 | qwen2.5-coder:3b | broken (bare JSON) | 5.89 | 10.25 | 1.9 GB | fast but tool-use unusable for CC |
 | qwen2.5-coder:7b | broken (bare JSON) | 2.37 | 4.45 | 4.7 GB | not viable for CC |
-| **qwen3:4b** | **works** (native) | **4.05** | **7.81** | 2.5 GB | best speed/usability tradeoff |
-| qwen3:8b | works (native) | TBD (~2-3) | TBD | 5 GB | best quality, slow |
+| qwen3:4b | works (native) | 4.05 | 7.81 | 2.5 GB | speed pick, weaker reasoning |
+| **qwen3:8b** | **works** (native) | **1.92** | **4.34** | 5.2 GB | **quality pick, painful speed** |
 
-(qwen3:8b numbers pending — pull in progress.)
+Warm-call benchmarks (Pi 5 16GB, CPU only, no swap). Cold start adds ~3s model load; KEEP_ALIVE=5m keeps it warm.
 
-TTFT on first call includes ~2-3s model load; subsequent calls keep model warm for 5min (`OLLAMA_KEEP_ALIVE=5m`).
+Realistic agent loop cost: a 10-step tool-using turn at 2 tok/s and ~300 tok per assistant message = **~25 min per loop**. For interactive CC use this is brutal — model is best for batch tasks, code review, single-shot generation. For real-time agent iteration, drop to qwen3:4b (5-10 min per loop) or accept the wait.
 
 ## Memory safety (Pi swap is SD card — fatal if thrashed)
 
