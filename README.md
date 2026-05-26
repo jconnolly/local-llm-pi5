@@ -6,11 +6,11 @@ Pi target: `<user>@<pi-ip>` (Pi 5, 16GB, Debian 13 trixie, kernel 6.12.75+rpt-rp
 
 ## TL;DR verdict (May 2026)
 
-**Use Pi 5 CPU + Ollama + Qwen3-Coder-7B for Claude Code. Don't use Hailo for Claude Code — yet.**
+**Use Pi 5 CPU + Ollama + Qwen2.5-Coder-7B for Claude Code. Don't use Hailo for Claude Code — yet.**
 
 Three independent dealbreakers on Hailo-10H for agentic coding workloads:
 
-1. **Model ceiling 2B params.** Largest HEF (Hailo-Executable-Format) compiled for Hailo-10H is ~2B. No Phi-4, no Qwen3-Coder, no Llama-3.3, no Gemma 7B+.
+1. **Model ceiling 2B params.** Largest HEF (Hailo-Executable-Format) compiled for Hailo-10H is ~2B. No Phi-4, no Qwen2.5-Coder, no Llama-3.3, no Gemma 7B+.
 2. **Context window 2048 tokens.** Claude Code's official guidance is ≥64k. With 2k you cannot fit system prompt + tool defs + a single file read.
 3. **`hailo-ollama` 500s on `tools` payload.** Open bug as of Feb 2026 — tool-call requests fail with `TreeToObjectMapper::mapString(): Node is NOT a STRING`. Community fork patches it; not upstream.
 
@@ -24,7 +24,7 @@ Install Hailo anyway for vision / Whisper / chat-toy experiments — it's genuin
 Mac (Claude Code CLI)
   └─ ANTHROPIC_BASE_URL=http://<pi-ip>:11434
         └─ Ollama (arm64) on Pi 5 CPU
-              └─ qwen3-coder:7b (Q4_K_M, 32k ctx, native tool use)
+              └─ qwen2.5-coder:7b (Q4_K_M, 32k ctx, native tool use)
 ```
 
 Realistic perf on Pi 5 16GB:
@@ -44,7 +44,7 @@ Guardrails:
 - Start with 3B model to validate, only pull 7B after 3B is stable
 - Watch `vmstat 2` during first run — if `si/so` columns go non-zero, kill the model immediately
 
-Memory math for Qwen3-Coder-7B Q4_K_M:
+Memory math for Qwen2.5-Coder-7B Q4_K_M:
 - Model weights: ~4.5 GB
 - KV cache @ 8k ctx: ~0.6 GB
 - KV cache @ 32k ctx: ~2.4 GB
@@ -53,16 +53,17 @@ Memory math for Qwen3-Coder-7B Q4_K_M:
 - **Peak resident @ 8k**: ~7 GB → safe with 9 GB headroom
 - **Peak resident @ 32k**: ~9 GB → safe but tighter
 
-## Why Qwen3-Coder-7B specifically
+## Why Qwen2.5-Coder-7B specifically
 
 - Only widely-deployed sub-10B model with **trained-in agentic tool use** (XML + JSON tool call formats both work)
 - Trained on coding + tool-use traces; not a generalist with bolt-on function calling
-- Ollama 2026 ships native Anthropic-API endpoint that maps tool blocks correctly for Qwen3-Coder template
+- Ollama 2026 ships native Anthropic-API endpoint that maps tool blocks correctly for Qwen2.5-Coder template
 - Alternatives considered and rejected:
   - Llama 3.1 8B: tool use OK but coding noticeably worse
   - DeepSeek-Coder-V2-Lite 16B: better code, too big for Pi RAM at usable ctx
   - Phi-4 14B: too big for usable speed on CPU
-  - Qwen2.5-Coder-7B: predecessor, tool use less reliable
+  - Qwen3-Coder-30B-A3B: MoE, too large for Pi 16GB even at Q4
+  - Qwen3 base (non-coder) 8B/14B: weaker on code-specific benchmarks
 
 ## Claude Code wiring
 

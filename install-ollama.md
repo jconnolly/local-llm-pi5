@@ -64,13 +64,13 @@ vmstat 2 5    # si/so should stay 0 — non-zero means swap thrashing, kill mode
 If 3B is stable, pull 7B:
 
 ```bash
-ollama pull qwen3-coder:7b
+ollama pull qwen2.5-coder:7b
 ```
 
 ## 5. Test 7B with bounded context
 
 ```bash
-ollama run qwen3-coder:7b --context-size 8192 "explain quicksort"
+ollama run qwen2.5-coder:7b --context-size 8192 "explain quicksort"
 ```
 
 Watch RAM — expect peak ~7 GB.
@@ -78,14 +78,14 @@ Watch RAM — expect peak ~7 GB.
 ## 6. Benchmark
 
 ```bash
-ollama run --verbose qwen3-coder:7b "<some prompt>"
+ollama run --verbose qwen2.5-coder:7b "<some prompt>"
 # Note: eval rate (tok/s), load duration, prompt eval rate
 ```
 
 Or scripted:
 ```bash
 curl -s http://localhost:11434/api/generate -d '{
-  "model": "qwen3-coder:7b",
+  "model": "qwen2.5-coder:7b",
   "prompt": "write fizzbuzz in rust",
   "stream": false,
   "options": {"num_ctx": 8192}
@@ -107,7 +107,7 @@ Inside Claude Code, the model name will be ignored — Ollama serves whatever's 
 
 To force a specific model, set:
 ```bash
-export ANTHROPIC_MODEL=qwen3-coder:7b
+export ANTHROPIC_MODEL=qwen2.5-coder:7b
 ```
 
 ## Rollback
