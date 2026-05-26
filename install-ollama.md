@@ -41,14 +41,16 @@ sudo systemctl daemon-reload
 sudo systemctl restart ollama
 ```
 
-## 3. Pull starter model (3B — smoke test)
+## 3. Pull starter model (4B — smoke test)
 
 ```bash
-ollama pull qwen2.5-coder:3b
+ollama pull qwen3:4b
 ollama list
 ```
 
-Should be ~2 GB download. Watch RAM during pull (`free -h` from another shell).
+Should be ~2.5 GB download. Watch RAM during pull (`free -h` from another shell).
+
+**Why qwen3, not qwen2.5-coder?** Qwen2.5-Coder emits tool calls as bare JSON which Ollama's parser misses (model doesn't emit the `<tool_call>` XML wrapper its template expects). Result: `text` block returned where Claude Code expects `tool_use`. Qwen3 has native tool-call training and works end-to-end.
 
 ## 4. Smoke test
 
@@ -64,13 +66,13 @@ vmstat 2 5    # si/so should stay 0 — non-zero means swap thrashing, kill mode
 If 3B is stable, pull 7B:
 
 ```bash
-ollama pull qwen2.5-coder:7b
+ollama pull qwen3:8b
 ```
 
 ## 5. Test 7B with bounded context
 
 ```bash
-ollama run qwen2.5-coder:7b --context-size 8192 "explain quicksort"
+ollama run qwen3:8b --context-size 8192 "explain quicksort"
 ```
 
 Watch RAM — expect peak ~7 GB.
@@ -78,14 +80,14 @@ Watch RAM — expect peak ~7 GB.
 ## 6. Benchmark
 
 ```bash
-ollama run --verbose qwen2.5-coder:7b "<some prompt>"
+ollama run --verbose qwen3:8b "<some prompt>"
 # Note: eval rate (tok/s), load duration, prompt eval rate
 ```
 
 Or scripted:
 ```bash
 curl -s http://localhost:11434/api/generate -d '{
-  "model": "qwen2.5-coder:7b",
+  "model": "qwen3:8b",
   "prompt": "write fizzbuzz in rust",
   "stream": false,
   "options": {"num_ctx": 8192}
@@ -107,7 +109,7 @@ Inside Claude Code, the model name will be ignored — Ollama serves whatever's 
 
 To force a specific model, set:
 ```bash
-export ANTHROPIC_MODEL=qwen2.5-coder:7b
+export ANTHROPIC_MODEL=qwen3:8b
 ```
 
 ## Rollback
