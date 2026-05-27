@@ -420,6 +420,106 @@ claude-status
 
 ---
 
+## Act 9 — How much SWE-bench am I actually trading away?
+
+The router decision needs a calibration point. **What's the actual gap between my current LLM and the Maral local?**
+
+### Current setup (this Mac, before Act 8)
+
+- Claude Code points at Anthropic API via OAuth (`~/.claude/.credentials.json`, Claude Max subscription)
+- This session is running on **Claude Opus 4.7** (1M context variant), released April 16 2026
+- Daily-driver model when no override: whatever CC picks; typically Sonnet 4.6 for routine tasks, Opus 4.7 for harder ones, per Claude Max routing
+
+### Target setup (Maral as primary)
+
+- qwen3:14b Q4_K_M dense, Apache 2.0 (Alibaba Qwen)
+- ~9 GB resident, 10 tok/s decode on M2 Air 16GB
+- Estimated **40-50% SWE-bench Verified** (general-purpose model, not coder-specialized, Q4 quantization shaves 5-10 pts off FP16 baseline)
+
+### The headline gap
+
+| Path | SWE-bench Verified | Δ vs Opus 4.7 |
+|---|---|---|
+| Claude Opus 4.7 (current) | **87.6%** | baseline |
+| Maral qwen3:14b (target) | **~45%** est | **-43 pts** |
+
+**Switching local cuts measured coding-issue resolution by roughly half.** That's the price for privacy + zero quota + always-on.
+
+### Where my current backend sits in Claude history
+
+Anthropic shipped Claude Code-class models on a steep curve over 14 months. SWE-bench Verified score, in chronological order:
+
+| Released | Model | SWE-bench Verified | Notes |
+|---|---|---|---|
+| Feb 25 2025 | Claude 3.7 Sonnet | 70.3% (scaffold) / 62.3% (no scaffold) | First with extended thinking |
+| May 22 2025 | Claude Sonnet 4 | 72.7% | First "Claude 4" generation |
+| May 2025 | Claude Opus 4 | ~72.5% | Released alongside Sonnet 4 |
+| Aug 2025 | Claude Opus 4.1 | 74.5% | Incremental |
+| Sep-Oct 2025 | Claude Sonnet 4.5 | 77.2% | "Highest-scoring Sonnet at release" |
+| Dec 2025 | Claude Opus 4.5 | 80.9% | First crossed 80% mark |
+| Dec 2025 | Claude Sonnet 4.6 | 79.6% | Sonnet catches Opus 4.5-class perf |
+| Feb 5 2026 | Claude Opus 4.6 | 80.8% | Tiny regression; image res improvements |
+| Apr 16 2026 | **Claude Opus 4.7** | **87.6%** | **Big jump; current default** |
+| May 22 2026 | Claude Mythos Preview | 93.9% | Preview-only as of write date |
+
+The cloud frontier moved from **70% → 88% in 14 months** — gained 18 pts. The leading open-weights model in the same window:
+
+| Model | Released | SWE-bench Verified | Local-deployable? |
+|---|---|---|---|
+| Llama 3.3 70B | Dec 2024 | ~36% | needs ~40GB |
+| DeepSeek-Coder-V2-Lite 16B | mid-2024 | ~37% | needs ~10GB |
+| Qwen2.5-Coder 32B | Nov 2024 | ~47% | needs ~20GB |
+| Qwen3:14B (general) | mid-2025 | **~45% est (Q4)** | **~9GB — fits Maral** |
+| Qwen3-Coder-30B-A3B | Aug 2025 | 51.6% | needs ~18GB |
+| GLM-4.5 | Sep 2025 | 64.2% | needs ~64GB+ |
+| Qwen3.6-27B | Apr 22 2026 | **77.2%** | needs ~18GB — fits Mac Mini M4 24GB |
+| GLM-5 | early 2026 | 77.8% | needs ~170GB |
+| DeepSeek V4 Pro Max | May 2026 | 80.6% | needs ~340GB |
+
+Putting them on the same axis (latest data, May 27 2026):
+
+```
+SWE-bench Verified score
+100% |                                                  ██ Mythos
+ 95% |
+ 90% |
+ 85% |                                              ██ Opus 4.7  <-- I am here
+ 80% |                                  ██ Opus 4.5 ██ Sonnet 4.6  ██ Opus 4.6
+ 75% |                            ██ Sonnet 4.5                              ██ Qwen3.6-27B (local, $999 hw)
+ 70% |          ██ 3.7 Sonnet  ██ Sonnet 4   ██ Opus 4.1
+ 65% |                                          ██ GLM-4.5 (local, $1.5K hw)
+ 60% |
+ 55% |                                          ██ Qwen3-Coder-30B-A3B (local, $999 hw)
+ 50% |                                                  ██ Qwen2.5-Coder-32B (local, $999 hw)
+ 45% |                                          ██ qwen3:14b dense Q4   <-- Maral
+ 40% |          ██ Llama 3.3 70B   ██ DeepSeek-Coder-V2-Lite
+       Feb'25   May'25   Aug'25   Oct'25   Dec'25   Feb'26   Apr'26   May'26
+```
+
+### Translation
+
+Switching from Opus 4.7 to qwen3:14b on Maral is, roughly, **rolling back ~14 months of Anthropic's coding-agent progress** — landing approximately where Claude 3.5 Sonnet sat in mid-2024, or where open-weight 32B models sit at the time of writing.
+
+That's not nothing — Claude 3.5 Sonnet shipped real production code for many people in 2024. But it is meaningfully *less capable* than current Opus, especially on multi-file refactors, subagent prompting, and subtle code review.
+
+### What would close the gap
+
+| Hardware (~price) | Model | Score | Δ vs Opus 4.7 |
+|---|---|---|---|
+| Maral (free, already owned) | qwen3:14b | ~45% | -43 pts |
+| Mac Mini M4 24GB BTO ($999) | Qwen3.6-27B | **77.2%** | **-10 pts** |
+| GMKtec EVO-X2 64GB ($1,499) | Mistral Medium 3.5 128B | 77.6% | -10 pts |
+| Beelink GTR9 Pro 128GB ($1,985 Amazon) | GLM-5 / Kimi K2.6 Q4 | ~77-80% | -8 pts |
+| Mac Studio M3 Ultra 256GB ($6K+) | DeepSeek V4 Pro Max Q4 | 80.6% | -7 pts |
+
+To get within ~10 pts of cloud, **$999 buys back ~32 pts** (45% → 77%). Beyond that, hardware spend hits sharp diminishing returns: closing the *last* 8-10 pts to cloud parity requires hardware that doesn't exist at consumer prices yet (frontier closed-source models are months ahead of any local-deployable open weight).
+
+### Lesson 13: Local-LLM coding parity tracks ~12-18 months behind the cloud frontier in 2025-2026. Maral on free hardware gets you to ~2024 Q3 frontier. $999 buys mid-2025 frontier. Closing the last 10 points takes $5K+ and isn't always possible.
+
+### Lesson 14: When choosing between cloud and local, denominate in points of SWE-bench, not in dollars or principle. A 43-point gap is a 50% drop in real-world coding-issue resolution. A 10-point gap on $999 hardware is the actual sweet spot.
+
+---
+
 ## Lessons distilled
 
 1. **SSH brute-force on a fail2ban host is broken by design** — connection resets ≠ permission denied, and your "ruled out" list lies. Rate-limit yourself.
