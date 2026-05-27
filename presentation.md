@@ -320,6 +320,106 @@ Caffeinate as a launchd user agent (no sudo):
 
 ---
 
+## Act 8 — Wiring it into daily use without losing the cloud escape hatch
+
+The whole point of this exercise is making the local LLM the *default* without losing access to cloud Claude when local falls short. The user requirement:
+
+> "I want claude cloud only if I specifically invoke it. I don't want it for 'complex task' — I want my ollama to do memories and manage multiple sessions etc."
+
+Tried two designs:
+
+**Design A — auto-fallback on Maral down (rejected).**
+
+```sh
+claude() {
+  if maral_up; then use_local
+  else use_cloud   # silently
+  fi
+}
+```
+
+Rejected because "Maral momentarily unreachable" silently spends cloud quota. The user wants intent to be explicit.
+
+**Design B — strict local, opt-in cloud (shipped).**
+
+```sh
+# ~/.zshrc — bounded marker block
+LOCAL_LLM_HOST="maral.local:11434"
+LOCAL_LLM_MODEL="qwen3:14b"
+LOCAL_LLM_SMALL="qwen3:8b"
+
+claude() {
+  if [[ -n "$ANTHROPIC_FORCE_CLOUD" ]]; then
+    env -u ANTHROPIC_BASE_URL -u ANTHROPIC_AUTH_TOKEN -u ANTHROPIC_API_KEY \
+        -u ANTHROPIC_MODEL -u ANTHROPIC_SMALL_FAST_MODEL command claude "$@"
+    return $?
+  fi
+  if ! curl -sf -m 1 "http://${LOCAL_LLM_HOST}/api/version" >/dev/null 2>&1; then
+    echo "[claude] ERROR: Maral unreachable. Fix Maral, or use 'claude-cloud'." >&2
+    return 1
+  fi
+  ANTHROPIC_BASE_URL="http://${LOCAL_LLM_HOST}" \
+  ANTHROPIC_AUTH_TOKEN="ollama" \
+  ANTHROPIC_API_KEY="" \
+  ANTHROPIC_MODEL="${LOCAL_LLM_MODEL}" \
+  ANTHROPIC_SMALL_FAST_MODEL="${LOCAL_LLM_SMALL}" \
+    command claude "$@"
+}
+claude-cloud() { ANTHROPIC_FORCE_CLOUD=1 claude "$@"; }
+claude-status() { ... }
+```
+
+`claude` → Maral or error. `claude-cloud` → explicit cloud. No silent cloud spend.
+
+### Memories, sessions, skills — backend-agnostic
+
+`~/.claude/` is filesystem storage owned by the Claude Code CLI, not the model:
+
+| Directory | What | Affected by switching backend? |
+|---|---|---|
+| `~/.claude/memory/` | Auto-memory files + index | No — model reads/writes via standard tool calls |
+| `~/.claude/projects/<hash>/messages/*.jsonl` | Per-project session transcripts | No — pure conversation log |
+| `~/.claude/.credentials.json` | OAuth tokens | Only used when env vars NOT set (cloud path) |
+| `~/.claude/sessions/` | Active session state | No |
+| `~/.claude/plugins/` | Installed plugins/skills | No |
+| `~/.claude/settings.json` | CLI settings | No |
+
+So switching `claude` to Maral does **not** lose memories, session history, multi-project work, or skills. The model just answers the same conversation with different reasoning quality. *Quality of new auto-memory writes will be sloppier with qwen3:14b vs Opus 4.7* — that's a downstream cost worth accepting.
+
+### Hot-swapping existing sessions
+
+A running `claude` process locks its backend at launch — env vars don't hot-update. To migrate an in-flight session to Maral:
+
+```
+/exit                 # leave current session (transcript saved to .jsonl)
+exec zsh              # reload shell with new router
+claude --resume       # pick session from list — conversation continues on Maral
+```
+
+The transcript is replayed into qwen3:14b's context, so the resumed session retains every prior turn. Reasoning from this turn forward is qwen3:14b's, not Opus's.
+
+### Loading the router into a current terminal
+
+```
+source ~/.zshrc       # in place
+# or
+exec zsh              # replace shell process (cleaner)
+```
+
+Verify:
+
+```
+claude-status
+# Maral:  UP    (maral.local:11434, model=qwen3:14b)
+# Routing: `claude` -> Maral ONLY | `claude-cloud` -> explicit cloud opt-in
+```
+
+### Lesson 11: Backend env vars are launch-time, not runtime. To migrate a session, exit + `--resume`. The on-disk transcript is the actual state; the model is interchangeable.
+
+### Lesson 12: Make cloud opt-in, not auto-fallback. Silent fallback hides intent and burns quota. An explicit `claude-cloud` command makes the choice visible every time.
+
+---
+
 ## Lessons distilled
 
 1. **SSH brute-force on a fail2ban host is broken by design** — connection resets ≠ permission denied, and your "ruled out" list lies. Rate-limit yourself.
