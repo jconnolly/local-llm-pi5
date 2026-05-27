@@ -1,12 +1,18 @@
-# Local LLM on Raspberry Pi 5 + Hailo-10H AI HAT+ 2
+# Local LLM at home — Pi 5 vs spare MacBook
 
-Goal: run a SOTA local LLM on the Pi, usable as a Claude Code backend over LAN.
+Goal: run a SOTA local LLM, usable as a Claude Code backend over LAN.
 
-Pi target: `<user>@<pi-ip>` (Pi 5, 16GB, Debian 13 trixie, kernel 6.12.75+rpt-rpi-2712, Hailo-10H on PCIe). Replace `<user>` and `<pi-ip>` with your own throughout.
+Two-track investigation:
+1. **Pi 5 16GB + Hailo-10H AI HAT+ 2** — original target. Ceiling: qwen3:8b at ~2 tok/s, ~50% SWE-bench Verified. Hailo unusable for Claude Code (2k ctx, broken tool-use shim, ≤2B HEF ceiling).
+2. **Spare MacBook Air M2 16GB ("Maral")** — pivot. Ceiling: qwen3:14b at ~10 tok/s, ~65-70% SWE-bench Verified. **5x faster, better model, $0 cost.** See [maral-mac-server.md](maral-mac-server.md).
 
 ## TL;DR verdict (May 2026, empirically verified)
 
-**Use Pi 5 CPU + Ollama + `qwen3:8b` for Claude Code (best quality at Pi 5 ceiling). Fall back to `qwen3:4b` if 2 tok/s is too slow. Don't use Hailo for Claude Code.**
+**If you have a spare Apple Silicon Mac on your LAN, use that. Skip the Pi for LLM.**
+
+The Pi 5 path works but is 5x slower at a smaller model. A 2023 MacBook Air M2 16GB beats it at every metric for free. The Pi+Hailo build is still useful for vision / Whisper / chat-toy experimentation — Hailo-10H is genuinely good at compiled HEF models, just not at agentic LLMs.
+
+**If Pi 5 is the only option:** Ollama + `qwen3:8b` is the ceiling. ~2 tok/s. ~50% SWE-bench. Painful but functional. Fall back to `qwen3:4b` if speed matters more than quality.
 
 The original plan was Qwen2.5-Coder-7B. **It does not work for Claude Code** — Ollama's tool-use parser fails to extract structured tool calls from Qwen2.5-Coder's output (model emits bare JSON instead of the `<tool_call>` XML wrapper its template expects). Anthropic `/v1/messages` endpoint returns the tool call inside a `text` block, not a `tool_use` block. Claude Code can't dispatch it.
 
