@@ -520,6 +520,98 @@ To get within ~10 pts of cloud, **$999 buys back ~32 pts** (45% → 77%). Beyond
 
 ---
 
+## Act 10 — Closing the hard breaks with MCP
+
+The 43-point SWE-bench gap is mostly model capability — can't fix without bigger weights. But several other cloud-Claude features have nothing to do with model quality. They're *features Claude Code calls* on top of the model. Those, we can rebuild.
+
+### What is and isn't fixable with infrastructure
+
+| Cloud feature missing | Why missing | Infrastructure fix |
+|---|---|---|
+| Image / PDF understanding | qwen3:14b is text-only | ✅ Run a vision model (qwen2.5vl) and expose it as an MCP tool |
+| Context window > 32k | qwen3:14b ceiling | ✅ Build a RAG MCP server — embed the repo, retrieve top-k chunks per query |
+| Shallow code review | Single-pass LLM analysis | ✅ Compose deterministic linters + type checkers + LLM pass = denser findings |
+| Sloppy memory writes | Smaller model = looser format adherence | ✅ Periodic cron: re-process memory entries with stricter prompt |
+| Anthropic prompt cache | API-level feature | ✅ Local Ollama `OLLAMA_KEEP_ALIVE=24h` covers within-session; cross-machine is harder |
+| Frontier reasoning depth | Model capability | ❌ Can't fix without bigger weights |
+| Multi-file refactor coherence | Model context coherence | ❌ Partial — RAG helps but doesn't replace whole-repo reasoning |
+| Subagent prompt quality | Model can't write tight prompts | ⚠️ Partial — templated prompt MCP could help |
+
+### Architecture
+
+```
+Claude Code (your Mac)
+  ├─ ANTHROPIC_BASE_URL → Maral Ollama (qwen3:14b primary)
+  └─ MCP stdio subprocesses on your Mac:
+       ├─ maral-vision   → calls qwen2.5vl on Maral over HTTP
+       ├─ maral-rag      → calls nomic-embed-text on Maral, stores in sqlite-vec
+       ├─ maral-review   → runs local linters + calls qwen3:14b on Maral
+       └─ maral-memory   → reads ~/.claude/memory/, calls qwen3:14b for rewrites
+```
+
+Each server is ~150-300 lines of Python using `mcp.server.fastmcp.FastMCP`. They run as Claude Code stdio subprocesses. They don't need to live on Maral — they're thin clients to Ollama.
+
+### The four servers
+
+#### `maral-vision`
+- `describe_image(path, prompt?)` — generic vision description
+- `ocr_screenshot(path)` — verbatim text/code extraction from screenshots
+- `extract_pdf(path, page_range?, include_vision?)` — text extraction with optional per-page vision augmentation
+
+Closes: screenshots, mockups, PDFs with figures.
+
+#### `maral-rag`
+- `index_dir(path)` — chunks the directory (512 tokens per chunk, 80 overlap), embeds via nomic-embed-text, stores in sqlite-vec
+- `search(query, root, k)` — returns top-k chunks
+- `read_with_context(file, query)` — file body + related chunks elsewhere in the index
+
+Closes: large-repo work that overflows 32k native context.
+
+#### `maral-review`
+- `review_file(path, language?)` — runs ruff/mypy/eslint/tsc/clippy/staticcheck/shellcheck (whichever fits the language) THEN sends file + linter findings to qwen3:14b with "find what linters missed" prompt
+- `review_diff(diff_text?, cwd?)` — same idea for unified diffs (falls back to `git diff HEAD`)
+
+Closes (partially): shallow single-model code review. Deterministic catches go up sharply; subtle bug catches still weaker than Opus.
+
+#### `maral-memory`
+- `audit_memory()` — reports malformed frontmatter, duplicates, oversized entries, missing **Why:** lines
+- `cleanup_memory(dry_run=True)` — rewrites sloppy entries via qwen3:14b with strict format prompt
+- `consolidate_index()` — rebuilds `MEMORY.md` from frontmatter
+
+Closes: smaller-model auto-memory writes drifting from canonical format over time. Run weekly as cron.
+
+### Install
+
+```bash
+cd ~/tmp-projects/local-llm/mcp-servers
+./install.sh
+# prints 4 `claude mcp add` commands at the end
+```
+
+The install script: bootstraps `uv`, creates `.venv`, installs deps, SSHes to Maral and pulls `qwen2.5vl:7b` (~5GB) + `nomic-embed-text` (~270MB), then prints registration commands.
+
+### What this closes vs leaves open
+
+After install, the **hard breaks** are gone:
+
+- Screenshots / mockups / PDFs → usable (lower fidelity than Claude vision, but real)
+- 32k context limit → effectively unbounded via RAG retrieval (loses cross-cutting reasoning vs huge ctx, but covers 95% of cases)
+- Shallow review → multi-pass beats single-pass
+- Memory drift → self-correcting
+
+The **quality gaps from model size** stay:
+
+- ~45% vs ~88% SWE-bench Verified
+- Multi-file refactor coherence
+- Subagent prompt quality
+- Subtle bug catches
+
+Net effect: from "can't do these tasks at all" to "can do them, just less precisely." That's the maximum useful work the infrastructure layer can do for you. Beyond this, you're paying for bigger weights (Mac Mini M4 24GB → Qwen3.6-27B).
+
+### Lesson 15: Infrastructure can close *categorical* gaps (vision/long-context/multi-pass review) but cannot close *capability* gaps (reasoning depth, coherence). Build the MCP servers for the categorical wins; budget hardware for the capability gap.
+
+---
+
 ## Lessons distilled
 
 1. **SSH brute-force on a fail2ban host is broken by design** — connection resets ≠ permission denied, and your "ruled out" list lies. Rate-limit yourself.
