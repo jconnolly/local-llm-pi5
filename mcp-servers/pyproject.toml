@@ -1,0 +1,23 @@
+[project]
+name = "maral-mcp-servers"
+version = "0.1.0"
+description = "MCP servers that close cloud-Claude feature gaps for a local Ollama backend on Maral"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=1.2.0",
+    "httpx>=0.27.0",
+    "pypdf>=4.0.0",
+    "pillow>=10.0.0",
+    "sqlite-vec>=0.1.6",
+    "watchdog>=3.0.0",
+]
+
+[project.scripts]
+maral-vision = "maral_vision.server:main"
+maral-rag = "maral_rag.server:main"
+maral-review = "maral_review.server:main"
+maral-memory = "maral_memory.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
