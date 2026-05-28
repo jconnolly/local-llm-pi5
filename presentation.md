@@ -844,6 +844,129 @@ Honest decision rule for `claude-cloud` overrides, based on these numbers:
 
 ### Lesson 20: When designing a benchmark, pick a *bad* default diff for code review and you'll get zero findings — not because the stack is broken but because there are no bugs to find. Use a diff with known bugs as the test fixture. (My first run hit a markdown-only diff and reported "0 findings"; correct for that input, useless as a benchmark signal.)
 
+---
+
+## Act 13 — Head-to-head refactor: cloud vs local, judged
+
+The benchmark suite in Act 12 measured speed + tool-use + RAG in isolation. But a SWE-bench-style "given a real task, does the output look good" comparison needed a different setup.
+
+### Task
+
+Both contestants got the same prompt — refactor a real file from this codebase:
+- File: `mcp-servers/maral-vision/server.py` (158 lines, 6 functions, 50% docstring coverage)
+- Goals: extract repeated patterns into helpers, improve naming, add missing docstrings, preserve behavior + public API
+- Output: full refactored file, no markdown fences, no preamble
+
+Contestants:
+- **CLOUD** = Claude Opus 4.7 (this session, OAuth-authenticated cloud)
+- **LOCAL** = Maral qwen3:14b (via /v1/messages), single-shot, temperature 0.2, num_predict 6000
+
+Both saved verbatim to `benchmarks/refactor-judging/{cloud,local}_refactor.py`.
+
+### Method 1: LLM-as-judge, attempted
+
+Built `benchmarks/refactor-judging/judge.py` to use two smaller Maral-hosted models (qwen3:8b + qwen3:4b) as judges. Plan: 2 judges × 5 rounds × 2 orderings (position swap) = 20 votes. Anonymized presentation. Wilson 95% CI, Cohen's κ for inter-judge agreement, position-bias check.
+
+**It didn't work cleanly.**
+
+Three failure modes hit in sequence:
+
+1. **qwen3:4b not pulled on Maral** — 404 on first try. Easy fix (`ollama pull qwen3:4b`).
+2. **`num_predict=600` too low** — qwen3 models put their reasoning in the `thinking` field, exhausted the token budget mid-thought, returned empty `content`. Parser couldn't find `WINNER:` directive. Bumped to 2000.
+3. **Maral hung mid-batch.** First run completed 17 of 20 calls then sat silent for 10+ minutes. Killed it. Second run with incremental JSON writes completed 2 of 10 calls then hung again. Killed.
+
+The pattern: as Maral handled long-context judge prompts (each ~12kb of system + two refactorings), its ollama runner started thrashing — probably KV-cache eviction across two judge models + a still-warm qwen3:14b serving the main router. Symptoms looked exactly like the **Hiccup #3 SD-card stall** from Act 3, except this time the bottleneck was VRAM/unified-memory pressure on the M2 Air's 16 GB.
+
+**Final LLM-judge tally before killing the run:**
+
+| Judge | Round | Ordering | Winner |
+|---|---|---|---|
+| qwen3:8b | 1 | CLOUD_FIRST | **LOCAL** |
+| qwen3:8b | 2 | CLOUD_FIRST | UNPARSED |
+
+n=1 decisive vote. Not statistically meaningful, but worth noting: the one judge call that produced a parseable verdict picked the LOCAL refactor.
+
+### Method 2: Deterministic metrics (the pivot)
+
+Instead of relying on a flaky judge, computed an objective rubric per file:
+
+- SLOC (non-blank, non-comment lines)
+- Function count
+- New helpers extracted (functions in refactor not in input)
+- Docstring coverage
+- Cyclomatic-proxy complexity (branch count per function, mean + max)
+- Public API preserved (every `@mcp.tool()` from input present in refactor with same signature)
+- Loadable (file parses + imports cleanly)
+
+| Metric | INPUT | CLOUD (Opus 4.7) | LOCAL (qwen3:14b) |
+|---|---|---|---|
+| Total lines | 158 | 206 | 184 |
+| SLOC | 123 | 152 | 145 |
+| Function count | 6 | 12 | 8 |
+| Docstring coverage | 50% | 100% | 100% |
+| Cyclomatic-proxy mean | 2.50 | 1.58 | 2.00 |
+| Cyclomatic-proxy max | 11 | 8 | 10 |
+| New helpers extracted | — | 7 | 4 |
+| Loadable | — | ✅ | ✅ |
+| API preserved | — | ✅ | ✅ |
+
+**Cloud new helpers:** `_describe_pdf_page_visually`, `_encode_image_b64`, `_encode_pil_image_b64`, `_parse_page_range`, `_resolve_path`, `_validate_image_file`, `_vision_error`
+
+**Local new helpers:** `_build_error_message`, `_call_ollama_api`, `_encode_image_to_base64`, `_validate_file`
+
+![metrics chart](refactor-judging/metrics_chart.png)
+
+### What the metrics tell you
+
+Both refactors pass the hard checks:
+- ✅ Load + parse without error
+- ✅ Preserve `@mcp.tool()` public surface verbatim
+- ✅ Get docstring coverage from 50% → 100%
+- ✅ Lower mean complexity vs input
+
+Where they differ:
+- **Cloud extracted nearly twice as many helpers** (7 vs 4) and reduced complexity-mean further (1.58 vs 2.00).
+- **Local was more conservative** — added only the most obvious helpers and 26 fewer SLOC than cloud.
+- **Local's naming was actually slightly better in places** — `_call_ollama_api` is more descriptive than cloud's `_vision_call`, even though both refer to the same thing. Cloud's `_encode_pil_image_b64` vs `_encode_image_b64` is a more careful split than local's single `_encode_image_to_base64`.
+
+There is no objective tie-breaker. The single LLM-judge vote we got (LOCAL won) and the deterministic rubric (CLOUD did more aggressive helper extraction) point different directions. Both refactors are *acceptable*. Cloud is *more refactored*. Local is *less changed*.
+
+### Speed cost
+
+- **Cloud refactor**: <30 seconds end-to-end via API (rough — this Opus 4.7 session)
+- **Local refactor**: 290 seconds end-to-end (8.93 tok/s decode × 2586 output tokens including thinking)
+
+10× slower for arguably equivalent quality, on this particular task.
+
+### Threats to validity
+
+- Single file, single task — generalization to other refactors is not implied
+- The smaller models on Maral were both judges *and* the bottleneck preventing a clean judge run — circular dependency
+- The judge prompt asked for free-form scoring then a `WINNER:` directive; qwen3-family thinking traces consumed most of the budget before reaching the directive
+- Position-swap was planned but only 1 round's worth of data survived
+- Cloud (Opus 4.7) judging its own output would have been disqualifying; we couldn't use it as judge for self-evaluation reasons
+
+### Lesson 21: LLM-as-judge against a local stack is bounded by that local stack. If the contestant model and the judge model share the same hardware, you cannot scale judge rounds linearly — Maral falls over before you collect statistical significance. Use cloud judges for cloud-vs-local A/B, or rent ephemeral compute for the judging pass.
+
+### Lesson 22: Deterministic metrics (SLOC, function count, docstring coverage, AST complexity) are unsung. They're fast, objective, reproducible, and they catch the same things a careful reviewer would catch. Use them *first*, before reaching for any LLM judge. If they agree, you don't need the LLM at all.
+
+### Lesson 23: When a planned benchmark falls apart, the *failure mode itself* is a finding. "Local LLM benchmark of local LLM judging local LLM" hitting Maral capacity is not a bug in the methodology — it is the methodology working correctly and revealing a real constraint of the architecture.
+
+### Reproduce
+
+```bash
+cd benchmarks/refactor-judging
+python _local_run.py        # produces local_refactor.py via Maral
+python metrics.py           # deterministic metrics
+python render_charts.py     # metrics_chart.png
+python judge.py             # attempts LLM judges (expect Maral instability)
+python analyze.py           # stats over judge_runs.json (if it survives)
+```
+
+---
+
+## Lessons distilled
+
 ### Full results
 
 ```json

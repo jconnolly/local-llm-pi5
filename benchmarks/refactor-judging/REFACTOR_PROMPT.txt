@@ -1,0 +1,9 @@
+Refactor this Python file. Goals:
+
+1. Extract helper functions where the same pattern repeats (e.g. validating file paths, calling Ollama, building error messages).
+2. Improve naming where ambiguous.
+3. Add docstrings to any function or method missing one.
+4. Preserve behavior exactly — no functional changes, only structural improvements.
+5. Keep the same public API (the @mcp.tool() decorated functions must keep their signatures).
+
+Return ONLY the complete refactored file content. No preamble, no explanation, no markdown fences. Just the .py file body.

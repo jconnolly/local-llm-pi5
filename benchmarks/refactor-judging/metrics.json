@@ -1,0 +1,112 @@
+{
+  "input": {
+    "path": "input.py",
+    "lines_total": 158,
+    "sloc": 123,
+    "func_count": 6,
+    "public_tools": [
+      "describe_image",
+      "extract_pdf",
+      "ocr_screenshot"
+    ],
+    "docstring_coverage": 0.5,
+    "docstrings_with": 3,
+    "docstrings_total": 6,
+    "complexity_mean": 2.5,
+    "complexity_max": 11,
+    "complexity_per_fn": {
+      "_b64_image(path)": 0,
+      "_vision_call(prompt,image_b64s)": 0,
+      "describe_image(path,prompt)": 4,
+      "ocr_screenshot(path)": 0,
+      "extract_pdf(path,page_range,include_vision)": 11,
+      "main()": 0
+    },
+    "loadable": true,
+    "load_msg": "OK"
+  },
+  "cloud": {
+    "path": "cloud_refactor.py",
+    "lines_total": 206,
+    "sloc": 152,
+    "func_count": 12,
+    "public_tools": [
+      "describe_image",
+      "extract_pdf",
+      "ocr_screenshot"
+    ],
+    "docstring_coverage": 1.0,
+    "docstrings_with": 12,
+    "docstrings_total": 12,
+    "complexity_mean": 1.5833333333333333,
+    "complexity_max": 8,
+    "complexity_per_fn": {
+      "_resolve_path(path)": 0,
+      "_validate_image_file(p)": 4,
+      "_encode_image_b64(path)": 0,
+      "_encode_pil_image_b64(image)": 0,
+      "_vision_call(prompt,image_b64s)": 0,
+      "_vision_error(exc)": 0,
+      "_parse_page_range(page_range,total_pages)": 2,
+      "_describe_pdf_page_visually(pdf_path,page_index)": 3,
+      "describe_image(path,prompt)": 2,
+      "ocr_screenshot(path)": 0,
+      "extract_pdf(path,page_range,include_vision)": 8,
+      "main()": 0
+    },
+    "loadable": true,
+    "load_msg": "OK",
+    "new_helpers": [
+      "_describe_pdf_page_visually",
+      "_encode_image_b64",
+      "_encode_pil_image_b64",
+      "_parse_page_range",
+      "_resolve_path",
+      "_validate_image_file",
+      "_vision_error"
+    ],
+    "removed_funcs": [
+      "_b64_image"
+    ],
+    "api_preserved": true
+  },
+  "local": {
+    "path": "local_refactor.py",
+    "lines_total": 184,
+    "sloc": 145,
+    "func_count": 8,
+    "public_tools": [
+      "describe_image",
+      "extract_pdf",
+      "ocr_screenshot"
+    ],
+    "docstring_coverage": 1.0,
+    "docstrings_with": 8,
+    "docstrings_total": 8,
+    "complexity_mean": 2.0,
+    "complexity_max": 10,
+    "complexity_per_fn": {
+      "_encode_image_to_base64(file_path)": 0,
+      "_call_ollama_api(prompt,image_b64s)": 1,
+      "_validate_file(file_path,allowed_extensions,max_size_bytes)": 3,
+      "_build_error_message(error_type,file_path)": 0,
+      "describe_image(path,prompt)": 2,
+      "ocr_screenshot(path)": 0,
+      "extract_pdf(path,page_range,include_vision)": 10,
+      "main()": 0
+    },
+    "loadable": true,
+    "load_msg": "OK",
+    "new_helpers": [
+      "_build_error_message",
+      "_call_ollama_api",
+      "_encode_image_to_base64",
+      "_validate_file"
+    ],
+    "removed_funcs": [
+      "_b64_image",
+      "_vision_call"
+    ],
+    "api_preserved": true
+  }
+}
