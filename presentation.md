@@ -952,6 +952,105 @@ There is no objective tie-breaker. The single LLM-judge vote we got (LOCAL won) 
 
 ### Lesson 23: When a planned benchmark falls apart, the *failure mode itself* is a finding. "Local LLM benchmark of local LLM judging local LLM" hitting Maral capacity is not a bug in the methodology — it is the methodology working correctly and revealing a real constraint of the architecture.
 
+---
+
+## Act 14 — Tuning for speed: MLX vs Ollama
+
+The Act 12 benchmark established the Ollama-on-llama.cpp baseline at **9.45 tok/s decode** for qwen3:14b on Maral. Time to see if Apple's MLX framework beats it on the same hardware.
+
+### Background
+
+Ollama wraps llama.cpp, which has Metal kernels for Apple Silicon but they're generic. MLX is Apple's own LLM framework with kernels written specifically for M-series unified memory + Metal Performance Shaders. Online benchmarks suggest 1.5–2× throughput gains for single-stream inference. Worth testing.
+
+### Hardware constraint surfaced early
+
+The first attempt was: run Ollama AND mlx-lm.server side-by-side on Maral to A/B test the same prompt. Within minutes Maral's 16 GB unified memory was exhausted — both 14B models trying to load = ~14 GB combined + macOS overhead. Memory got pinned in `wired` state and couldn't be reclaimed quickly.
+
+The lesson before the lesson: **on a 16 GB M2 Air, you can only have one 14B model loaded at a time**. Multi-engine A/B testing requires more RAM, or careful tear-down between runs.
+
+### Download odyssey
+
+The MLX-quantized model (`Qwen/Qwen3-14B-MLX-4bit`, 7.85 GB) had to be downloaded fresh. Hugging Face's new Xet protocol kept returning "snapshot complete" with only partial blobs present — file 1 missing, only file 2 on disk. Three attempts via `snapshot_download(force_download=True)` all returned in 0 seconds reporting success while leaving the cache half-empty.
+
+Workaround: bypass `huggingface_hub` entirely and use `curl -L -C - --retry 20`. Plain HTTPS, resumable, no metadata layer. **5.47 MB/s** sustained throughput vs the xet path's ~370 KB/s on the same WiFi. ~30 min for the full download.
+
+### Server bug
+
+After download, `mlx-lm.server` started cleanly, bound to port 8000, but hung indefinitely on the first `/v1/chat/completions` request. The server process sat at 3.5 GB RSS (partial model load) with 0.1% CPU. Sub-process never made progress. Three separate server instances, killed and restarted, all hit the same wall.
+
+Workaround: skip the HTTP server, use `mlx_lm.generate` directly from Python. That works.
+
+### Real numbers (`mlx_lm.generate` direct, qwen3-14b MLX 4-bit)
+
+```
+load: 2.7s
+run 1: wall=19.8s  tokens=200  decode=10.09 tok/s
+run 2: wall=19.1s  tokens=200  decode=10.48 tok/s
+run 3: wall=19.0s  tokens=200  decode=10.53 tok/s
+```
+
+Median: **10.48 tok/s decode.**
+
+### Comparison
+
+| Engine | Decode (tok/s) | Load time | Notes |
+|---|---|---|---|
+| Ollama 0.24.0 (llama.cpp Metal) | 9.45 | ~5–10s | from Act 12 baseline |
+| **MLX 0.30 (direct `generate`)** | **10.48** | **2.7s** | this Act |
+| Δ | **+11%** | **~3× faster cold start** | — |
+
+### What the 11% means
+
+This is a much smaller win than the ML-influencer-typical "MLX is 2× faster on Apple Silicon" claim. Possible reasons:
+
+- Ollama recent versions caught up — its Metal kernels are now near-MLX for inference
+- Quantization scheme equivalence: Q4_K_M (GGUF) and 4-bit MLX use similar group sizes; on this model they're comparable
+- M2 (not M3/M4) — newer chips might widen the MLX gap with better Metal Performance Shaders
+- 16 GB ceiling means MLX can't use its unified-memory tricks fully
+
+The **cold-start** gain (5–10s → 2.7s) is more dramatically useful than the decode tok/s in practice. Snappier feel for first-prompt-after-idle.
+
+### Speculative decoding — not tested
+
+The plan was: add `--draft-model Qwen3-0.6B-MLX-4bit` for speculative decoding. Would give +50–100% more on top of MLX gains. **Couldn't ship today** because:
+
+1. `mlx-lm.server` is the only path that supports `--draft-model` flag; the direct `generate` API doesn't expose it
+2. The server hangs on Maral (see "Server bug" above)
+3. Would need either: a fixed mlx-lm server, or a custom Python loop that does speculative decoding manually
+
+Filed as future work.
+
+### Memory budget reality
+
+`qwen3:14b` MLX 4-bit takes ~8 GB resident. With macOS + other apps: ~14–15 GB used out of 16 GB. **Speculative decoding adds another draft model (~0.5 GB)** which is fine. But running MLX *alongside* Ollama doubles weights → 14+ GB just for models → swap or OOM.
+
+The deployment decision is binary: **pick MLX or Ollama, run one server.** Hot-swapping mid-session requires the launchd plist on Maral to be retargeted + a model unload cycle.
+
+### Updated router
+
+The zsh router still points at Ollama's port 11434 (Anthropic-compatible endpoint). MLX wasn't promoted to default because:
+
+1. `mlx-lm.server` Anthropic-compatible endpoint is hung (see bug)
+2. The 11% decode gain doesn't justify the deployment churn
+3. Ollama has the Anthropic `/v1/messages` shim that Claude Code uses directly; MLX's OpenAI endpoint would need a translator (claude-code-router or similar)
+
+If/when these are fixed, the router rewrite is one-line.
+
+### Verdict
+
+| Question | Answer |
+|---|---|
+| Does MLX outperform Ollama on Apple Silicon? | Yes, marginally on M2 (11% decode), more dramatically on cold start (3× faster) |
+| Is the win worth the deployment complexity *today*? | No — Ollama stays the production backend |
+| What would change the calculus? | Working mlx-lm.server Anthropic endpoint, or speculative decoding via mlx-lm proxy, or M3/M4 with more headroom |
+| What's the real ceiling for Maral as-is? | ~10–11 tok/s on 14B class. Period. Bigger gains need bigger hardware. |
+
+### Lesson 24: Hyped frameworks deliver hyped numbers on *new* hardware. On older chips (M1/M2), the relative gap to mature alternatives often shrinks to single digits. Always measure on YOUR machine before committing to a stack switch.
+
+### Lesson 25: `huggingface_hub`'s xet transport silently fails to a "successful" exit while leaving partial cache. Don't trust `snapshot_download(force_download=True)` to mean "complete on disk." Verify with `du` + manifest cross-check after every pull, or just use `curl -C -` directly.
+
+### Lesson 26: A working library API does not imply a working server built on it. `mlx_lm.generate` worked in 3 seconds; `mlx_lm.server` hung for 10+ minutes on the same load. Two surface areas, two test paths.
+
 ### Reproduce
 
 ```bash

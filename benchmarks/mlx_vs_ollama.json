@@ -1,0 +1,28 @@
+{
+  "ts": "2026-05-27T23:30:00Z",
+  "host": "Maral M2 Air 16GB",
+  "model": "Qwen3-14B 4-bit",
+  "ollama": {
+    "engine": "Ollama 0.24.0 (llama.cpp Metal)",
+    "model": "qwen3:14b (Q4_K_M GGUF)",
+    "decode_tok_s_median": 9.45,
+    "source": "Act 12 benchmark"
+  },
+  "mlx": {
+    "engine": "mlx-lm 0.30+ direct (mlx_lm.generate)",
+    "model": "Qwen/Qwen3-14B-MLX-4bit",
+    "load_s": 2.7,
+    "decode_tok_s_runs": [10.09, 10.48, 10.53],
+    "decode_tok_s_median": 10.48
+  },
+  "comparison": {
+    "speedup_x": 1.11,
+    "speedup_pct": 11.0,
+    "notes": [
+      "MLX wins modestly on this hardware/model combo",
+      "Cold load 2.7s on MLX is the biggest qualitative gain (vs Ollama ~5-10s)",
+      "mlx_lm.server hangs on the first /v1/chat/completions request on this machine — likely a bug in the lazy-load path; direct `generate` works fine",
+      "Speculative decoding not tested due to time; would require pulling a draft model (qwen3:0.6b MLX) plus a working server path"
+    ]
+  }
+}
