@@ -612,6 +612,157 @@ Net effect: from "can't do these tasks at all" to "can do them, just less precis
 
 ---
 
+## Act 11 — Bringing your past with you (settings + cloud export)
+
+A coding agent is only as good as the context it walks into. Two pieces have to come along when you switch backends:
+
+1. **Local Claude Code state** — `CLAUDE.md`, hooks, skills, plugins, memory, settings, shell router — should be available on every machine you run `claude` on, not just the primary Mac.
+2. **Cloud-side history** — the conversations you've had on claude.ai, the auto-memories Anthropic has built up about you — should be queryable from the local LLM.
+
+### Sync Mac → Maral
+
+Maral has Claude Code installed (from Act 7) and now serves as both the Ollama backend AND a usable headless CC client over SSH. For the second role to work, it needs your settings.
+
+Synced via rsync with path rewriting (`/Users/john.connolly` → `/Users/jconnolly`):
+
+```bash
+MARAL=youruser@maral.local
+
+ssh $MARAL 'mkdir -p ~/.claude/hooks ~/.claude/skills ~/.claude/plugins ~/.claude/memory'
+
+# CLAUDE.md + settings.json: pipe through sed for path rewrite
+sed 's|/Users/john.connolly|/Users/jconnolly|g' ~/.claude/CLAUDE.md | ssh $MARAL 'cat > ~/.claude/CLAUDE.md'
+sed 's|/Users/john.connolly|/Users/jconnolly|g' ~/.claude/settings.json | ssh $MARAL 'cat > ~/.claude/settings.json'
+
+# bulk dirs: rsync (Node hook scripts, skills, plugins, existing memories)
+rsync -aq ~/.claude/hooks/   $MARAL:~/.claude/hooks/
+rsync -aq --exclude='.git' ~/.claude/skills/  $MARAL:~/.claude/skills/
+rsync -aq --exclude='.git' --exclude='node_modules' ~/.claude/plugins/ $MARAL:~/.claude/plugins/
+rsync -aq ~/.claude/memory/  $MARAL:~/.claude/memory/
+```
+
+The zsh router also goes on Maral, but pointing at `localhost:11434` (Maral runs Ollama locally) instead of the Mac IP:
+
+```sh
+# Maral's ~/.zshrc fragment (same structure, different LOCAL_LLM_HOST)
+LOCAL_LLM_HOST="localhost:11434"
+LOCAL_LLM_MODEL="qwen3:14b"
+LOCAL_LLM_SMALL="qwen3:8b"
+# ...same claude/claude-cloud/claude-status functions...
+```
+
+What was NOT synced:
+- `~/.claude/.credentials.json` — OAuth tokens; re-login on Maral via `claude /login` if needed
+- `~/.claude/projects/` — per-project session transcripts; large, sync selectively when continuity matters
+- `~/.claude.json` — has cwd-keyed project entries with paths that won't translate; would need surgical merge
+
+### Importing the cloud export
+
+User triggered the claude.ai data export (Settings → Privacy → Export). Email arrived a few hours later, ZIP unpacks to `~/Downloads/data-<uuid>-batch-0000/` containing:
+
+```
+conversations.json        2.2 MB   — 8 conversations, 26 messages each on average
+memories.json             1.8 KB   — Anthropic-side auto-memory profile of the user
+projects/                 20 KB    — claude.ai project metadata
+users.json                160 B    — minimal account info
+```
+
+The `memories.json` was the surprise: a hand-summarized profile of the user from cross-conversation memory. Worth keeping as a local memory file:
+
+```bash
+# ~/.claude/memory/cloud_export_user_profile.md
+---
+name: cloud-export-user-profile
+description: User profile inferred from claude.ai conversations memory (exported May 2026)
+metadata:
+  type: user
+---
+# (content of memories.json[0].conversations_memory, lightly reformatted)
+```
+
+The `conversations.json` was converted to one markdown file per conversation, in a dedicated dir for RAG indexing:
+
+```python
+import json, re, pathlib
+data = json.load(open(DATA + "/conversations.json"))
+out = pathlib.Path("~/local-llm-data/cloud-conversations").expanduser()
+out.mkdir(parents=True, exist_ok=True)
+for conv in data:
+    title = conv.get("name") or conv["uuid"]
+    safe = re.sub(r"[^\w\-]", "_", title)[:80]
+    fn = out / f"{conv['created_at'][:10]}__{safe}.md"
+    lines = [f"# {title}", f"_uuid: {conv['uuid']}_", ""]
+    for m in conv.get("chat_messages", []):
+        lines.append(f"## {m['sender']} ({m['created_at']})\n\n{m['text']}\n")
+    fn.write_text("\n".join(lines))
+```
+
+Then indexed via `maral-rag`:
+
+```python
+from server import index_dir
+await index_dir("~/local-llm-data/cloud-conversations")
+# → Indexed 7 files, 74 chunks
+```
+
+Smoke test query:
+
+```python
+await search("local LLM hardware Mac mini", "~/local-llm-data/cloud-conversations", k=3)
+# → returns 3 chunks from "Secure Claude deployment for enterprise data" conversation,
+#   covering Mac Mini M4 Pro pricing, MCP compatibility, cost analysis
+```
+
+The local model can now pull yesterday's cloud thinking into today's local session.
+
+### Hiccup #4: macOS Python + sqlite extension loading
+
+First `index_dir` attempt failed:
+
+```
+AttributeError: 'sqlite3.Connection' object has no attribute 'enable_load_extension'
+```
+
+macOS bundles a Python built without `--enable-loadable-sqlite-extensions`. `sqlite-vec` needs that flag. Fix was to use `uv` to install a python-build-standalone Python (which compiles sqlite3 with extensions on):
+
+```bash
+uv python install 3.12       # installs cpython-3.12.13-macos-aarch64-none
+rm -rf .venv
+uv venv --python 3.12
+.venv/bin/python -c "import sqlite3; print(hasattr(sqlite3.connect(':memory:'), 'enable_load_extension'))"
+# True
+```
+
+### Hiccup #5: sqlite-vec knn query syntax
+
+After fixing Python, search threw:
+
+```
+sqlite3.OperationalError: A LIMIT or 'k = ?' constraint is required on vec0 knn queries.
+```
+
+sqlite-vec's knn syntax requires `AND k = ?` *in the WHERE clause*, not `LIMIT N` after `ORDER BY`. Wrong:
+
+```sql
+WHERE embedding MATCH ? ORDER BY distance LIMIT ?
+```
+
+Right:
+
+```sql
+WHERE embedding MATCH ? AND k = ? ORDER BY distance
+```
+
+One-line fix in `maral-rag/server.py`.
+
+### Lesson 16: When you switch backends, you're not just switching the model — you're switching the *machine that knows your config, history, and skills*. Plan the sync explicitly. Path rewriting (`/Users/john.connolly` → `/Users/jconnolly`) is the boring step that breaks everything if you skip it.
+
+### Lesson 17: Vendor-exported data has more than just chat logs. Claude's export ships an `conversations_memory` field that's effectively a hand-summarized you, written by their model. Drop it straight into `~/.claude/memory/` as a `type: user` entry — the cleanest one-line gain in the whole pivot.
+
+### Lesson 18: macOS system Python's sqlite isn't built with extension loading. Use `uv python install` to get the python-build-standalone toolchain. This is the single most-frequent footgun for local-AI Python tooling on Macs.
+
+---
+
 ## Lessons distilled
 
 1. **SSH brute-force on a fail2ban host is broken by design** — connection resets ≠ permission denied, and your "ruled out" list lies. Rate-limit yourself.
