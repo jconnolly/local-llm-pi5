@@ -200,9 +200,8 @@ async def search(
         SELECT chunks.file_path, chunks.start_byte, chunks.end_byte, chunks.content, vec_chunks.distance
         FROM vec_chunks
         JOIN chunks ON chunks.rowid = vec_chunks.rowid
-        WHERE vec_chunks.embedding MATCH ?
+        WHERE vec_chunks.embedding MATCH ? AND k = ?
         ORDER BY vec_chunks.distance
-        LIMIT ?
         """,
         (json.dumps(query_emb), k),
     ).fetchall()
@@ -255,9 +254,8 @@ async def read_with_context(
                 SELECT chunks.file_path, chunks.content, vec_chunks.distance
                 FROM vec_chunks
                 JOIN chunks ON chunks.rowid = vec_chunks.rowid
-                WHERE vec_chunks.embedding MATCH ? AND chunks.file_path != ?
+                WHERE vec_chunks.embedding MATCH ? AND k = 3 AND chunks.file_path != ?
                 ORDER BY vec_chunks.distance
-                LIMIT 3
                 """,
                 (json.dumps(query_emb), str(p)),
             ).fetchall()
