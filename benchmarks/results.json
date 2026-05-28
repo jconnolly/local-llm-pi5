@@ -1,0 +1,194 @@
+{
+  "ts": 1779927602.3690372,
+  "suites": {
+    "speed": {
+      "qwen3:8b": {
+        "decode_tok_s_median": 17.045775734842124,
+        "prefill_tok_s_median": 580.7951809532103,
+        "wall_s_median": 11.955596208572388,
+        "runs": [
+          {
+            "decode_tok_s": 17.060319971414042,
+            "prefill_tok_s": 85.33683559607732,
+            "tokens_out": 200,
+            "tokens_in": 35,
+            "wall_s": 14.745280981063843
+          },
+          {
+            "decode_tok_s": 17.045775734842124,
+            "prefill_tok_s": 586.3943902362854,
+            "tokens_out": 200,
+            "tokens_in": 35,
+            "wall_s": 11.930541038513184
+          },
+          {
+            "decode_tok_s": 16.995055582592705,
+            "prefill_tok_s": 580.7951809532103,
+            "tokens_out": 200,
+            "tokens_in": 35,
+            "wall_s": 11.955596208572388
+          }
+        ]
+      },
+      "qwen3:14b": {
+        "decode_tok_s_median": 9.454633460886624,
+        "prefill_tok_s_median": 322.4549560829248,
+        "wall_s_median": 21.747285842895508,
+        "runs": [
+          {
+            "decode_tok_s": 9.454633460886624,
+            "prefill_tok_s": 44.92492481576372,
+            "tokens_out": 200,
+            "tokens_in": 35,
+            "wall_s": 26.318275213241577
+          },
+          {
+            "decode_tok_s": 9.456048121479395,
+            "prefill_tok_s": 327.1932650313965,
+            "tokens_out": 200,
+            "tokens_in": 35,
+            "wall_s": 21.403960943222046
+          },
+          {
+            "decode_tok_s": 9.312782970365676,
+            "prefill_tok_s": 322.4549560829248,
+            "tokens_out": 200,
+            "tokens_in": 35,
+            "wall_s": 21.747285842895508
+          }
+        ]
+      }
+    },
+    "tool_use": {
+      "qwen3:14b": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "total": 3,
+        "tests": [
+          {
+            "name": "single_tool_basic",
+            "expected_tool": "get_weather",
+            "expected_arg": {
+              "city": "Paris"
+            },
+            "called_tool": "get_weather",
+            "called_input": {
+              "city": "Paris"
+            },
+            "correct": true,
+            "wall_s": 13.744354009628296
+          },
+          {
+            "name": "multi_tool_routing",
+            "expected_tool": "read_file",
+            "expected_arg": {
+              "path": "/etc/hostname"
+            },
+            "called_tool": "read_file",
+            "called_input": {
+              "path": "/etc/hostname"
+            },
+            "correct": true,
+            "wall_s": 17.908493041992188
+          },
+          {
+            "name": "negative_no_tool_needed",
+            "expected_tool": null,
+            "expected_arg": null,
+            "called_tool": null,
+            "called_input": {},
+            "correct": true,
+            "wall_s": 11.49240493774414
+          }
+        ]
+      },
+      "qwen3:8b": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "total": 3,
+        "tests": [
+          {
+            "name": "single_tool_basic",
+            "expected_tool": "get_weather",
+            "expected_arg": {
+              "city": "Paris"
+            },
+            "called_tool": "get_weather",
+            "called_input": {
+              "city": "Paris"
+            },
+            "correct": true,
+            "wall_s": 8.862276792526245
+          },
+          {
+            "name": "multi_tool_routing",
+            "expected_tool": "read_file",
+            "expected_arg": {
+              "path": "/etc/hostname"
+            },
+            "called_tool": "read_file",
+            "called_input": {
+              "path": "/etc/hostname"
+            },
+            "correct": true,
+            "wall_s": 13.458337783813477
+          },
+          {
+            "name": "negative_no_tool_needed",
+            "expected_tool": null,
+            "expected_arg": null,
+            "called_tool": null,
+            "called_input": {},
+            "correct": true,
+            "wall_s": 8.574229001998901
+          }
+        ]
+      }
+    },
+    "rag": {
+      "relevance_rate": 1.0,
+      "queries": [
+        {
+          "query": "Mac mini hardware cost analysis",
+          "must_contain": "Mac mini",
+          "hits": 3,
+          "top_distance": 17.952850341796875,
+          "relevant_in_top3": true
+        },
+        {
+          "query": "MCP architecture for local deployment",
+          "must_contain": "MCP",
+          "hits": 3,
+          "top_distance": 17.379762649536133,
+          "relevant_in_top3": true
+        },
+        {
+          "query": "local model running on Raspberry Pi",
+          "must_contain": "Pi",
+          "hits": 3,
+          "top_distance": 18.47500991821289,
+          "relevant_in_top3": true
+        },
+        {
+          "query": "compound interest formula",
+          "must_contain": "compound",
+          "hits": 3,
+          "top_distance": 15.315839767456055,
+          "relevant_in_top3": true
+        }
+      ]
+    },
+    "review": {
+      "diff_size_bytes": 7279,
+      "findings": "",
+      "finding_lines": 0
+    },
+    "agent_loop": {
+      "qwen3:14b": {
+        "wall_s": 39.10286784172058,
+        "final_answer": "The function calculates the factorial of a given integer using recursion.",
+        "correct": true
+      }
+    }
+  }
+}
