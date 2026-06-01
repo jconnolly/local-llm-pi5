@@ -1,0 +1,51 @@
+{
+  "_purpose": "Local-LLM project: aggressively slim Claude Code prompt so qwen3:8b on Maral 16GB can serve requests without 6-minute prefill stalls. Disables built-in skills not needed for this project, slashes skill listing budget, removes built-in git workflow injection. Other projects unaffected.",
+
+  "enabledPlugins": {
+    "caveman@caveman": true
+  },
+
+  "skillOverrides": {
+    "grillme-withbrad": "off",
+    "handoff": "off",
+    "improve-codebase-architecture": "off",
+    "find-skills": "off",
+    "triage": "off",
+    "grill-with-docs": "off",
+    "humanizer": "off",
+    "grill-me": "off",
+    "to-issues": "off",
+    "to-prd": "off",
+    "update-config": "off",
+    "keybindings-help": "off",
+    "fewer-permission-prompts": "off",
+    "claude-api": "off",
+    "run": "off",
+    "init": "off",
+    "review": "off",
+    "security-review": "off",
+    "loop": "off",
+    "schedule": "off",
+    "verify": "off",
+    "code-review": "off",
+    "simplify": "off",
+    "tdd": "off",
+    "prototype": "off",
+    "diagnose": "off",
+    "internal CLI tooling:dsg-aws-cost-report": "off",
+    "internal CLI tooling:dsg-me": "off",
+    "internal CLI tooling:dsg-jira-transition": "off",
+    "internal CLI tooling:dsg-auth-rotate-atlassian-token": "off",
+    "internal CLI tooling:dsg-aws-webhook-tunnel": "off",
+    "internal CLI tooling:dsg-bitbucket-set-deployment-var": "off",
+    "internal CLI tooling:dsg-jira-add-comment": "off",
+    "internal CLI tooling:dsg-aws-cost-watch": "off",
+    "internal CLI tooling:dsg-bitbucket-copy-deployment-vars": "off",
+    "internal CLI tooling:dsg-bitbucket-create-pr": "off",
+    "internal CLI tooling:dsg-bitbucket-tail-pipeline-logs": "off"
+  },
+
+  "includeGitInstructions": false,
+  "skillListingBudgetFraction": 0.005,
+  "maxSkillDescriptionChars": 500
+}

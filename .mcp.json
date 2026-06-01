@@ -1,0 +1,46 @@
+{
+  "mcpServers": {
+    "maral-vision": {
+      "type": "stdio",
+      "command": "/Users/john.connolly/tmp-projects/local-llm/mcp-servers/.venv/bin/python",
+      "args": [
+        "/Users/john.connolly/tmp-projects/local-llm/mcp-servers/maral-vision/server.py"
+      ],
+      "env": {
+        "OLLAMA_HOST": "http://maral.local:11434",
+        "MARAL_VISION_MODEL": "qwen2.5vl:7b"
+      }
+    },
+    "maral-rag": {
+      "type": "stdio",
+      "command": "/Users/john.connolly/tmp-projects/local-llm/mcp-servers/.venv/bin/python",
+      "args": [
+        "/Users/john.connolly/tmp-projects/local-llm/mcp-servers/maral-rag/server.py"
+      ],
+      "env": {
+        "OLLAMA_HOST": "http://maral.local:11434",
+        "MARAL_EMBED_MODEL": "nomic-embed-text"
+      }
+    },
+    "maral-review": {
+      "type": "stdio",
+      "command": "/Users/john.connolly/tmp-projects/local-llm/mcp-servers/.venv/bin/python",
+      "args": [
+        "/Users/john.connolly/tmp-projects/local-llm/mcp-servers/maral-review/server.py"
+      ],
+      "env": {
+        "OLLAMA_HOST": "http://maral.local:11434"
+      }
+    },
+    "maral-memory": {
+      "type": "stdio",
+      "command": "/Users/john.connolly/tmp-projects/local-llm/mcp-servers/.venv/bin/python",
+      "args": [
+        "/Users/john.connolly/tmp-projects/local-llm/mcp-servers/maral-memory/server.py"
+      ],
+      "env": {
+        "OLLAMA_HOST": "http://maral.local:11434"
+      }
+    }
+  }
+}
