@@ -1,0 +1,80 @@
+{
+  "source": "local_solutions.json",
+  "passed": 12,
+  "total": 12,
+  "score": 1.0,
+  "results": [
+    {
+      "id": "is_balanced",
+      "difficulty": "easy",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "two_sum",
+      "difficulty": "easy",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "roman_to_int",
+      "difficulty": "easy",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "merge_intervals",
+      "difficulty": "medium",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "longest_unique",
+      "difficulty": "medium",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "spiral_order",
+      "difficulty": "medium",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "word_break",
+      "difficulty": "hard",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "coin_change",
+      "difficulty": "hard",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "lru_cache",
+      "difficulty": "hard",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "edit_distance",
+      "difficulty": "hard",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "trap_rain",
+      "difficulty": "hard",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "median_two_sorted",
+      "difficulty": "hard",
+      "passed": true,
+      "note": "ok"
+    }
+  ]
+}
