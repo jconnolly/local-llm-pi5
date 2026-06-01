@@ -1128,6 +1128,103 @@ Reproduce: `cd benchmarks && python run.py`. Results land in `benchmarks/results
 
 ---
 
+## Act 15 — Pushing the 16GB ceiling (and finding the floor)
+
+*May 28 2026, the day after.* The deck was written, the router shipped, qwen3:14b at 10.5 tok/s declared the ceiling. Then: "we need to do better."
+
+The premise: try a model with more parameters or a better coder lineage on the same hardware, no new spend. The result, in one line: **16GB unified is not the ceiling for serving an LLM, it's the floor for keeping the machine alive while serving one.**
+
+### Hiccup #11: State drift between presentation and reality
+
+Resuming a stale session, I read the deck and believed two things that turned out to be wrong:
+
+1. "MLX server is the new default." Reality: `mlx-lm.server` was *attempted* in Act 14, hung on the 14B load, and never shipped. The launchd plist for it was never created. zshrc still pointed at Ollama port 11434. The user's intent ("we changed to mlx server") and the deployment state disagreed.
+2. "Ollama is running on Maral." Reality: `com.ollama.serve` plist was on disk with `RunAtLoad=1`, but `launchctl list` showed no loaded service. Someone (the user, presumably, during the MLX experiments) had unloaded it. Nothing was serving when I probed.
+
+Lesson written in real time: before acting on what a previous-session memory or document says is deployed, verify the live service state. The on-disk plist, the launchd registry, and the listening socket are three different sources of truth.
+
+### Hiccup #12: WiFi driver fragility under memory or network pressure
+
+Three independent triggers crashed Maral's WiFi driver in one morning:
+
+| Trigger | What happened |
+|---|---|
+| `mlx_lm.server` loading qwen3:14b (~8 GB) | RSS hit 3.5 GB, server hung, WiFi associated state went `not associated` per `networksetup`, cross-subnet TCP died |
+| `ollama pull deepseek-coder-v2:16b` (8.9 GB download) | DNS resolution failed mid-pull (`no such host` against Cloudflare R2), pull aborted at 23%, en0 went link-local |
+| `ollama` loading `qwen3-coder:30b` (19 GB resident, CPU/GPU split) | 13 GB wired, ~100 MB free, kernel held but WiFi was on the brink for 4+ minutes |
+
+Symptom every time: ICMP and TCP to Maral's LAN IP go dead, but mDNS hostname `maral.local` keeps resolving via Bonjour over awdl0 (Apple Wireless Direct Link — a *separate radio* used for AirDrop and Sidecar). SSH and VNC over the mDNS hostname continued to work the entire time.
+
+This is the workaround: **never hard-code Maral's LAN IP, always use `maral.local`.** Updated `~/.zshrc:183` from `maral.local:11434` to `maral.local:11434`. mDNS survives DHCP renewals, WiFi disassociation, and IP drift.
+
+It is also the failure mode signature: cross-subnet `ping` timeouts plus a still-responsive `ssh youruser@maral.local` means *the WiFi driver wedged, not the machine*. You don't need to walk to it and reboot — kill the LLM process via the mDNS SSH path, wait, and the WiFi stack often recovers on its own.
+
+### Hiccup #13: stale stdio buffering killed 25 minutes of pull progress
+
+First pull of deepseek-coder-v2 was launched as `nohup ollama pull ... > log 2>&1 &` with no foreground stream. SSH check 25 minutes in showed the log ending mid-byte with a DNS error. No prior visibility — the entire run was a black box until it died.
+
+Captured as a permanent rule in `~/.claude/CLAUDE.md` and as a project-scoped feedback memory: **always stream output in near-realtime, never buffer.** Long commands need `Monitor` polling the log, or `tee` + foreground SSH, or `stdbuf -oL` / `python -u` / `grep --line-buffered` in pipes. The pain rule: if a command can run for 30 minutes and segfault at minute 25, you must be able to see what was happening at minute 24.
+
+Switched the second pull (qwen3-coder:30b, 18 GB, ~28 minutes) to a Monitor watcher that emitted every 10% advance. Pulled cleanly with full visibility.
+
+### What "better" actually meant — the candidates
+
+| Model | Status | Why it failed (or worked) |
+|---|---|---|
+| `deepseek-coder-v2:16b` MoE | **dead** | Ollama returns `HTTP 400: registry.ollama.ai/library/deepseek-coder-v2:16b does not support tools`. Model card lacks the `tools` capability tag. Cannot be dispatched by Claude Code. |
+| `qwen3-coder:30b-a3b` (Q4_K_M, 18 GB on disk) | **loads, unusable** | Ollama splits weights **37% CPU / 63% GPU** on a 16GB Air — model exceeds GPU memory. Tool use **passes** (`stop_reason: tool_use`, correct `name`/`input`). Decode rate: **<1 tok/s** (200-token completion timed out at 4 minutes). RAM resident 13 GB wired, ~100 MB free — WiFi crash imminent. Evicted immediately. |
+| `qwen2.5-coder:14b` | known broken | Tool-use parser bug from Act 3 (emits bare JSON, no `<tool_call>` wrapper). Skipped. |
+| `qwen3:14b-q6_K` | **doesn't exist** | Ollama only ships qwen3:14b in `q4_*`, `q8_0`, `fp16`. No middle quant available. Would need custom Modelfile + local quantization from fp16. |
+| `qwen3:14b` Q4_K_M | **still the ceiling** | 10.5 tok/s, full GPU fit, ~9.3 GB. The local-LLM ceiling on this hardware, unchanged. |
+
+### Why the MoE split is a worse failure than OOM
+
+When a dense 32B model is loaded against a 16GB box, you get a clean OOM: the load fails, you know to try something smaller. When a 30B MoE model (`qwen3-coder:30b-a3b` = 30B total / 3B active per token) is loaded against the same box, **Ollama happily splits the weights across CPU and GPU and reports success.** The model loads. The model serves requests. The model passes the tool-use smoke test. Everything looks like it worked.
+
+Then you try real generation and the decode rate is 0.8 tok/s because the CPU portion bottlenecks every token. The mode you wanted (full GPU acceleration) is silently replaced with the mode you didn't (hybrid CPU+GPU). Worse: the 13 GB wired RAM puts the machine in a state where the WiFi driver is one bad page away from crashing.
+
+OOM is loud. The split is quiet. **Quiet failures cost more.**
+
+### Verdict
+
+| Question | Answer |
+|---|---|
+| Can a 30B model run on a 16GB Apple Silicon Mac? | Yes (with CPU/GPU split, mmap from SSD). |
+| Is the result usable for Claude Code? | No. <1 tok/s decode = a single agent loop takes 30+ minutes. |
+| Is the quality gain real? | Probably (+10pt SWE-bench expected from 30B-A3B vs 14B), but unmeasurable in this configuration because the loop times out. |
+| What's the real ceiling on Maral 16GB? | **qwen3:14b Q4_K_M at ~10 tok/s.** Empirically confirmed by trying to exceed it. |
+| What unlocks the next tier? | More unified RAM. Mac Mini M4 24GB BTO ($999) fits 30B-A3B cleanly on GPU. Lesson 14 from Act 9 is now stress-tested, not just argued. |
+
+### Lesson 27: 16GB unified is the floor, not the ceiling, of viable local-LLM hosting. Both running models near the boundary (MLX 14B load) and bulk transfers (`ollama pull` 9 GB) crashed the WiFi driver in the same session. The hardware is functional, not stable, at this size.
+
+### Lesson 28: Ollama's per-model `tools` capability is the gate. A model can pull cleanly, load cleanly, and respond to chat, and still return `HTTP 400: does not support tools` because Ollama's manifest lacks the capability tag. Check this *before* benchmarking quality.
+
+### Lesson 29: MoE on undersized hardware is a worse failure than OOM. The model loads. The model serves. The model passes structural tool-use tests. Then decode is <1 tok/s because Ollama silently split it across CPU and GPU. Don't trust "it loaded" as a signal. Measure warm decode tok/s as the actual gate.
+
+### Lesson 30: Use mDNS hostnames (`maral.local`), never LAN IPs, for any local-LLM endpoint. WiFi can wedge under load and lose the IP, but Bonjour over awdl0 (Apple's peer-to-peer radio) usually survives. The same `~/.zshrc` line keeps working through DHCP renewals, WiFi flaps, and "WiFi is on the brink" episodes.
+
+### Reproduce
+
+```bash
+# All on Maral, all timed
+~/bin/ollama pull deepseek-coder-v2:16b      # ~15 min on 10 MB/s WiFi
+python3 benchmarks/tool_use_smoke.py deepseek-coder-v2:16b
+# FAIL: HTTP 400: ... does not support tools
+
+~/bin/ollama pull qwen3-coder:30b            # ~28 min, 18 GB
+python3 benchmarks/tool_use_smoke.py qwen3-coder:30b
+# PASS tool use, then:
+ollama ps   # SIZE=19GB, PROCESSOR=37%/63% CPU/GPU  <-- the warning sign
+time curl -sf -m 240 http://maral.local:11434/v1/messages \
+  -H "Content-Type: application/json" -H "x-api-key: ollama" \
+  -H "anthropic-version: 2023-06-01" \
+  -d '{"model":"qwen3-coder:30b","max_tokens":200,
+       "messages":[{"role":"user","content":"write reverse_string in python"}]}'
+# 240s timeout. <1 tok/s. Unusable.
+```
+
+---
+
 ## References (live as of May 27 2026)
 
 - [SWE-bench Verified official](https://www.swebench.com/verified.html)
