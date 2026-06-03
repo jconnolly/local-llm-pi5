@@ -1225,6 +1225,158 @@ time curl -sf -m 240 http://maral.local:11434/v1/messages \
 
 ---
 
+## Act 16 — Tuning the floor, and the day local tied the cloud
+
+*May 28 – June 2 2026.* Act 15 declared the 16GB ceiling and walked away. Then the
+question that wouldn't die: **how good can the floor get with pure software, no new
+hardware?** This act is the tuning ladder — and an unexpected result at the end.
+
+### The thinking-tax discovery (the biggest single win)
+
+Every benchmark up to this point was secretly paying a tax. Qwen3 emits a `<think>`
+reasoning trace before every answer. On a coding prompt that needs 80 tokens of code,
+the model would burn **600 tokens of thinking first** — 8× the work, 8× the wait. The
+"so so slow" complaint was never really about decode speed; it was about generating
+hundreds of thinking tokens nobody read.
+
+Three layers to kill it:
+- Ollama native: `{"think": false}` on `/api/chat` → clean output, no trace
+- Anthropic shim: `{"thinking": {"type": "disabled"}}` on `/v1/messages` → honored
+- **Claude Code: `CLAUDE_CODE_DISABLE_THINKING=1`** → wired into all three local routes
+  in `~/.zshrc` (`claude`, `claude-mlx`, `claude-laptop`; NOT `claude-cloud` — Opus
+  thinking is worth paying for)
+
+Effect: a 600-token thinking-then-answer turn became a 77-token answer. **~3× effective
+speedup on real usage**, single highest-impact change of the whole project. It cost one
+env var.
+
+### The rest of the ladder (all $0)
+
+| Tuning | Change | Result |
+|---|---|---|
+| KV cache quant | `OLLAMA_KV_CACHE_TYPE=q8_0` + flash-attn | 16k-token KV cache = 1.2 GiB (vs ~2.4 at f16), 100% GPU |
+| Context window | `OLLAMA_CONTEXT_LENGTH` 4k → 16k | 4× usable context, still fits |
+| Quant sweep | qwen3:8b-q4 vs -q8 vs 14b-q4 | **q4 wins** for routine: 17.7 tok/s, ties on correctness; q8/14b slower, no quality edge on bounded tasks |
+| Prompt slim | skillOverrides + `ENABLE_TOOL_SEARCH=auto:5` | CC system prompt 28k → 9.7k on cold turn |
+
+### Methodology footgun (worth its own line)
+
+The quant sweep returned **0/8 on everything** at first. Not a model failure — the
+`<think>` trace ate the 600-token budget before any code came out, and the test fixture
+for `two_sum` had an *ambiguous* expected answer (`[1,5,3,7]` target 8 has two valid
+pairs). Both bugs were in the *harness*, not the model. Lesson 20 from Act 12, learned
+again: when a benchmark says everything fails, suspect the benchmark first.
+
+### The result that stopped the project cold
+
+Built `benchmarks/minibench/` — 12 HumanEval-style problems (easy → hard: bracket
+matching up through edit-distance, LRU cache, trapping rain, median-of-two-sorted),
+scored by **executing the generated code against hidden tests**. No LLM-as-judge (that
+was the Act 13 failure mode — judging local-with-local hit Maral's capacity). Pure
+deterministic scoring. Same harness runs the local model and the cloud baseline.
+
+| Contestant | Score | Speed |
+|---|---|---|
+| **qwen3:8b tuned (think:false), local** | **12/12 = 100%** | ~8s/problem, 15.7 tok/s |
+| **Opus 4.8, cloud** | **12/12 = 100%** | instant |
+
+**They tied.** On self-contained algorithmic problems, the tuned 8B model on a 2023
+MacBook Air matched the May-2026 frontier cloud model. Every problem, easy to hard.
+
+### What the tie does and doesn't mean
+
+It does **not** mean local caught the cloud. SWE-bench Verified is multi-file repos,
+sprawling context, vague bug reports, existing-code comprehension — the *open-ended* half
+of the capability space, where the 8B's ceiling shows and Opus pulls ahead ~20 points.
+
+What the tie means precisely: **the gap between local and cloud is zero on bounded
+problems and large on open-ended repo work.** HumanEval-shaped tasks — write this
+function, here are the cases — are where small models already saturate. Your daily mix
+decides which number matters. Lots of self-contained scripts/functions → local is
+genuinely enough now, for free. Big cross-file refactors in unfamiliar code → cloud still
+wins.
+
+### Lesson 31: The thinking trace is a silent latency tax on local models. A coding answer that needs 80 tokens can cost 600 if the model thinks first. `CLAUDE_CODE_DISABLE_THINKING=1` (or `think:false`) is the single highest-ROI local-LLM tuning knob — ~3× effective speedup for one env var.
+
+### Lesson 32: Pick the quant empirically, don't inherit the default. Q4_K_M beat Q8 and the 14B for routine coding — faster, same correctness on bounded tasks. The "bigger/higher-precision is better" instinct costs speed you don't need to spend until the task is genuinely hard.
+
+### Lesson 33: Local ties cloud on bounded problems, loses on open-ended ones. Measure your own task mix before paying for either. The parity is real but narrow; the gap is real but only shows where context and cross-file reasoning dominate.
+
+---
+
+## Act 17 — Buying the ceiling (when parity isn't for sale)
+
+*June 3 2026.* The minibench proved tuning closes the bounded-problem gap but not the
+open-ended one. To move the *open-ended* number you need a bigger model, which needs more
+unified memory than 16GB. Time to spend.
+
+### The reckoning: full parity is not purchasable
+
+The hard truth, stated plainly because every "local SOTA" pitch elides it: **Opus-4.8
+parity (~92% SWE-bench) cannot be bought in local hardware at any price.** The best
+open-weight models you can run top out below it:
+
+| Model | Best-case SWE-bench | RAM needed | Gap to Opus |
+|---|---|---|---|
+| qwen3:32b / qwen3-coder:30b-a3b | ~76-77% | 96GB | -15pt |
+| qwen3:235b-a22b Q4 | ~85-86% | 192GB | -6-7pt |
+| DeepSeek-V3 671B Q4 | ~88% | 512GB | -4pt |
+
+Even the biggest model on a 512GB Mac Studio (~$11.5K) lands ~88% — still four points
+short, and slower. The frontier labs are 6-12 months ahead of open weights; RAM doesn't
+close that. **The only thing that gives you Opus quality is Opus.** What money buys is
+*how close* — and the honest answer for most budgets is "the 80% tier plus a cloud escape
+hatch for the hard 20%."
+
+### The hardware ladder (priced)
+
+| Spend | Hardware | Model | SWE-bench |
+|---|---|---|---|
+| $4K | M3 Ultra 96GB | qwen3:32b / 30b-a3b | ~76-77% |
+| $8K | M2 Ultra 192GB (used) | qwen3:235b-a22b Q4 | ~86% |
+| $9.5K | M3 Ultra 256GB | 235b Q4 + headroom | ~87% |
+| $11.5K | M3 Ultra 512GB | DeepSeek-V3 Q4 | ~88% |
+| $200/mo | cloud | Opus 4.8 | 92% (this is parity) |
+
+### The hunt (and the EOL surprise)
+
+Target: M3 Ultra 96GB, ~$4K, ASAP, Long Island. The surprise: **Apple direct showed
+October 13 delivery** — four months out, across all 11 NY/CT stores, pickup included.
+M3 Ultra is being phased out (M5 Studio incoming), so Apple's own stock had evaporated.
+The "quick + Apple Card points" path was dead.
+
+A full due-diligence sweep — B&H, Best Buy, MicroCenter, Adorama, Amazon, Walmart,
+Target, Costco, Newegg, StockX, Back Market, Mercari, CDW, Connection, Insight, Expercom,
+Sweetwater, Apple refurb, Craigslist (NY/Boston/Philly/DC), Facebook Marketplace, eBay —
+found **every traditional channel dry.** eBay was the only live market for a
+just-EOL'd machine. Most "deals" were off-platform classifieds (no buyer protection) or
+auctions with unfixed prices; the scrape data on the cheap ones was inconsistent enough
+that certifying them would have been a false positive.
+
+### The buy
+
+One listing passed verification cleanly — opened twice, all fields consistent: a **sealed
+M3 Ultra 96GB/1TB, Buy It Now, free returns, 99.3% seller, eBay buyer protection.**
+$4,299.99 + $376.25 NY tax = **$4,676.24 all-in.** That's +$300 over Apple's $3,999
+MSRP, but Apple's MSRP wasn't actually available (October). The premium bought *having it
+this week* on a discontinued machine. Bought it.
+
+### What it gets
+
+~76-77% SWE-bench locally (qwen3:32b or qwen3-coder:30b-a3b), 3× Maral's decode speed,
+fits the coder MoE with headroom. **Not parity** — that was never on the table locally.
+The real parity strategy is the **hybrid**: the new box handles the 80% daily grind for
+free, `claude-cloud` handles the hard repo tasks. That combination is effectively
+CC-quality coverage at a fraction of always-cloud cost.
+
+### Lesson 34: Full frontier parity is not a hardware purchase. Open weights trail the closed frontier by 6-12 months; the best local model on the biggest Mac is still ~4pt short of Opus and slower. Buy hardware for the 80%, keep an explicit cloud command for the 20%, and stop chasing a number that isn't for sale.
+
+### Lesson 35: A just-discontinued machine vanishes from every normal channel at once. When Apple EOL'd the M3 Ultra, Apple-direct went to a 4-month backorder and every authorized reseller went dry within days — leaving only the grey market (eBay/classifieds) at a premium. If you want a specific current-gen config, buy it *before* the refresh rumor becomes a refresh.
+
+### Lesson 36: "No false positives" is a discipline, not a vibe. Scraping resale marketplaces surfaces plausible-looking cheap listings whose details fall apart on inspection (off-platform classifieds, climbing auctions, item-ID mismatches). Verifying each one — and refusing to certify the ones whose data is inconsistent — is the difference between a real lead and a $4,600 mistake.
+
+---
+
 ## References (live as of May 27 2026)
 
 - [SWE-bench Verified official](https://www.swebench.com/verified.html)
