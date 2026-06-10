@@ -26,8 +26,12 @@ HERE = Path(__file__).parent
 sys.path.insert(0, str(HERE))
 from problems import PROBLEMS  # noqa: E402
 
-HOST = "http://maral.local:11434/api/chat"
-MODEL = "qwen3:8b"
+# Override via env to point at any box/model, e.g.:
+#   MINIBENCH_HOST=studio.local:11434 MINIBENCH_MODEL=qwen3-coder:30b-a3b-q8_0 \
+#     python harness.py local
+import os as _os
+HOST = f"http://{_os.environ.get('MINIBENCH_HOST', 'maral.local:11434')}/api/chat"
+MODEL = _os.environ.get("MINIBENCH_MODEL", "qwen3:8b")
 
 
 class Timeout(Exception):
@@ -157,12 +161,14 @@ def score_file(path: str) -> dict:
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "local"
     if mode == "local":
-        print("Running local (qwen3:8b on Maral, think:false)...")
+        # Model-specific output files so multiple models don't clobber each other.
+        slug = MODEL.replace(":", "_").replace("/", "_")
+        print(f"Running {MODEL} @ {HOST} (think:false)...")
         out, sols = run_local()
-        (HERE / "local.json").write_text(json.dumps(out, indent=2))
-        (HERE / "local_solutions.json").write_text(json.dumps(sols, indent=2))
-        print(f"\nLOCAL: {out['passed']}/{out['total']} = {out['score']*100:.0f}%  "
-              f"({out['total_wall_s']}s, {out['decode_tps']} tok/s)")
+        (HERE / f"result_{slug}.json").write_text(json.dumps(out, indent=2))
+        (HERE / f"solutions_{slug}.json").write_text(json.dumps(sols, indent=2))
+        print(f"\n{MODEL}: {out['passed']}/{out['total']} = {out['score']*100:.0f}%  "
+              f"({out['total_wall_s']}s, {out['decode_tps']} tok/s)  -> result_{slug}.json")
     elif mode == "score-file":
         out = score_file(sys.argv[2])
         print(f"\nSCORE: {out['passed']}/{out['total']} = {out['score']*100:.0f}%")

@@ -101,4 +101,48 @@ PROBLEMS = [
         "tests": [(([1,3],[2]), 2.0), (([1,2],[3,4]), 2.5),
                   (([],[1]), 1.0), (([1,2,3,4,5,6],[7,8]), 4.5)],
     },
+
+    # --- expert tier: where small models fail and bigger ones earn their keep ---
+    # (expected values verified against reference solutions before adding)
+    {
+        "id": "regex_match", "difficulty": "expert",
+        "prompt": "Write `regex_match(s, p)` implementing regex matching where '.' matches any single char and '*' matches zero or more of the preceding element. The match must cover the ENTIRE string.",
+        "entrypoint": "regex_match",
+        "tests": [(("aa","a"), False), (("aa","a*"), True), (("ab",".*"), True),
+                  (("aab","c*a*b"), True), (("mississippi","mis*is*p*."), False),
+                  (("",""), True), (("a",""), False)],
+    },
+    {
+        "id": "n_queens", "difficulty": "expert",
+        "prompt": "Write `n_queens(n)` returning the number of distinct solutions to the N-Queens puzzle on an n x n board.",
+        "entrypoint": "n_queens",
+        "tests": [((1,), 1), ((4,), 2), ((5,), 10), ((6,), 4), ((8,), 92)],
+    },
+    {
+        "id": "calculate", "difficulty": "expert",
+        "prompt": "Write `calculate(s)` evaluating a string arithmetic expression with +, -, *, / and spaces, honoring operator precedence. Integer division truncates toward zero. No use of eval().",
+        "entrypoint": "calculate",
+        "tests": [(("3+2*2",), 7), ((" 3/2 ",), 1), ((" 3+5 / 2 ",), 5),
+                  (("2*3+4",), 10), (("14-3/2",), 13)],
+    },
+    {
+        "id": "lis_length", "difficulty": "expert",
+        "prompt": "Write `lis_length(nums)` returning the length of the longest STRICTLY increasing subsequence of the list nums.",
+        "entrypoint": "lis_length",
+        "tests": [(([10,9,2,5,3,7,101,18],), 4), (([0,1,0,3,2,3],), 4),
+                  (([7,7,7,7],), 1), (([],), 0), (([1,3,6,7,9,4,10,5,6],), 6)],
+    },
+    {
+        "id": "min_path_sum", "difficulty": "expert",
+        "prompt": "Write `min_path_sum(grid)` returning the minimum path sum from top-left to bottom-right of a 2D grid, moving only right or down.",
+        "entrypoint": "min_path_sum",
+        "tests": [(([[1,3,1],[1,5,1],[4,2,1]],), 7), (([[1,2,3],[4,5,6]],), 12), (([[5]],), 5)],
+    },
+    {
+        "id": "decode_ways", "difficulty": "expert",
+        "prompt": "Write `decode_ways(s)` returning the number of ways to decode a digit string into letters where A=1..Z=26. Leading zeros and invalid groups count as zero ways.",
+        "entrypoint": "decode_ways",
+        "tests": [(("12",), 2), (("226",), 3), (("06",), 0), (("0",), 0),
+                  (("10",), 1), (("11106",), 2)],
+    },
 ]

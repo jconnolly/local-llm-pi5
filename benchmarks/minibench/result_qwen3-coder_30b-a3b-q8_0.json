@@ -1,0 +1,155 @@
+{
+  "model": "qwen3-coder:30b-a3b-q8_0",
+  "engine": "ollama-maral-think-false",
+  "passed": 18,
+  "total": 18,
+  "score": 1.0,
+  "total_wall_s": 43.1,
+  "decode_tps": 68.4,
+  "results": [
+    {
+      "id": "is_balanced",
+      "difficulty": "easy",
+      "passed": true,
+      "note": "ok",
+      "wall": 1.4,
+      "tok": 83
+    },
+    {
+      "id": "two_sum",
+      "difficulty": "easy",
+      "passed": true,
+      "note": "ok",
+      "wall": 1.1,
+      "tok": 55
+    },
+    {
+      "id": "roman_to_int",
+      "difficulty": "easy",
+      "passed": true,
+      "note": "ok",
+      "wall": 2.0,
+      "tok": 134
+    },
+    {
+      "id": "merge_intervals",
+      "difficulty": "medium",
+      "passed": true,
+      "note": "ok",
+      "wall": 2.0,
+      "tok": 142
+    },
+    {
+      "id": "longest_unique",
+      "difficulty": "medium",
+      "passed": true,
+      "note": "ok",
+      "wall": 1.7,
+      "tok": 105
+    },
+    {
+      "id": "spiral_order",
+      "difficulty": "medium",
+      "passed": true,
+      "note": "ok",
+      "wall": 3.3,
+      "tok": 247
+    },
+    {
+      "id": "word_break",
+      "difficulty": "hard",
+      "passed": true,
+      "note": "ok",
+      "wall": 1.5,
+      "tok": 97
+    },
+    {
+      "id": "coin_change",
+      "difficulty": "hard",
+      "passed": true,
+      "note": "ok",
+      "wall": 1.6,
+      "tok": 101
+    },
+    {
+      "id": "lru_cache",
+      "difficulty": "hard",
+      "passed": true,
+      "note": "ok",
+      "wall": 2.5,
+      "tok": 165
+    },
+    {
+      "id": "edit_distance",
+      "difficulty": "hard",
+      "passed": true,
+      "note": "ok",
+      "wall": 2.6,
+      "tok": 185
+    },
+    {
+      "id": "trap_rain",
+      "difficulty": "hard",
+      "passed": true,
+      "note": "ok",
+      "wall": 2.1,
+      "tok": 145
+    },
+    {
+      "id": "median_two_sorted",
+      "difficulty": "hard",
+      "passed": true,
+      "note": "ok",
+      "wall": 3.2,
+      "tok": 216
+    },
+    {
+      "id": "regex_match",
+      "difficulty": "expert",
+      "passed": true,
+      "note": "ok",
+      "wall": 4.6,
+      "tok": 324
+    },
+    {
+      "id": "n_queens",
+      "difficulty": "expert",
+      "passed": true,
+      "note": "ok",
+      "wall": 3.0,
+      "tok": 216
+    },
+    {
+      "id": "calculate",
+      "difficulty": "expert",
+      "passed": true,
+      "note": "ok",
+      "wall": 3.3,
+      "tok": 241
+    },
+    {
+      "id": "lis_length",
+      "difficulty": "expert",
+      "passed": true,
+      "note": "ok",
+      "wall": 1.6,
+      "tok": 95
+    },
+    {
+      "id": "min_path_sum",
+      "difficulty": "expert",
+      "passed": true,
+      "note": "ok",
+      "wall": 3.4,
+      "tok": 244
+    },
+    {
+      "id": "decode_ways",
+      "difficulty": "expert",
+      "passed": true,
+      "note": "ok",
+      "wall": 2.2,
+      "tok": 153
+    }
+  ]
+}

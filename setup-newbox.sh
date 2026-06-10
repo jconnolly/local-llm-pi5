@@ -28,8 +28,11 @@ if [[ ! -x "$BIN/ollama" ]]; then
   cd /tmp
   curl -fL -o Ollama-darwin.zip https://ollama.com/download/Ollama-darwin.zip
   unzip -qo Ollama-darwin.zip -d ollama-extract
-  cp ollama-extract/Ollama.app/Contents/Resources/ollama "$BIN/ollama"
-  chmod +x "$BIN/ollama"
+  # Ollama 0.30+ splits the inference runner (llama-server) + ggml/MLX dylibs out
+  # of the main binary. Copy the WHOLE Resources tree, not just `ollama`, or the
+  # server 500s with "llama-server binary not found" on first inference.
+  cp -R ollama-extract/Ollama.app/Contents/Resources/* "$BIN/"
+  chmod +x "$BIN/ollama" "$BIN/llama-server" 2>/dev/null || true
 fi
 grep -q 'export PATH=$HOME/bin' "$HOME/.zshrc" 2>/dev/null || \
   echo 'export PATH=$HOME/bin:$PATH' >> "$HOME/.zshrc"

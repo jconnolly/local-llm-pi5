@@ -3,6 +3,26 @@
 Running flight-recorder. Updated after each meaningful step. Newest info wins.
 
 ## Now
+- **2026-06-09: M3 ULTRA LIVE + FIRST BENCH = MILESTONE.** qwen3-coder:30b-a3b-q8 on the Studio
+  scored **18/18 = 100%** on the expanded minibench (12 bounded + 6 expert: regex/N-queens/calculator/
+  LIS/min-path/decode) at **68.4 tok/s** — **TIES Opus 4.8 (18/18)** AND aces the expert tier, at 4x
+  Maral's decode speed. The hardware delivered: local now matches cloud on these problems, fast.
+  - **Bootstrap bug found+fixed:** setup-newbox.sh copied only the `ollama` binary; Ollama 0.30+ needs
+    the full Resources/ (llama-server + ggml/MLX dylibs) or it 500s "llama-server not found". Fixed in
+    the committed script (cp -R Resources/*).
+  - **Gotcha:** restarting the ollama launchd agent KILLS in-flight `ollama pull`. Don't restart mid-pull.
+  - qwen3:32b + qwen3:8b re-pulling (~/repull.log; the llama-server-fix restart had killed them).
+  - **Next:** bench 32b + 8b on the Studio when re-pull done; test MLX/MTP speculative decoding
+    (0.30.7 has OLLAMA_MLX_MTP_* flags); `exec zsh` + verify `claude` routes to Studio.
+- **(prior) 2026-06-09: M3 ULTRA ARRIVED + SETUP.** Box on network as
+  `studio.local` (user jconnolly, passwordless SSH set up). Confirmed M3 Ultra/96GB/873GB
+  free. Ran setup-newbox.sh: **Ollama 0.30.7** (has MLX backend) + tuned launchd (KV q8, flash-attn,
+  32k ctx) + caffeinate — all up. Models pulling fresh (~/modelpull.log, ~30MB/s): qwen3-coder:30b-a3b-q8
+  then qwen3:32b then qwen3:8b. Laptop ~/.zshrc router REPOINTED: LOCAL_LLM_HOST=studio.local,
+  LOCAL_LLM_MODEL=qwen3-coder:30b-a3b-q8_0, SMALL=qwen3:8b. (Maral offline during setup; demoted to fallback.)
+  - **Next once models land:** `exec zsh` + `claude-status` (verify Studio READY), smoke-test tool use,
+    re-run benchmarks/minibench/harness.py on the Studio vs the 12/12 qwen3:8b baseline + Opus. Then tune.
+- **(prior) Now**
 - **HARDWARE PURCHASED (2026-06-03):** Bought eBay M3 Ultra 96GB/1TB SEALED, item 398020186804,
   $4,299.99 + $376.25 tax = **$4,676.24 all-in.** Verified sealed, free returns, 99.3% seller,
   eBay buyer protection. (Apple-direct was Oct 13 / 4mo out; this ships ~Jun 9.)
@@ -42,6 +62,11 @@ Running flight-recorder. Updated after each meaningful step. Newest info wins.
   hook (+10-20pt); Act 16 writeup (today's tuning + 12/12 parity result).
 
 ## Recent (newest first)
+- 2026-06-03: Wrote + pushed Acts 16-17 + lessons 31-36 (commit 6b435f5). Act 16 = tuning ladder +
+  the 12/12 minibench TIE vs Opus 4.8. Act 17 = parity-not-purchasable + the hardware hunt/buy.
+  Committed setup-newbox.sh + SESSION_STATE (8b9da92). Disk cleanup: freed ~72GB (Docker 56G +
+  stale Ollama 18G), MacBook now 75% / 108GB free. Pre-pull of qwen3:32b + coder-30b-a3b-q8 still
+  running on Maral (~/prestage.log).
 - 2026-06-03: **VERIFIED BUY FOUND.** Apple-direct M3 Ultra 96GB = Oct 13 (EOL/backordered, all
   11 NY/CT stores). Pivoted to resale, full due-diligence sweep (resellers + marketplaces, no
   false positives). WINNER: eBay itm/398020186804 — $4,299.99, SEALED, M3 Ultra 96GB/1TB (A3389),
