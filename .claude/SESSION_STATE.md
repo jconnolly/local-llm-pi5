@@ -12,8 +12,20 @@ Running flight-recorder. Updated after each meaningful step. Newest info wins.
     the committed script (cp -R Resources/*).
   - **Gotcha:** restarting the ollama launchd agent KILLS in-flight `ollama pull`. Don't restart mid-pull.
   - qwen3:32b + qwen3:8b re-pulling (~/repull.log; the llama-server-fix restart had killed them).
-  - **Next:** bench 32b + 8b on the Studio when re-pull done; test MLX/MTP speculative decoding
-    (0.30.7 has OLLAMA_MLX_MTP_* flags); `exec zsh` + verify `claude` routes to Studio.
+  - **BENCH DONE (full 24, incl 6 brutal LeetCode-hard):** coder-30b-a3b = **24/24 @ 64 tok/s** (ties
+    Opus, aced Dijkstra/calc-parens/LIS-palindrome/max-profit-k/word-ladder/RPN). qwen3:8b=16/18@64.5,
+    qwen3:32b=16/18@20.5 (skip, slow+no edge). FINDING: bench saturated — local coder = cloud on ALL
+    self-contained/algorithmic coding; the local<-cloud gap is purely open-ended multi-file repo work
+    (needs SWE-bench-style harness, not harder algos). **coder-30b-a3b = THE model.** Committed e076f5c.
+  - `claude` verified end-to-end -> Studio. Router labels fixed (Studio not Maral). claude-status READY.
+  - **Spec decoding finding:** Ollama 0.30.7 spec-decode = MLX runner + models w/ native MTP/nextn heads
+    (Qwen3-Next, Qwen3.5-MoE, DeepSeek-V3). GGUF coder on llama.cpp does NOT use it. Pulling
+    qwen3-next:80b-a3b-instruct-q4 (50GB, MTP model) to measure spec-decode tok/s + as a possible
+    bigger-model upgrade (~/nextpull.log, slow ~40min).
+  - **Research (what beefy-Studio people run beyond coding agents):** local fine-tuning (mlx-tune:
+    SFT/DPO/GRPO/vision/OCR), private RAG over docs, fully-local voice agents (OpenClaw+TTS+STT),
+    vision/OCR pipelines, faster serving (vllm-mlx ~113 tok/s on 30B MoE = 1.6x our Ollama 68),
+    LM Studio 0.4 headless "llmster". Top adds for John: vllm-mlx for speed + fine-tune on own codebase.
 - **(prior) 2026-06-09: M3 ULTRA ARRIVED + SETUP.** Box on network as
   `studio.local` (user jconnolly, passwordless SSH set up). Confirmed M3 Ultra/96GB/873GB
   free. Ran setup-newbox.sh: **Ollama 0.30.7** (has MLX backend) + tuned launchd (KV q8, flash-attn,
