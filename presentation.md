@@ -1377,6 +1377,147 @@ CC-quality coverage at a fraction of always-cloud cost.
 
 ---
 
+## Act 18 — The box arrives: standing up the M3 Ultra
+
+*June 9 2026.* The eBay unit landed. Time to turn $4,676 of sealed aluminum into a
+working local-LLM server, replacing Maral (the 16GB Air that carried the project
+this far) as the primary backend.
+
+### Finding it (again)
+
+No surprise by now: the box advertised itself over mDNS as `John's Mac Studio`,
+resolving to `studio.local`. Enabled Remote Login, copied an SSH key,
+confirmed the hardware: **Apple M3 Ultra, 96 GB, 873 GB free.** Exactly the config
+the listing promised.
+
+### The bootstrap, and the bug it hid
+
+`setup-newbox.sh` (written weeks earlier while waiting for the hardware) installed
+Ollama 0.30.7, a tuned launchd agent (KV cache q8, flash-attention, 32k context),
+and a caffeinate keep-awake agent — all clean. Then the first inference 500'd:
+
+```
+error starting llama-server: llama-server binary not found
+```
+
+The bootstrap had copied only the `ollama` binary out of the app bundle. **Ollama
+0.30+ splits the inference runner (`llama-server`) and its ggml/MLX dylibs into
+separate files in `Contents/Resources/`** — the single binary can't serve without
+them. On Maral's older 0.24 the binary was more self-contained; the newer version
+isn't. Fix: copy the whole `Resources/` tree, not just `ollama`. (Folded back into
+the committed script so the next person doesn't hit it.)
+
+A second gotcha, learned the hard way: **restarting the Ollama launchd agent kills
+any in-flight `ollama pull`.** The llama-server fix-and-restart silently aborted two
+model downloads mid-stream; they had to be re-pulled.
+
+### Models
+
+Pulled `qwen3-coder:30b-a3b-q8` (32 GB, the verified-working coder MoE),
+`qwen3:32b`, and `qwen3:8b`. Repointed the laptop's `~/.zshrc` router at
+`studio.local:11434`, kept the hard-won tuning (think:false, tool-search
+auto:5, 120s timeout). Maral demoted to fallback. `claude` end-to-end through the
+new box: working, first try.
+
+### Lesson 37: A bootstrap script written against one tool version rots against the next. Ollama 0.30 restructured its runtime; the script that worked in theory for weeks failed on contact with the real hardware. Test the install path on the actual target, not just the logic.
+
+---
+
+## Act 19 — The verdict: local ties cloud on coding
+
+The whole project pointed at one question: does the right hardware close the gap?
+The minibench answers it.
+
+### The benchmark, expanded
+
+The original 12-problem minibench (Act 16) was the easy half — qwen3:8b already
+maxed it. So it grew: **24 problems**, easy → expert → *brutal* (Dijkstra,
+calculator-with-nested-parens, longest-palindromic-subsequence, max-profit-with-k-
+transactions, word-ladder BFS, RPN evaluation). Every expected value verified
+against a reference solution first — the bad-fixture discipline, applied twice
+before and not skipped here.
+
+### Results (Mac Studio M3 Ultra, 24 problems, deterministic test scoring)
+
+| Model | Score | Speed | Verdict |
+|---|---|---|---|
+| **qwen3-coder:30b-a3b-q8** | **24/24 = 100%** | **64-68 tok/s** | ties Opus, aces every brutal problem |
+| qwen3:8b | 16/18 | 64.5 tok/s | tiny, fast, 89% — the routing model |
+| qwen3:32b (dense) | 16/18 | 20.5 tok/s | slower *and* less accurate — skip |
+| qwen3-next:80b-a3b | (untested, saturates) | 63.8 tok/s | 80B at ~same speed (3B-active MoE) |
+| **Opus 4.8 (cloud)** | **24/24** | — | the reference |
+
+**The coder MoE tied Opus 4.8 on all 24** — including LeetCode-hard problems where
+a local model was expected to drop points. At **68 tok/s**, four times Maral's decode
+speed, the payoff of the M3 Ultra's ~800 GB/s memory bandwidth.
+
+### What the tie means, precisely
+
+Not "local caught the cloud." The bench **saturated** — it can no longer separate the
+coder from Opus, because **local already owns the entire space it measures: self-
+contained, algorithmic coding.** The remaining cloud advantage is exclusively in
+**open-ended, multi-file, sprawling-context repo work** (SWE-bench-style), which a
+problem-set of isolated functions cannot capture. The gap is real but it lives on a
+different axis than the one most local-LLM benchmarks test.
+
+### Bonus findings
+
+- **qwen3:32b is pointless here** — dense means all 32B parameters are active per
+  token, so it ran 3× slower than the MoE coder, with *lower* accuracy on code. MoE
+  wins outright.
+- **qwen3-next:80b runs at 63.8 tok/s** — an 80B model nearly as fast as the 30B,
+  because both activate only ~3B per token. Free quality headroom for the hard
+  open-ended work, same speed.
+- **Speculative decoding: a dead end via Ollama's GGUF path.** Ollama 0.30.7's MTP
+  works only on the MLX runner with MLX-format models; `ollama pull` gives GGUF,
+  which runs on llama.cpp with no MTP. Not worth chasing at 64-68 tok/s already.
+- **One box = a full local AI server.** With `OLLAMA_MAX_LOADED_MODELS=3`, the coder
+  (32 GB) + a vision model (qwen2.5vl, 6 GB) + an embedding model (nomic-embed) sit
+  resident *simultaneously* — coding agent, OCR/vision, and RAG embeddings all hot,
+  ~38 GB used, ~50 GB free. (Caveat: `ollama ps` renders empty in 0.30.7 — a display
+  bug; confirm with `ps aux | grep llama-server`.)
+
+### Lesson 38: Memory bandwidth, not parameter count, sets the speed ceiling. The M3 Ultra's ~800 GB/s gave 68 tok/s where Maral's ~100 GB/s gave 16. The same model, 4× faster, entirely because of the bus. When buying for inference, bandwidth is the spec that matters most.
+
+### Lesson 39: MoE beats dense on a memory-bound box. qwen3-coder:30b-a3b (3B active) ran 3× faster than dense qwen3:32b *and* scored higher on code. On Apple Silicon, prefer mixture-of-experts — you pay RAM for the full weight set but only the active experts hit the bandwidth bottleneck.
+
+### Lesson 40: Build the benchmark that can fail your champion. The 12-problem set said "tied." Only the expanded brutal tier could have exposed a gap — and the fact that it didn't is the actual finding. A bench your best model can't lose on has stopped measuring; expand it until it can, or admit it's saturated.
+
+---
+
+## Epilogue — what "local LLM at home" actually means, mid-2026
+
+The trip, end to end: a Raspberry Pi 5 with a 40-TOPS NPU (dead end), a spare 16 GB
+MacBook Air (carried the whole investigation, taught every lesson), a wall of tuning
+(`think:false` was the single best knob), the reckoning that **frontier parity isn't
+purchasable locally at any price**, and finally a $4,676 used M3 Ultra that **ties
+Opus 4.8 on every kind of self-contained coding problem at 68 tok/s, for $0/month
+after the buy.**
+
+The honest summary, for anyone considering the same trip:
+
+- **For self-contained coding** — functions, scripts, algorithms, single-file work —
+  a $4-5K Mac Studio running qwen3-coder:30b is **genuinely at parity with frontier
+  cloud**, fast, private, free to run. This covers a large fraction of daily work.
+- **For open-ended, multi-file repo work** — vague bug reports across sprawling
+  codebases — cloud still wins by the margin everyone quotes, and no amount of local
+  hardware closes it (open weights trail the closed frontier 6-12 months).
+- **The right architecture is hybrid, not either/or:** local for the 80%, an explicit
+  `claude-cloud` for the hard 20%. Denominate the choice in your actual task mix, not
+  in dollars or principle.
+- **The hardware spec that matters is memory bandwidth.** MoE models. ~$4-5K and one
+  Mac Studio is the single-developer sweet spot; below ~64 GB you can't run the model
+  that ties cloud, and above ~96 GB is overkill for one person.
+
+The Pi still makes a fine vision/Whisper box. The Air is a fine fallback. And the
+single most valuable artifact of the entire project is not the hardware — it's the
+**24-problem deterministic benchmark that let "local vs cloud" be answered with a
+number instead of a vibe.**
+
+### Lesson 41: "Local SOTA at home" is a real thing in 2026 — narrowly. On bounded coding, a mid-five-figures Mac genuinely matches the frontier. On open-ended engineering, it does not, and no honest setup pretends otherwise. The win is real; the asterisk is load-bearing.
+
+---
+
 ## References (live as of May 27 2026)
 
 - [SWE-bench Verified official](https://www.swebench.com/verified.html)
