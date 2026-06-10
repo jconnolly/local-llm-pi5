@@ -145,4 +145,51 @@ PROBLEMS = [
         "tests": [(("12",), 2), (("226",), 3), (("06",), 0), (("0",), 0),
                   (("10",), 1), (("11106",), 2)],
     },
+
+    # --- brutal tier: differentiates a good model from a great one (saturated
+    #     bench needed these). Expected values verified vs reference solutions. ---
+    {
+        "id": "dijkstra", "difficulty": "brutal",
+        "prompt": "Write `dijkstra(graph, start, end)` returning the shortest path distance from start to end. graph is a dict mapping node -> list of (neighbor, weight) tuples. Return -1 if end is unreachable.",
+        "entrypoint": "dijkstra",
+        "tests": [(({'a':[('b',1),('c',4)],'b':[('c',2),('d',5)],'c':[('d',1)],'d':[]},'a','d'), 4),
+                  (({'a':[('b',1),('c',4)],'b':[('c',2),('d',5)],'c':[('d',1)],'d':[]},'a','c'), 3),
+                  (({'a':[('b',1),('c',4)],'b':[('c',2),('d',5)],'c':[('d',1)],'d':[]},'a','a'), 0),
+                  (({'x':[]},'x','y'), -1)],
+    },
+    {
+        "id": "calc_parens", "difficulty": "brutal",
+        "prompt": "Write `calc_parens(s)` evaluating an arithmetic expression string with +, -, *, /, parentheses, and spaces, honoring precedence and nesting. Integer division truncates toward zero. No eval().",
+        "entrypoint": "calc_parens",
+        "tests": [(("(1+(4+5+2)-3)+(6+8)",), 23), (("2*(5+5*2)/3+(6/2+8)",), 21),
+                  (("(2+6*3+5-(3*14/7+2)*5)+3",), -12), (("1+1",), 2)],
+    },
+    {
+        "id": "longest_palindrome_subseq", "difficulty": "brutal",
+        "prompt": "Write `longest_palindrome_subseq(s)` returning the length of the longest palindromic SUBSEQUENCE of s.",
+        "entrypoint": "longest_palindrome_subseq",
+        "tests": [(("bbbab",), 4), (("cbbd",), 2), (("a",), 1), (("",), 0), (("agbdba",), 5)],
+    },
+    {
+        "id": "max_profit_k", "difficulty": "brutal",
+        "prompt": "Write `max_profit_k(k, prices)` returning the max profit from at most k buy-sell transactions over the price list (must sell before buying again).",
+        "entrypoint": "max_profit_k",
+        "tests": [((2,[2,4,1]), 2), ((2,[3,2,6,5,0,3]), 7), ((1,[1,2,3,4,5]), 4),
+                  ((0,[1,2,3]), 0), ((2,[1,2,4,2,5,7,2,4,9,0]), 13)],
+    },
+    {
+        "id": "word_ladder", "difficulty": "brutal",
+        "prompt": "Write `word_ladder(begin, end, words)` returning the number of words in the shortest transformation sequence from begin to end (changing one letter at a time, each intermediate in the words list), including begin and end. Return 0 if impossible.",
+        "entrypoint": "word_ladder",
+        "tests": [(("hit","cog",["hot","dot","dog","lot","log","cog"]), 5),
+                  (("hit","cog",["hot","dot","dog","lot","log"]), 0),
+                  (("a","c",["a","b","c"]), 2)],
+    },
+    {
+        "id": "eval_rpn", "difficulty": "brutal",
+        "prompt": "Write `eval_rpn(tokens)` evaluating a list of Reverse Polish Notation tokens (integers and the operators + - * /). Division truncates toward zero.",
+        "entrypoint": "eval_rpn",
+        "tests": [((["2","1","+","3","*"],), 9), ((["4","13","5","/","+"],), 6),
+                  ((["10","6","9","3","+","-11","*","/","*","17","+","5","+"],), 22)],
+    },
 ]

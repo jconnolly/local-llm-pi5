@@ -1,203 +1,155 @@
 {
-  "model": "qwen3-coder:30b-a3b-q8_0",
+  "model": "qwen3:32b",
   "engine": "ollama-maral-think-false",
-  "passed": 24,
-  "total": 24,
-  "score": 1.0,
-  "total_wall_s": 64.1,
-  "decode_tps": 64.2,
+  "passed": 16,
+  "total": 18,
+  "score": 0.889,
+  "total_wall_s": 133.4,
+  "decode_tps": 20.5,
   "results": [
     {
       "id": "is_balanced",
       "difficulty": "easy",
       "passed": true,
       "note": "ok",
-      "wall": 4.0,
-      "tok": 83
+      "wall": 7.5,
+      "tok": 78
     },
     {
       "id": "two_sum",
       "difficulty": "easy",
       "passed": true,
       "note": "ok",
-      "wall": 1.1,
-      "tok": 63
+      "wall": 3.2,
+      "tok": 66
     },
     {
       "id": "roman_to_int",
       "difficulty": "easy",
       "passed": true,
       "note": "ok",
-      "wall": 2.0,
-      "tok": 134
+      "wall": 5.6,
+      "tok": 133
     },
     {
       "id": "merge_intervals",
       "difficulty": "medium",
       "passed": true,
       "note": "ok",
-      "wall": 2.1,
-      "tok": 142
+      "wall": 4.8,
+      "tok": 113
     },
     {
       "id": "longest_unique",
       "difficulty": "medium",
       "passed": true,
       "note": "ok",
-      "wall": 1.6,
-      "tok": 105
+      "wall": 3.9,
+      "tok": 90
     },
     {
       "id": "spiral_order",
       "difficulty": "medium",
       "passed": true,
       "note": "ok",
-      "wall": 3.6,
-      "tok": 247
+      "wall": 9.3,
+      "tok": 229
     },
     {
       "id": "word_break",
       "difficulty": "hard",
       "passed": true,
       "note": "ok",
-      "wall": 1.7,
-      "tok": 97
+      "wall": 4.3,
+      "tok": 103
     },
     {
       "id": "coin_change",
       "difficulty": "hard",
       "passed": true,
       "note": "ok",
-      "wall": 1.7,
-      "tok": 101
+      "wall": 4.9,
+      "tok": 119
     },
     {
       "id": "lru_cache",
       "difficulty": "hard",
       "passed": true,
       "note": "ok",
-      "wall": 2.5,
-      "tok": 165
+      "wall": 6.0,
+      "tok": 143
     },
     {
       "id": "edit_distance",
       "difficulty": "hard",
       "passed": true,
       "note": "ok",
-      "wall": 3.1,
-      "tok": 211
+      "wall": 8.3,
+      "tok": 206
     },
     {
       "id": "trap_rain",
       "difficulty": "hard",
       "passed": true,
       "note": "ok",
-      "wall": 2.2,
-      "tok": 145
+      "wall": 6.7,
+      "tok": 162
     },
     {
       "id": "median_two_sorted",
       "difficulty": "hard",
-      "passed": true,
-      "note": "ok",
-      "wall": 2.8,
-      "tok": 195
+      "passed": false,
+      "note": "([1, 3], [2]) -> 3 != 2.0",
+      "wall": 10.8,
+      "tok": 270
     },
     {
       "id": "regex_match",
       "difficulty": "expert",
       "passed": true,
       "note": "ok",
-      "wall": 4.1,
-      "tok": 301
+      "wall": 24.1,
+      "tok": 191
     },
     {
       "id": "n_queens",
       "difficulty": "expert",
       "passed": true,
       "note": "ok",
-      "wall": 2.9,
-      "tok": 188
+      "wall": 6.1,
+      "tok": 150
     },
     {
       "id": "calculate",
       "difficulty": "expert",
-      "passed": true,
-      "note": "ok",
-      "wall": 3.5,
-      "tok": 242
+      "passed": false,
+      "note": "('3+2*2',) -> 5 != 7",
+      "wall": 12.0,
+      "tok": 302
     },
     {
       "id": "lis_length",
       "difficulty": "expert",
       "passed": true,
       "note": "ok",
-      "wall": 1.5,
-      "tok": 95
+      "wall": 3.6,
+      "tok": 82
     },
     {
       "id": "min_path_sum",
       "difficulty": "expert",
       "passed": true,
       "note": "ok",
-      "wall": 3.4,
-      "tok": 239
+      "wall": 5.8,
+      "tok": 139
     },
     {
       "id": "decode_ways",
       "difficulty": "expert",
       "passed": true,
       "note": "ok",
-      "wall": 2.2,
-      "tok": 153
-    },
-    {
-      "id": "dijkstra",
-      "difficulty": "brutal",
-      "passed": true,
-      "note": "ok",
-      "wall": 2.2,
-      "tok": 149
-    },
-    {
-      "id": "calc_parens",
-      "difficulty": "brutal",
-      "passed": true,
-      "note": "ok",
-      "wall": 3.5,
-      "tok": 245
-    },
-    {
-      "id": "longest_palindrome_subseq",
-      "difficulty": "brutal",
-      "passed": true,
-      "note": "ok",
-      "wall": 4.2,
-      "tok": 289
-    },
-    {
-      "id": "max_profit_k",
-      "difficulty": "brutal",
-      "passed": true,
-      "note": "ok",
-      "wall": 3.6,
-      "tok": 237
-    },
-    {
-      "id": "word_ladder",
-      "difficulty": "brutal",
-      "passed": true,
-      "note": "ok",
-      "wall": 2.7,
-      "tok": 166
-    },
-    {
-      "id": "eval_rpn",
-      "difficulty": "brutal",
-      "passed": true,
-      "note": "ok",
-      "wall": 1.8,
-      "tok": 120
+      "wall": 6.4,
+      "tok": 155
     }
   ]
 }
