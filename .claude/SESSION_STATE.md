@@ -3,6 +3,20 @@
 Running flight-recorder. Updated after each meaningful step. Newest info wins.
 
 ## Now
+- **2026-06-09 (cont): MULTI-MODEL SERVER LIVE + qwen3-next:80b added.**
+  - #3 DONE: OLLAMA_MAX_LOADED_MODELS=3. coder-30b + qwen2.5vl:7b (vision) + nomic-embed-text
+    all resident simultaneously (~38GB, ~50GB free). Box = full local AI server (code+vision+RAG).
+    NOTE: `ollama ps` shows empty in 0.30.7 (display bug); confirm via `ps aux | grep llama-server`.
+  - qwen3-next:80b-a3b-instruct-q4 (50GB) pulled. Runs **63.8 tok/s** (80B MoE, 3B active = ~same
+    speed as the 30B coder). = free quality upgrade for hard/open-ended work. Runs on llama.cpp.
+  - SPEC-DECODE finding: NOT achievable via Ollama GGUF path. Ollama 0.30.7 MTP = MLX-runner +
+    MLX-format models only; `ollama pull` GGUF runs llama.cpp (no MTP). Skipped — already 63-68 tok/s.
+  - Models pulled: qwen2.5vl:7b, nomic-embed-text, qwen3-next:80b-a3b-instruct-q4_K_M.
+  - Beefier-model survey (fit 96GB, beat 30B coder): qwen3.5:122b-a10b (~65GB, newest+strongest),
+    gpt-oss:120b (~63GB), llama4:17b-scout (~60GB, 10M ctx). glm-4.6=cloud-only; 480b/235b/v3 too big.
+  - Team-of-24 analysis: 1 box = ~2-4 concurrent CC sessions OK; 24 bursty = viable supplement w/
+    vllm-mlx batching + LiteLLM gateway (auth/quota); all-24-heavy overwhelms it. Cluster or cloud for spikes.
+
 - **2026-06-09: M3 ULTRA LIVE + FIRST BENCH = MILESTONE.** qwen3-coder:30b-a3b-q8 on the Studio
   scored **18/18 = 100%** on the expanded minibench (12 bounded + 6 expert: regex/N-queens/calculator/
   LIS/min-path/decode) at **68.4 tok/s** — **TIES Opus 4.8 (18/18)** AND aces the expert tier, at 4x
