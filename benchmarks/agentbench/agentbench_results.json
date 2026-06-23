@@ -1,0 +1,28 @@
+[
+  {
+    "backend": "local",
+    "success": true,
+    "duration_ms": 110364,
+    "ttft_ms": 68789,
+    "num_turns": 9,
+    "in_tokens": 256169,
+    "out_tokens": 1295,
+    "cache_read": 0,
+    "cost_usd": 1.3132199999999998,
+    "is_error": false,
+    "task": "ttl_off_by_one"
+  },
+  {
+    "backend": "cloud",
+    "success": true,
+    "duration_ms": 17273,
+    "ttft_ms": 2613,
+    "num_turns": 5,
+    "in_tokens": 7995,
+    "out_tokens": 493,
+    "cache_read": 142135,
+    "cost_usd": 0.3073175,
+    "is_error": false,
+    "task": "ttl_off_by_one"
+  }
+]
