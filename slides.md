@@ -360,15 +360,33 @@ Plus qwen3-next:80b (80B, 64 tok/s, bigger brain, same speed).
 
 ---
 
+## Tested it: the instability was the model
+
+| same agent loop, same box | pass | turns | avg time |
+|---|---|---|---|
+| coder-30b (the deck's baseline) | 4 / 5 | **4-41 (wild)** | 248 s |
+| Qwen 3.6 27b (q8) | 5 / 5 | 7-9 | 161 s |
+| **gpt-oss 20b** | **5 / 5** | **7-9 (stable)** | **48 s** |
+| gemma4 26b | 5 / 5 | 8-20 | 69 s |
+| Opus 4.8 (cloud) | 5 / 5 | 5-9 | 31 s |
+
+Every current model is stable and 5/5, the 41-turn coder spiral was a stale model, not local inference. **gpt-oss 20b lands within ~1.5x of cloud**, stable, on a 20B model. The fix was a newer model, not a bigger box.
+
+<!--
+1:30 | The payoff slide, and it lands the 'maybe it's software, not hardware' thesis. A few slides ago the agent loop was fumbling, the forty-one-turn spiral. Hypothesis from Boykis and HN: maybe that's the model, not local inference. So I tested it, same box, same five tasks, swapped my last-gen coder for Qwen three-six, same eight-bit quant, only variable is the model. Result: five out of five, every task seven to nine turns, dead stable, like cloud. The forty-one-turn spiral became seven. So the instability was a stale model, the fix was a newer model, not a bigger box. Honest caveat: still about five times slower than cloud, but stable and correct. The most important update since I built the deck.
+-->
+
+---
+
 ## The reconciliation
 
 | Workload | Local verdict |
 |---|---|
 | One-shot bounded coding | **Ties Opus**, fast, free |
-| Multi-turn agent loops | **Works (4/5) but ~8x slower, unstable** |
+| Multi-turn agent loops | **Current models: stable, 5/5. gpt-oss 20b within ~1.5x of cloud** |
 | Open-ended multi-file repos | **Loses on capability too** |
 
-Local is capable AND the daily agent experience is far less reliable than raw speed implied. Both true. **Measure the agent loop, not just tok/s.**
+The instability was a stale-model artifact, a current model is stable and 5/5. What's left is wall-clock (~5x) and big-context repo work. **Measure the agent loop, and keep your model current.**
 
 <!--
 1:00 | This collapses the whole act into one honest table, the 'what's actually true' summary. One-shot bounded coding, ties Opus. Multi-turn agent loops, it works, four out of five, but eight times slower and unstable. Open-ended repos, it loses outright. The line that is the spine of the entire talk: local is genuinely capable, AND the daily experience is worse than the raw speed implies, and both of those are true at the same time. Resist the urge to pick a side, the nuance is the finding. This is usually where a skeptic's question lands, so own the complexity out loud before they get the chance.
@@ -488,8 +506,8 @@ One toggle, per task. Denominated in your real workload.
 - Mid-build, Vicki Boykis published *Running local models is good now* (Jun 15), and Hacker News piled on with a 1,589-point discussion of it.
 - They corroborate the core finding: context is the wall, ~30B MoE is the sweet spot, agentic local is real but model-dependent.
 - But my models are already last-gen, the community moved to **Qwen 3.6** (27b / 35b-a3b) and **Gemma 4**; my coder-30b is a step behind.
-- A likely fix for the instability: q4 quant weakens tool-calling, **q6** is the agentic sweet spot. My 80B ran at q4, that may be the bug, not the model.
-- **Next:** re-bench Qwen 3.6 + Gemma 4 + gpt-oss, re-run the agent loop at q6. The verdict holds; the models won't, this moves weekly.
+- **Already tested:** re-ran the agent loop across Qwen 3.6, gpt-oss, and Gemma 4 (same box). All 5/5, all stable, no spirals. **gpt-oss 20b landed within ~1.5x of cloud.** The instability was the stale model.
+- **Still open:** the quant angle (q6 vs q4 on the 80B), and living on it daily. The verdict holds; the models won't, this moves weekly.
 - Sources: [blog](https://vickiboykis.com/2026/06/15/running-local-models-is-good-now/) + [HN](https://news.ycombinator.com/item?id=48555993)
 
 <!--

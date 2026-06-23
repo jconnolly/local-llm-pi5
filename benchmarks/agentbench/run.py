@@ -38,9 +38,10 @@ sys.path.insert(0, str(REPOBENCH))
 import importlib
 TASKS = importlib.import_module("tasks_hard").TASKS
 
+import os as _os
 CLAUDE = "/Users/john.connolly/.local/bin/claude"
 STUDIO = "studio.local:11434"
-LOCAL_MODEL = "qwen3-coder:30b-a3b-q8_0"
+LOCAL_MODEL = _os.environ.get("AGENTBENCH_LOCAL_MODEL", "qwen3-coder:30b-a3b-q8_0")
 
 # Backends: env overlay for the claude binary. Cloud = stored OAuth (strip overrides).
 BACKENDS = {

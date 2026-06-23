@@ -404,12 +404,23 @@ bullets_slide("It's not caching, it's convergence",
      B("The one-shot '68 tok/s, ties Opus' number was single-turn, it hid all of this.")],
     "1:30 | The diagnosis, and use the honest 'I was wrong' beat, it builds trust. My first theory was 'local has no prompt caching, so it re-computes everything, that's why it's slow.' I dug in. Wrong. Ollama does cache, the logs show about thirty thousand tokens cached and only two hundred fifty new per turn. The scary big token numbers were Claude Code's accounting display, not the machine re-crunching. The real culprit is convergence instability, the thirty-billion model just can't reliably drive a tool-use loop to the finish, it fumbles, sometimes spiraling to forty-one turns, sometimes quitting early at four. Cloud nails five turns every time. The meta-point: that headline sixty-eight-tokens-a-second, ties-Opus number was a single-turn measurement, and single-turn benchmarks structurally hide multi-turn instability. That's why you measure the loop.")
 
+table_slide("Tested it: the instability was the model",
+    ["same agent loop, same box", "pass", "turns", "avg time"],
+    [["coder-30b (the deck's baseline)", "4 / 5", "**4-41 (wild)**", "248 s"],
+     ["Qwen 3.6 27b (q8)", "5 / 5", "7-9", "161 s"],
+     ["**gpt-oss 20b**", "**5 / 5**", "**7-9 (stable)**", "**48 s**"],
+     ["gemma4 26b", "5 / 5", "8-20", "69 s"],
+     ["Opus 4.8 (cloud)", "5 / 5", "5-9", "31 s"]],
+    "Every current model is stable and 5/5, the 41-turn coder spiral was a stale model, not local inference. **gpt-oss 20b lands within ~1.5x of cloud**, stable, on a 20B model. The fix was a newer model, not a bigger box.",
+    "1:30 | The payoff, and it overturns my own headline, so own it. A few slides back the agent loop was spiraling to forty-one turns. Hypothesis from Boykis and Hacker News: that's the model, not local inference. So I re-ran the exact same five tasks on the same box across four current models. Result: every one is five-out-of-five and stable, the wild four-to-forty-one swing is gone. The standout, gpt-oss, a twenty-billion model, does it in forty-eight seconds, within about one-and-a-half times of cloud, stable. So the real story is sharper than the deck I built: the instability AND most of the speed gap were a stale model, not a hardware limit. The fix was a newer model, not a bigger box.",
+    col_w=[3.6, 1.1, 1.8, 1.6], font=12)
+
 table_slide("The reconciliation",
     ["Workload", "Local verdict"],
     [["One-shot bounded coding", "**Ties Opus**, fast, free"],
-     ["Multi-turn agent loops", "**Works (4/5) but ~8x slower, unstable**"],
+     ["Multi-turn agent loops", "**Current models: stable, 5/5. gpt-oss 20b within ~1.5x of cloud**"],
      ["Open-ended multi-file repos", "**Loses on capability too**"]],
-    "Local is capable AND the daily agent experience is far less reliable than raw speed implied. Both true. **Measure the agent loop, not just tok/s.**",
+    "The instability was a stale-model artifact, a current model is stable and 5/5. What's left is wall-clock (~5x) and big-context repo work. **Measure the agent loop, and keep your model current.**",
     "1:00 | This collapses the whole act into one honest table, the 'what's actually true' summary. One-shot bounded coding, ties Opus. Multi-turn agent loops, it works, four out of five, but eight times slower and unstable. Open-ended repos, it loses outright. The line that is the spine of the entire talk: local is genuinely capable, AND the daily experience is worse than the raw speed implies, and both of those are true at the same time. Resist the urge to pick a side, the nuance is the finding. This is usually where a skeptic's question lands, so own the complexity out loud before they get the chance.",
     col_w=[4, 5])
 
@@ -470,8 +481,8 @@ bullets_slide("PS: the field moved while I built this deck",
     [B("Mid-build, Vicki Boykis published 'Running local models is good now' (Jun 15), and Hacker News piled on with a 1,589-point discussion of it."),
      B("They corroborate the core finding: context is the wall, ~30B MoE is the sweet spot, agentic local is real but model-dependent."),
      B("But my models are already last-gen. The community has moved to **Qwen 3.6** (27b / 35b-a3b) and **Gemma 4**; my coder-30b is a step behind."),
-     B("And a likely fix for the instability: q4 quant weakens tool-calling, q6 is the agentic sweet spot. My 80B ran at q4, that may be the bug, not the model."),
-     B("**So, next:** re-bench Qwen 3.6 + Gemma 4 + gpt-oss, and re-run the agent loop at q6. The verdict holds; the specific models won't, this moves weekly."),
+     B("**Already tested:** re-ran the agent loop across Qwen 3.6, gpt-oss, and Gemma 4 (same box). All 5/5, all stable, no spirals. **gpt-oss 20b landed within ~1.5x of cloud.** The instability was the stale model."),
+     B("**Still open:** the quant angle (q6 vs q4 on the 80B), and living on it daily. The verdict holds; the specific models won't, this moves weekly."),
      B("Sources: vickiboykis.com/2026/06/15 + Hacker News item 48555993")],
     "0:30 | The honest closer-after-the-closer. While I was literally building this deck, Vicki Boykis published almost exactly this argument, and Hacker News spent fifteen hundred points debating it the same week. Two points. One, it corroborates the structure, context is the wall, thirty-billion MoE is the sweet spot, that's not just me. Two, the humbling part, my specific models are already a step behind, the community is on Qwen three-six and Gemma four now, and several people flagged that low quantization weakens tool-calling, which might be the actual cause of the instability I measured, not the model size. So the verdict holds, but the numbers have a one-week shelf life, and I'm already re-running with newer models at higher quant. Ends on intellectual honesty and momentum.")
 
