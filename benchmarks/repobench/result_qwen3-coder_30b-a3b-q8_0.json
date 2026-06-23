@@ -1,46 +1,54 @@
 {
   "model": "qwen3-coder:30b-a3b-q8_0",
   "passed": 4,
-  "total": 4,
-  "score": 1.0,
+  "total": 5,
+  "score": 0.8,
   "results": [
     {
-      "id": "registry_dispatch",
-      "passed": true,
-      "note": "..                                                                       [100%] | 2 passed in 0.03s",
-      "wall": 3.0,
-      "files_changed": [
-        "ops/handlers.py"
-      ]
-    },
-    {
-      "id": "symptom_elsewhere",
+      "id": "pagination_partial_page",
       "passed": true,
       "note": "....                                                                     [100%] | 4 passed in 0.03s",
-      "wall": 1.0,
+      "wall": 2.1,
       "files_changed": [
-        "checks.py"
+        "pager.py",
+        "count.py"
       ]
     },
     {
-      "id": "cache_invalidation",
+      "id": "ttl_off_by_one",
       "passed": true,
-      "note": "..                                                                       [100%] | 2 passed in 0.03s",
-      "wall": 4.1,
+      "note": "...                                                                      [100%] | 3 passed in 0.02s",
+      "wall": 1.8,
       "files_changed": [
-        "lru.py",
-        "store.py"
+        "ttlcache.py"
       ]
     },
     {
-      "id": "shared_refactor",
+      "id": "retry_off_by_one",
       "passed": true,
-      "note": "....                                                                     [100%] | 4 passed in 0.03s",
-      "wall": 1.9,
+      "note": "...                                                                      [100%] | 3 passed in 0.03s",
+      "wall": 1.4,
       "files_changed": [
-        "money.py",
-        "report.py",
-        "invoice.py"
+        "retry.py"
+      ]
+    },
+    {
+      "id": "interval_touching_merge",
+      "passed": false,
+      "note": "FAILED test_hidden.py::test_touching_merges - assert [[1, 2], [2, 3]] == [[1,... | FAILED test_hidden.py::test_unsorted_input - assert [[1, 2], [2, 4], [5, 6]] ... | 2 failed, 2 passed in 0.04s",
+      "wall": 1.8,
+      "files_changed": [
+        "merge.py"
+      ]
+    },
+    {
+      "id": "diamond_double_count",
+      "passed": true,
+      "note": "...                                                                      [100%] | 3 passed in 0.02s",
+      "wall": 2.2,
+      "files_changed": [
+        "graph.py",
+        "cost.py"
       ]
     }
   ]

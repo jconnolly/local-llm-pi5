@@ -29,7 +29,9 @@ from pathlib import Path
 
 HERE = Path(__file__).parent
 sys.path.insert(0, str(HERE))
-from tasks import TASKS  # noqa: E402
+import importlib
+_mod = importlib.import_module(os.environ.get("TASKS_MODULE", "tasks"))
+TASKS = _mod.TASKS  # noqa: E402
 
 HOST = f"http://{os.environ.get('MINIBENCH_HOST', 'studio.local:11434')}/api/chat"
 MODEL = os.environ.get("MINIBENCH_MODEL", "qwen3-coder:30b-a3b-q8_0")
