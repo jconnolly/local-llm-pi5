@@ -1,0 +1,17 @@
+{
+  "registry_dispatch": {
+    "ops/handlers.py": "from ops.base import register\n\n@register('add')\ndef _add(a, b):\n    return a + b\n\n@register('sub')\ndef _sub(a, b):\n    return a - b\n\n@register('mul')\ndef _mul(a, b):\n    return a * b\n"
+  },
+  "symptom_elsewhere": {
+    "checks.py": "def is_positive(n):\n    # FIXED: zero is not positive\n    return n > 0\n\ndef is_nonempty(s):\n    return isinstance(s, str) and len(s) > 0\n"
+  },
+  "cache_invalidation": {
+    "lru.py": "from collections import OrderedDict\n\nclass LRUCache:\n    def __init__(self, cap=128):\n        self.cap = cap\n        self.d = OrderedDict()\n    def get(self, k):\n        if k not in self.d:\n            return None\n        self.d.move_to_end(k)\n        return self.d[k]\n    def set(self, k, v):\n        self.d[k] = v\n        self.d.move_to_end(k)\n        if len(self.d) > self.cap:\n            self.d.popitem(last=False)\n    def invalidate(self, k):\n        self.d.pop(k, None)\n",
+    "store.py": "from lru import LRUCache\n\nclass Store:\n    def __init__(self):\n        self._data = {}\n        self._cache = LRUCache()\n        self.reads = 0\n    def put(self, k, v):\n        self._data[k] = v\n        self._cache.invalidate(k)\n    def get(self, k):\n        c = self._cache.get(k)\n        if c is not None:\n            return c\n        self.reads += 1\n        v = self._data.get(k)\n        if v is not None:\n            self._cache.set(k, v)\n        return v\n"
+  },
+  "shared_refactor": {
+    "money.py": "def format_cents(cents):\n    return f\"${cents // 100}.{cents % 100:02d}\"\n",
+    "report.py": "from money import format_cents\n\ndef line_total(qty, unit_cents):\n    return format_cents(qty * unit_cents)\n",
+    "invoice.py": "from money import format_cents\n\ndef grand_total(line_cents):\n    return format_cents(sum(line_cents))\n"
+  }
+}

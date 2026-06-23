@@ -1,0 +1,47 @@
+{
+  "model": "qwen3-coder:30b-a3b-q8_0",
+  "passed": 4,
+  "total": 4,
+  "score": 1.0,
+  "results": [
+    {
+      "id": "registry_dispatch",
+      "passed": true,
+      "note": "..                                                                       [100%] | 2 passed in 0.03s",
+      "wall": 3.0,
+      "files_changed": [
+        "ops/handlers.py"
+      ]
+    },
+    {
+      "id": "symptom_elsewhere",
+      "passed": true,
+      "note": "....                                                                     [100%] | 4 passed in 0.03s",
+      "wall": 1.0,
+      "files_changed": [
+        "checks.py"
+      ]
+    },
+    {
+      "id": "cache_invalidation",
+      "passed": true,
+      "note": "..                                                                       [100%] | 2 passed in 0.03s",
+      "wall": 4.1,
+      "files_changed": [
+        "lru.py",
+        "store.py"
+      ]
+    },
+    {
+      "id": "shared_refactor",
+      "passed": true,
+      "note": "....                                                                     [100%] | 4 passed in 0.03s",
+      "wall": 1.9,
+      "files_changed": [
+        "money.py",
+        "report.py",
+        "invoice.py"
+      ]
+    }
+  ]
+}
