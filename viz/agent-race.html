@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agent-loop race — local vs cloud</title>
+<style>
+  :root{
+    --bg:#0d1117; --pane:#161b22; --border:#30363d; --txt:#c9d1d9; --dim:#8b949e;
+    --local:#f78166; --cloud:#58a6ff; --ok:#3fb950; --warn:#d29922;
+    --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font-family:var(--mono)}
+  .wrap{height:100%;display:flex;flex-direction:column;padding:22px 26px;gap:14px}
+  .top{display:flex;align-items:baseline;justify-content:space-between}
+  .title{font-size:20px;font-weight:700;letter-spacing:.3px}
+  .title small{color:var(--dim);font-weight:400;font-size:13px;margin-left:10px}
+  .speed{color:var(--warn);font-size:13px;border:1px solid var(--warn);border-radius:6px;padding:2px 8px}
+  .panes{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:18px;min-height:0}
+  .pane{background:var(--pane);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;overflow:hidden}
+  .pane.local{box-shadow:0 0 0 1px rgba(247,129,102,.25)}
+  .pane.cloud{box-shadow:0 0 0 1px rgba(88,166,255,.25)}
+  .head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border)}
+  .who{font-size:15px;font-weight:700;display:flex;align-items:center;gap:9px}
+  .dot{width:10px;height:10px;border-radius:50%}
+  .local .dot{background:var(--local)} .cloud .dot{background:var(--cloud)}
+  .local .who{color:var(--local)} .cloud .who{color:var(--cloud)}
+  .meta{display:flex;gap:18px;font-size:13px;color:var(--dim)}
+  .meta b{color:var(--txt);font-variant-numeric:tabular-nums}
+  .clock{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;padding:6px 16px 2px;letter-spacing:.5px}
+  .local .clock{color:var(--local)} .cloud .clock{color:var(--cloud)}
+  .log{flex:1;overflow:hidden;padding:6px 16px 14px;font-size:13.5px;line-height:1.65}
+  .line{opacity:0;transform:translateY(4px);transition:opacity .18s,transform .18s;white-space:nowrap}
+  .line.show{opacity:1;transform:none}
+  .tool{color:var(--dim)} .tool b{color:var(--txt)}
+  .fail{color:var(--local)} .pass{color:var(--ok)}
+  .cursor{display:inline-block;width:8px;height:15px;background:var(--txt);vertical-align:-2px;animation:blink 1s steps(2) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .banner{margin-top:8px;font-weight:800;font-size:15px;opacity:0;transition:opacity .3s}
+  .banner.show{opacity:1}
+  .banner.ok{color:var(--ok)}
+  .footer{display:flex;justify-content:center;gap:40px;font-size:14px;color:var(--dim)}
+  .footer b{color:var(--txt)}
+  .verdict{color:var(--local);font-weight:700}
+  .replay{cursor:pointer;color:var(--cloud);font-size:13px;border:1px solid var(--cloud);border-radius:6px;padding:3px 12px;background:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="title">Same one-line bug · the real Claude Code agent loop
+      <small>task: ttl_off_by_one  (cache expiry <code>&gt;</code> → <code>&gt;=</code>)</small>
+    </div>
+    <div class="speed">⏩ 8× real time</div>
+  </div>
+
+  <div class="panes">
+    <div class="pane local" id="local">
+      <div class="head">
+        <div class="who"><span class="dot"></span>LOCAL · qwen3-coder:30b</div>
+        <div class="meta">turn <b class="turns">0</b> · Mac Studio</div>
+      </div>
+      <div class="clock"><span class="t">0.0</span>s</div>
+      <div class="log"></div>
+    </div>
+
+    <div class="pane cloud" id="cloud">
+      <div class="head">
+        <div class="who"><span class="dot"></span>CLOUD · Opus 4.8</div>
+        <div class="meta">turn <b class="turns">0</b> · Anthropic</div>
+      </div>
+      <div class="clock"><span class="t">0.0</span>s</div>
+      <div class="log"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div>cloud done: <b>17.3s</b> / 5 turns</div>
+    <div class="verdict">local: <b style="color:var(--local)">110.4s</b> / 9 turns — 6.4× slower for the SAME fix</div>
+    <button class="replay" onclick="run()">↻ replay</button>
+  </div>
+</div>
+
+<script>
+// real benchmarked numbers. virtualSec = the clock the audience sees; we play it 8x fast.
+const SPEED = 8;
+const tick = 50;                 // ms between frames
+const dtv = (tick/1000)*SPEED;   // virtual seconds advanced per frame
+
+// scripted tool-call timeline per backend. {at: virtualSec, html}
+const CLOUD = {
+  finish: 17.3, turns: 5,
+  events: [
+    [0.0,  'read', 'Read', 'cache.py'],
+    [2.4,  'read', 'Read', 'test_task.py'],
+    [5.1,  'edit', 'Edit', 'cache.py  <span class="pass">expiry &gt; now → &gt;= now</span>'],
+    [9.2,  'bash', 'Bash', 'pytest -q test_task.py'],
+    [14.0, 'pass', '✓', '<span class="pass">4 passed in 0.04s</span>'],
+  ],
+};
+const LOCAL = {
+  finish: 110.4, turns: 9,
+  events: [
+    [0.0,   'read', 'Read', 'cache.py'],
+    [9.0,   'read', 'Read', 'store.py'],
+    [21.0,  'bash', 'Bash', 'pytest -q  <span class="fail">2 failed</span>'],
+    [34.0,  'edit', 'Edit', 'cache.py  <span class="dim">touch ttl branch</span>'],
+    [48.0,  'bash', 'Bash', 'pytest -q  <span class="fail">2 failed</span>'],
+    [63.0,  'read', 'Read', 'cache.py  <span class="dim">(re-reading)</span>'],
+    [78.0,  'edit', 'Edit', 'cache.py  <span class="pass">&gt; → &gt;=</span>'],
+    [95.0,  'bash', 'Bash', 'pytest -q test_task.py'],
+    [106.0, 'pass', '✓', '<span class="pass">4 passed in 0.05s</span>'],
+  ],
+};
+
+function renderLine(ev){
+  const [,kind,tool,arg] = ev;
+  if(kind==='pass')
+    return `<div class="line"><span class="pass">${tool}</span> <span class="tool">${arg}</span></div>`;
+  return `<div class="line tool">→ <b>${tool}</b>(<span>${arg}</span>)</div>`;
+}
+
+function setup(id, spec){
+  const pane = document.getElementById(id);
+  const log = pane.querySelector('.log');
+  log.innerHTML = spec.events.map(renderLine).join('') +
+    `<div class="line cur"><span class="cursor"></span></div>` +
+    `<div class="banner ok">PASS ✓  ${spec.turns} turns · ${spec.finish}s</div>`;
+  return {
+    pane, log,
+    tEl: pane.querySelector('.t'),
+    turnsEl: pane.querySelector('.turns'),
+    lines: [...log.querySelectorAll('.line:not(.cur)')],
+    cur: log.querySelector('.cur'),
+    banner: pane.querySelector('.banner'),
+    spec, shown:0, done:false,
+  };
+}
+
+let raf=null;
+function run(){
+  if(raf) clearInterval(raf);
+  const C = setup('cloud', CLOUD);
+  const L = setup('local', LOCAL);
+  let v = 0; // virtual seconds
+  raf = setInterval(()=>{
+    v += dtv;
+    [C,L].forEach(s=>{
+      if(s.done) return;
+      const shownClock = Math.min(v, s.spec.finish);
+      s.tEl.textContent = shownClock.toFixed(1);
+      // reveal events whose time passed
+      while(s.shown < s.spec.events.length && s.spec.events[s.shown][0] <= v){
+        s.lines[s.shown].classList.add('show');
+        s.turnsEl.textContent = Math.min(s.shown+1, s.spec.turns);
+        s.shown++;
+      }
+      if(v >= s.spec.finish){
+        s.done = true;
+        s.cur.style.display='none';
+        s.banner.classList.add('show');
+        s.turnsEl.textContent = s.spec.turns;
+      }
+    });
+    if(C.done && L.done && v > LOCAL.finish + 4){ clearInterval(raf); raf=null; }
+  }, tick);
+}
+run();
+</script>
+</body>
+</html>

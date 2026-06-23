@@ -3,6 +3,37 @@
 Running flight-recorder. Updated after each meaningful step. Newest info wins.
 
 ## Now
+- **2026-06-23 (cont): PRESENTATION DECK built (DS-branded) + Boykis/HN reality-check.**
+  - Two decks, 31 slides each, content-synced: `local-llm-datasociety.pptx` (native Data Society
+    template via `build_pptx.py` + python-pptx) and `slides.html`/`slides.pdf` (Marp, brand-themed,
+    gifs animate). Both: purple ACT dividers + white content, DS logo every slide, TL;DR callout,
+    Mac Studio photo (stock; eBay swap pending), full talk-script presenter notes (~1min/slide).
+  - Editorial passes: de-Claude'd (no arrows/em-dashes/emoji), gen-z + dry humor, hyperbole cut
+    ("Maral era"->"doing the most"), acronyms trimmed (kept niche, cut LLM/SOTA/OCR/CPU/RAM).
+  - **HARDWARE ACCURACY FIX:** the Pi accelerator is the **AI HAT+ 2 (Hailo-10H, 40 TOPS, 8GB
+    on-board)** = Adafruit #6451, a real gen-AI accelerator, NOT the old vision AI HAT+. Real
+    dead-end reason = **integration (c)**: no Anthropic/Ollama endpoint, Claude Code couldn't connect.
+    Rewrote dead-end + "show the work" slides honestly (napkin-math caveat; dropped false CNN/CPU claim).
+  - **Boykis "Running local models is good now" (Jun 15) + 1,589pt HN thread** analyzed. Corroborates
+    our axis (context=wall, ~30B MoE sweet spot, agentic local model-dependent). TWO updates: (1) our
+    models stale — community on **Qwen 3.6** (27b/35b-a3b) + **Gemma 4** + gpt-oss; (2) **q4 quant
+    weakens tool-calling, q6 = agentic sweet spot** — our 80B ran q4, may explain the instability.
+    Added a **PS slide** citing both. NEXT: re-bench Qwen3.6/Gemma4/gpt-oss + agent loop at q6.
+  - Assets in viz/: agent-race.gif, appbench/side_by_side_2x.gif, mac-studio.jpg, ds-logo-{dark,white}.png.
+
+- **2026-06-23: APPBENCH (build playable Space Invaders) — NEW long-horizon bench + gameplay videos.**
+  - New harness `benchmarks/appbench/`: agent builds a single self-contained index.html via the REAL
+    `claude -p` loop; scored by a Playwright 7-check rubric (load/canvas/animation/controls/no-crash/
+    render/game-logic). Rubric validated on a ref game = 7/7. `record.py` plays each game ~14s, records
+    video, ffmpeg captions (model · built Ns · k/7) + hstacks -> viz/appbench/side_by_side.mp4 + .gif.
+  - RESULTS (all built playable in 2 turns): cloud Opus 7/7 @ 50s · **next80 qwen3-next:80b 7/7 @ 98s**
+    · local coder-30b 6/7 @ 166s (only miss = idle-animation; game static until keypress).
+  - **KEY FINDING: the 8x agent-loop gap COLLAPSES on a clean build task.** No failing-test to spiral on
+    -> local 80B ties cloud on quality, within 2x on speed. The 80B beat coder-30b on BOTH speed+score
+    (98s/7 vs 166s/6) and used HALF the output tokens (1844 vs 3482) = bigger local model converges
+    better even here. The 8x/41-turn gap was specific to the DEBUG-spiral case, not open-ended building.
+  - Deck assets: 3 playable index.html + screenshots + side-by-side gameplay video under viz/appbench/.
+
 - **2026-06-09 (cont): MULTI-MODEL SERVER LIVE + qwen3-next:80b added.**
   - #3 DONE: OLLAMA_MAX_LOADED_MODELS=3. coder-30b + qwen2.5vl:7b (vision) + nomic-embed-text
     all resident simultaneously (~38GB, ~50GB free). Box = full local AI server (code+vision+RAG).

@@ -1,0 +1,60 @@
+[
+  {
+    "backend": "next80",
+    "task": "space_invaders",
+    "built": true,
+    "score": 7,
+    "max": 7,
+    "checks": {
+      "controls_wired": true,
+      "game_logic_present": true,
+      "no_load_errors": true,
+      "canvas_min_size": true,
+      "animation_running": true,
+      "canvas_rendered": true,
+      "no_errors_on_input": true
+    },
+    "check_notes": {
+      "no_load_errors": "",
+      "canvas_min_size": "600x600",
+      "animation_running": "raf=Y pixel_delta=0.977",
+      "canvas_rendered": "png_bytes=9826",
+      "no_errors_on_input": ""
+    },
+    "duration_ms": 97974,
+    "num_turns": 2,
+    "in_tokens": 59879,
+    "out_tokens": 1844,
+    "cost_usd": 0.345495,
+    "artifact_dir": "/Users/john.connolly/tmp-projects/local-llm/viz/appbench/next80/space_invaders"
+  },
+  {
+    "backend": "cloud",
+    "task": "space_invaders",
+    "built": true,
+    "score": 7,
+    "max": 7,
+    "checks": {
+      "controls_wired": true,
+      "game_logic_present": true,
+      "no_load_errors": true,
+      "canvas_min_size": true,
+      "animation_running": true,
+      "canvas_rendered": true,
+      "no_errors_on_input": true
+    },
+    "check_notes": {
+      "no_load_errors": "",
+      "canvas_min_size": "640x640",
+      "animation_running": "raf=Y pixel_delta=0.978",
+      "canvas_rendered": "png_bytes=14499",
+      "no_errors_on_input": ""
+    },
+    "duration_ms": 49515,
+    "num_turns": 2,
+    "in_tokens": 7989,
+    "out_tokens": 4692,
+    "cost_usd": 0.40175250000000007,
+    "artifact_dir": "/Users/john.connolly/tmp-projects/local-llm/viz/appbench/cloud/space_invaders"
+  }
+]

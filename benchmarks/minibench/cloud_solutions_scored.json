@@ -1,7 +1,7 @@
 {
   "source": "cloud_solutions.json",
-  "passed": 12,
-  "total": 12,
+  "passed": 24,
+  "total": 24,
   "score": 1.0,
   "results": [
     {
@@ -73,6 +73,78 @@
     {
       "id": "median_two_sorted",
       "difficulty": "hard",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "regex_match",
+      "difficulty": "expert",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "n_queens",
+      "difficulty": "expert",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "calculate",
+      "difficulty": "expert",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "lis_length",
+      "difficulty": "expert",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "min_path_sum",
+      "difficulty": "expert",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "decode_ways",
+      "difficulty": "expert",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "dijkstra",
+      "difficulty": "brutal",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "calc_parens",
+      "difficulty": "brutal",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "longest_palindrome_subseq",
+      "difficulty": "brutal",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "max_profit_k",
+      "difficulty": "brutal",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "word_ladder",
+      "difficulty": "brutal",
+      "passed": true,
+      "note": "ok"
+    },
+    {
+      "id": "eval_rpn",
+      "difficulty": "brutal",
       "passed": true,
       "note": "ok"
     }

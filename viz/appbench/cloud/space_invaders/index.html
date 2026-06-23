@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Space Invaders</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    color: #0f0;
+    font-family: "Courier New", monospace;
+    height: 100%;
+  }
+  #wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  #hud {
+    width: 640px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    letter-spacing: 2px;
+    padding: 8px 4px;
+  }
+  canvas {
+    background: #000;
+    border: 2px solid #0f0;
+    display: block;
+    image-rendering: pixelated;
+  }
+  #hint {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #060;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="hud">
+    <span id="score">SCORE 0</span>
+    <span id="lives">LIVES 3</span>
+  </div>
+  <canvas id="game" width="640" height="640"></canvas>
+  <div id="hint">&larr; &rarr; move &nbsp;&middot;&nbsp; SPACE shoot &nbsp;&middot;&nbsp; ENTER restart</div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var canvas = document.getElementById("game");
+  var ctx = canvas.getContext("2d");
+  var W = canvas.width, H = canvas.height;
+  var scoreEl = document.getElementById("score");
+  var livesEl = document.getElementById("lives");
+
+  // ---- game state ----
+  var STATE_PLAY = 0, STATE_OVER = 1, STATE_WIN = 2;
+  var state, score, lives;
+
+  var player, bullets, enemyBullets, invaders;
+  var invDir, invStep, invDropTimer, invShootTimer;
+
+  // invader grid config
+  var ROWS = 5, COLS = 11;
+  var INV_W = 32, INV_H = 22;
+  var INV_GAP_X = 16, INV_GAP_Y = 14;
+  var GRID_LEFT = 60, GRID_TOP = 70;
+
+  // input
+  var keys = {};
+  document.addEventListener("keydown", function (e) {
+    if (["ArrowLeft", "ArrowRight", "ArrowUp", " ", "Spacebar", "Enter"].indexOf(e.key) !== -1) {
+      e.preventDefault();
+    }
+    keys[e.key] = true;
+    if ((e.key === " " || e.key === "Spacebar") && state === STATE_PLAY) {
+      tryFire();
+    }
+    if (e.key === "Enter" && state !== STATE_PLAY) {
+      reset();
+    }
+  });
+  document.addEventListener("keyup", function (e) { keys[e.key] = false; });
+
+  function reset() {
+    state = STATE_PLAY;
+    score = 0;
+    lives = 3;
+    player = { x: W / 2 - 20, y: H - 50, w: 40, h: 18, speed: 5, cooldown: 0 };
+    bullets = [];
+    enemyBullets = [];
+    invaders = [];
+    for (var r = 0; r < ROWS; r++) {
+      for (var c = 0; c < COLS; c++) {
+        invaders.push({
+          x: GRID_LEFT + c * (INV_W + INV_GAP_X),
+          y: GRID_TOP + r * (INV_H + INV_GAP_Y),
+          w: INV_W, h: INV_H,
+          alive: true,
+          row: r,
+          points: (ROWS - r) * 10
+        });
+      }
+    }
+    invDir = 1;          // 1 = right, -1 = left
+    invStep = 12;        // horizontal pixels per move tick
+    invDropTimer = 0;
+    invShootTimer = 0;
+    updateHud();
+  }
+
+  function updateHud() {
+    scoreEl.textContent = "SCORE " + score;
+    livesEl.textContent = "LIVES " + lives;
+  }
+
+  function tryFire() {
+    if (player.cooldown > 0) return;
+    bullets.push({ x: player.x + player.w / 2 - 2, y: player.y - 6, w: 4, h: 12, speed: 9 });
+    player.cooldown = 18; // frames
+  }
+
+  // ---- invader movement: classic step + drop on edge ----
+  var moveTimer = 0;
+  function moveSpeedFrames() {
+    // fewer invaders -> faster steps
+    var aliveCount = 0;
+    for (var i = 0; i < invaders.length; i++) if (invaders[i].alive) aliveCount++;
+    return Math.max(6, Math.floor(aliveCount * 0.7) + 6);
+  }
+
+  function updateInvaders() {
+    moveTimer++;
+    if (moveTimer < moveSpeedFrames()) return;
+    moveTimer = 0;
+
+    // find current bounds of living invaders
+    var minX = Infinity, maxX = -Infinity;
+    for (var i = 0; i < invaders.length; i++) {
+      var v = invaders[i];
+      if (!v.alive) continue;
+      if (v.x < minX) minX = v.x;
+      if (v.x + v.w > maxX) maxX = v.x + v.w;
+    }
+    if (minX === Infinity) return; // none alive
+
+    var hitEdge = false;
+    if (invDir === 1 && maxX + invStep >= W - 10) hitEdge = true;
+    if (invDir === -1 && minX - invStep <= 10) hitEdge = true;
+
+    if (hitEdge) {
+      // drop down and reverse
+      invDir *= -1;
+      for (var j = 0; j < invaders.length; j++) {
+        if (invaders[j].alive) invaders[j].y += INV_H;
+      }
+    } else {
+      for (var k = 0; k < invaders.length; k++) {
+        if (invaders[k].alive) invaders[k].x += invStep * invDir;
+      }
+    }
+
+    // reach bottom -> game over
+    for (var m = 0; m < invaders.length; m++) {
+      var iv = invaders[m];
+      if (iv.alive && iv.y + iv.h >= player.y) {
+        state = STATE_OVER;
+        return;
+      }
+    }
+  }
+
+  function invadersShoot() {
+    invShootTimer++;
+    if (invShootTimer < 35) return;
+    invShootTimer = 0;
+    // pick a random living invader from the front-most of each column
+    var living = invaders.filter(function (v) { return v.alive; });
+    if (!living.length) return;
+    var shooter = living[Math.floor(Math.random() * living.length)];
+    enemyBullets.push({
+      x: shooter.x + shooter.w / 2 - 2,
+      y: shooter.y + shooter.h,
+      w: 4, h: 12, speed: 4
+    });
+  }
+
+  function rectHit(a, b) {
+    return a.x < b.x + b.w && a.x + a.w > b.x &&
+           a.y < b.y + b.h && a.y + a.h > b.y;
+  }
+
+  function update() {
+    if (state !== STATE_PLAY) return;
+
+    // player move
+    if (keys["ArrowLeft"]) player.x -= player.speed;
+    if (keys["ArrowRight"]) player.x += player.speed;
+    if (player.x < 4) player.x = 4;
+    if (player.x + player.w > W - 4) player.x = W - 4 - player.w;
+    if (player.cooldown > 0) player.cooldown--;
+
+    // player bullets
+    for (var i = bullets.length - 1; i >= 0; i--) {
+      var b = bullets[i];
+      b.y -= b.speed;
+      if (b.y + b.h < 0) { bullets.splice(i, 1); continue; }
+      var hit = false;
+      for (var j = 0; j < invaders.length; j++) {
+        var v = invaders[j];
+        if (!v.alive) continue;
+        if (rectHit(b, v)) {
+          v.alive = false;
+          score += v.points;
+          updateHud();
+          hit = true;
+          break;
+        }
+      }
+      if (hit) bullets.splice(i, 1);
+    }
+
+    // enemy bullets
+    for (var e = enemyBullets.length - 1; e >= 0; e--) {
+      var eb = enemyBullets[e];
+      eb.y += eb.speed;
+      if (eb.y > H) { enemyBullets.splice(e, 1); continue; }
+      if (rectHit(eb, player)) {
+        enemyBullets.splice(e, 1);
+        lives--;
+        updateHud();
+        if (lives <= 0) { state = STATE_OVER; }
+      }
+    }
+
+    updateInvaders();
+    invadersShoot();
+
+    // win check
+    var anyAlive = false;
+    for (var w = 0; w < invaders.length; w++) {
+      if (invaders[w].alive) { anyAlive = true; break; }
+    }
+    if (!anyAlive) state = STATE_WIN;
+  }
+
+  // ---- drawing ----
+  function drawInvader(v) {
+    ctx.fillStyle = v.row === 0 ? "#f44" : (v.row < 3 ? "#ff0" : "#0ff");
+    var x = v.x, y = v.y, w = v.w, h = v.h;
+    // simple pixel-ish body
+    ctx.fillRect(x + 6, y, w - 12, h - 8);
+    ctx.fillRect(x, y + 6, w, h - 14);
+    ctx.fillRect(x + 2, y + h - 8, 6, 6);
+    ctx.fillRect(x + w - 8, y + h - 8, 6, 6);
+    // eyes
+    ctx.fillStyle = "#000";
+    ctx.fillRect(x + 10, y + 6, 4, 4);
+    ctx.fillRect(x + w - 14, y + 6, 4, 4);
+  }
+
+  function drawPlayer() {
+    ctx.fillStyle = "#0f0";
+    var p = player;
+    ctx.fillRect(p.x, p.y + 6, p.w, p.h - 6);
+    ctx.fillRect(p.x + p.w / 2 - 4, p.y, 8, 8);
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // ground line
+    ctx.strokeStyle = "#040";
+    ctx.beginPath();
+    ctx.moveTo(0, player.y + player.h + 6);
+    ctx.lineTo(W, player.y + player.h + 6);
+    ctx.stroke();
+
+    for (var i = 0; i < invaders.length; i++) {
+      if (invaders[i].alive) drawInvader(invaders[i]);
+    }
+
+    ctx.fillStyle = "#fff";
+    for (var b = 0; b < bullets.length; b++) {
+      ctx.fillRect(bullets[b].x, bullets[b].y, bullets[b].w, bullets[b].h);
+    }
+    ctx.fillStyle = "#f80";
+    for (var e = 0; e < enemyBullets.length; e++) {
+      ctx.fillRect(enemyBullets[e].x, enemyBullets[e].y, enemyBullets[e].w, enemyBullets[e].h);
+    }
+
+    drawPlayer();
+
+    if (state === STATE_OVER || state === STATE_WIN) {
+      ctx.fillStyle = "rgba(0,0,0,0.6)";
+      ctx.fillRect(0, 0, W, H);
+      ctx.textAlign = "center";
+      ctx.fillStyle = state === STATE_WIN ? "#0f0" : "#f44";
+      ctx.font = "bold 48px 'Courier New', monospace";
+      ctx.fillText(state === STATE_WIN ? "YOU WIN!" : "GAME OVER", W / 2, H / 2 - 20);
+      ctx.fillStyle = "#fff";
+      ctx.font = "20px 'Courier New', monospace";
+      ctx.fillText("SCORE " + score, W / 2, H / 2 + 20);
+      ctx.fillText("Press ENTER to play again", W / 2, H / 2 + 55);
+      ctx.textAlign = "left";
+    }
+  }
+
+  function loop() {
+    update();
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  reset();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

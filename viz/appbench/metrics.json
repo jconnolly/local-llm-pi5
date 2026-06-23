@@ -1,0 +1,5 @@
+{
+  "local":  {"model": "qwen3-coder:30b (LOCAL)", "build_secs": 166, "score": 6, "turns": 2},
+  "next80": {"model": "qwen3-next:80b (LOCAL)",  "build_secs": 98,  "score": 7, "turns": 2},
+  "cloud":  {"model": "Opus 4.8 (CLOUD)",         "build_secs": 50,  "score": 7, "turns": 2}
+}
