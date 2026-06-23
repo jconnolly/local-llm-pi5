@@ -165,25 +165,28 @@ Plus **qwen3-next:80b** (80B, 64 tok/s — bigger brain for hard tasks, same spe
 
 ## But the *agent loop* tells a harder truth
 
-Same bug, same correct fix, measured through the **real Claude Code agent loop**:
+5 multi-file bug-fix tasks, measured through the **real Claude Code agent loop**,
+local model vs cloud Opus:
 
-| | wall-clock | time-to-first-token | turns | input tokens |
-|---|---|---|---|---|
-| **Local** | **110 s** | **69 s** | 9 | **256,000** |
-| **Cloud (Opus)** | **17 s** | 3 s | 5 | 8,000 |
+| | pass | avg wall-clock | turns (range) |
+|---|---|---|---|
+| **Cloud (Opus)** | **5 / 5** | **31 s** | 5–9 (stable) |
+| **Local (coder-30b)** | 4 / 5 | **248 s** | **4–41 (wild)** |
 
-**Local was 6× slower and churned 32× the input tokens — for the same answer.**
+**Local averaged 8× slower — and a one-line `>`→`>=` fix took it 41 turns / 584 s.**
 
 ---
 
-## Why: no prompt caching + more turns
+## It's not caching — it's *convergence*
 
-- **Cloud caches** the ~28K-token system prompt; each turn sends only the delta
-- **Ollama re-prefills the *entire* context every turn** → 9 turns × 28K = 256K tokens
-- The weaker model also needs **more turns** (9 vs 5), each one re-processing everything
+The investigation disproved the obvious culprits:
+- ✅ Ollama **does** prefix-cache (the big local token counts are CC's *accounting*,
+  not the box re-computing)
+- ❌ The real cost is **turn-count instability**: the 30B model fumbles in the loop,
+  sometimes spiraling to 41 turns, sometimes giving up at 4
 
-> The one-shot "68 tok/s, ties Opus" number was **single-turn** — it hid this.
-> The multi-turn agent experience is where local's real cost lives: **time waiting.**
+> Cloud converges in 5 turns *every time*. Local swings 4–41.
+> The one-shot "68 tok/s, ties Opus" number was single-turn — it hid all of this.
 
 ---
 
@@ -192,11 +195,11 @@ Same bug, same correct fix, measured through the **real Claude Code agent loop**
 | Workload | Local verdict |
 |---|---|
 | One-shot bounded coding | **Ties Opus** — fast, free |
-| Multi-turn agent loops | **~6× slower wall-clock, 32× token churn** |
+| Multi-turn agent loops | **Works (4/5) but ~8× slower, unstable** |
 | Open-ended multi-file repos | **Loses on capability too** |
 
-Local is genuinely good *and* the daily agent experience is meaningfully worse than
-the raw speed implied. Both things are true. Measure before you commit.
+Local is genuinely capable *and* the daily agent experience is far less reliable
+than the raw speed implied. Both true. **Measure the agent loop, not just tok/s.**
 
 ---
 
