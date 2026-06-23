@@ -163,6 +163,43 @@ Plus **qwen3-next:80b** (80B, 64 tok/s — bigger brain for hard tasks, same spe
 
 ---
 
+## But the *agent loop* tells a harder truth
+
+Same bug, same correct fix, measured through the **real Claude Code agent loop**:
+
+| | wall-clock | time-to-first-token | turns | input tokens |
+|---|---|---|---|---|
+| **Local** | **110 s** | **69 s** | 9 | **256,000** |
+| **Cloud (Opus)** | **17 s** | 3 s | 5 | 8,000 |
+
+**Local was 6× slower and churned 32× the input tokens — for the same answer.**
+
+---
+
+## Why: no prompt caching + more turns
+
+- **Cloud caches** the ~28K-token system prompt; each turn sends only the delta
+- **Ollama re-prefills the *entire* context every turn** → 9 turns × 28K = 256K tokens
+- The weaker model also needs **more turns** (9 vs 5), each one re-processing everything
+
+> The one-shot "68 tok/s, ties Opus" number was **single-turn** — it hid this.
+> The multi-turn agent experience is where local's real cost lives: **time waiting.**
+
+---
+
+## The honest reconciliation
+
+| Workload | Local verdict |
+|---|---|
+| One-shot bounded coding | **Ties Opus** — fast, free |
+| Multi-turn agent loops | **~6× slower wall-clock, 32× token churn** |
+| Open-ended multi-file repos | **Loses on capability too** |
+
+Local is genuinely good *and* the daily agent experience is meaningfully worse than
+the raw speed implied. Both things are true. Measure before you commit.
+
+---
+
 ## The economics
 
 - **Cloud:** ~$200/mo → ~$2,400/yr, indefinitely
