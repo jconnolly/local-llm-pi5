@@ -335,13 +335,12 @@ table_slide("Bounded coding vs open-ended repos",
      ["Context", "small, fits in your head", "huge (64k+), must be discovered first"],
      ["Agent loop", "few turns, converges fast", "many turns, sustained reasoning"],
      ["Examples", "a parser, a failing unit test, a data structure, a CLI tool, LeetCode", "refactor across the repo, a feature touching 12 files, real SWE-bench"],
-     ["Benchmark", "**HumanEval, LiveCodeBench** (function-level)", "**SWE-bench Verified** (repository-level)"],
-     ["Who wins", "**local ties (even leads) Opus**", "**cloud wins**"]],
-    "The benchmarks prove the split: open models tie or even lead on bounded (Qwen3.5 tops LiveCodeBench at 83.6%; HumanEval is saturated, ~90%+ for everyone), but trail on SWE-bench Verified (Qwen3.6-27B 77.2 vs Opus 88.6). Sources: codesota.com, benchlm.ai, llm-stats.com",
-    "1:00 | The definition slide, now with the benchmarks that prove it. Bounded coding is a self-contained problem you hold in your head and the agent converges on in a few turns, a parser, a failing unit test, a small CLI tool. The benchmarks for that are HumanEval and LiveCodeBench, function-level problems, and there open models tie or even lead, Qwen 3.5 actually tops LiveCodeBench. Open-ended is a vague bug or feature across a big, unfamiliar codebase where the model has to discover structure, juggle sixty-thousand-plus tokens, grind through many turns. The benchmark for that is SWE-bench Verified, repository-level, and there they trail, seventy-seven versus Opus's eighty-nine. Same models, opposite results, because the benchmarks test fundamentally different things. That is the whole talk in one table.",
+     ["Benchmark", "**HumanEval, LiveCodeBench** (function-level)", "**SWE-bench Verified** (repository-level)"]],
+    "Two genuinely different jobs, measured by two different benchmarks. So which side does local actually win, and where does cloud stay ahead? That's the question the rest of the talk measures.",
+    "1:00 | The definition slide; the whole talk hinges on this distinction. Bounded coding is a self-contained problem you hold in your head and converge on in a few turns, a parser, a failing test, a small CLI tool, measured by HumanEval and LiveCodeBench. Open-ended is a vague bug or feature across a big unfamiliar codebase, discover structure, juggle 64k-plus context, many turns, measured by SWE-bench Verified. Two genuinely different jobs. Do NOT tell them who wins each yet, that is the entire payoff of the talk, just plant the two-axis framing and the open question, and let the suspense carry.",
     col_w=[1.2, 4.0, 4.4], font=12)
 
-_q = _title_only("Local owns the bottom-left; cloud the top-right")
+_q = _title_only("Where does the line fall? (the map we'll test)")
 _qp = _q.shapes.add_picture(str(REPO / "viz" / "quadrant.png"), 0, 0, height=Inches(4.35))
 _qp.left = int((SW - _qp.width) // 2); _qp.top = Inches(1.4)
 _qcap = _q.shapes.add_textbox(Inches(1.7), Inches(5.95), SW - Inches(2.4), Inches(0.7))
@@ -357,13 +356,13 @@ _up.left = int((SW - _up.width) // 2); _up.top = Inches(1.45)
 _notes(_u, "1:30 | The full audit, all 2,177 prompts, classified by which project they came from, far more reliable than guessing from the text. Two headlines. One, it's almost exactly half DSG work, half personal projects I do outside work, plus a sliver of scratch. The biggest single thing is the internal gateway POC for work; right behind it, my home network, a personal finance app, and yes, building this very deck. Two, and this changes the local story: a huge chunk of the personal half is privacy-sensitive, my finances, my home network, my thermostat. That is local's natural home, the data never leaves the house. And it's not a compromise: when I had a local model categorize my credit-card charges, it was genuinely good, I didn't need the cloud. So local isn't just for bounded coding, it's the obvious choice for the private, personal, bounded-classification work that's half of what I do.")
 
 table_slide("The route: three machines, three verdicts",
-    ["Stop", "Hardware", "Verdict"],
+    ["Stop", "Hardware", "What this stop taught me"],
     [["1", "Raspberry Pi 5 + AI HAT+ 2 (Hailo-10H)", "Dead end: Hailo runs vision; LLMs fall to the Pi CPU at ~5 tok/s (measured)"],
      ["2", "MacBook Air M2 16GB ('Maral')", "Did the grunt work (~5 hrs). qwen3:14b ~10 tok/s, kinda slow"],
      ["3", "The tuning wall", "think:false = ~3x; quant sweep; prompt slim"],
-     ["4", "Reality check", "Frontier parity NOT purchasable locally at any price"],
-     ["5", "Mac Studio M3 Ultra 96GB ($4,676)", "Ties Opus on coding @ 68 tok/s, $0/mo"]],
-    notes="1:30 | This is the map, don't read every cell, walk it. Stop one, the Raspberry Pi, total dead end, I'll explain why in two slides. Stop two, a spare MacBook Air I call Maral, that's where I learned everything even though it only ran a few hours. Stop three, I hit a tuning wall and found the single best speedup of the whole project. Stop four, the reality check, the thing you cannot buy at any price. Stop five, the Mac Studio, which finally ties Opus on coding at sixty-eight tokens a second for zero dollars a month. The takeaway line: the lessons are in the trip, not just the destination.",
+     ["4", "Reality check", "Can you just buy your way to the top? (Act 2)"],
+     ["5", "Mac Studio M3 Ultra 96GB ($4,676)", "The machine that finally earned its keep (Act 3)"]],
+    notes="1:30 | This is the map, don't read every cell, walk it. Stop one, the Raspberry Pi, total dead end, I'll explain why in two slides. Stop two, a spare MacBook Air I call Maral, that's where I learned everything even though it only ran a few hours. Stop three, I hit a tuning wall and found the single best speedup of the whole project. Stop four, the reality check, which asks whether you can simply buy your way to the top, that's Act Two. Stop five, the Mac Studio, the machine that finally earned its keep, the verdict is Act Three. Tease, don't spoil, the numbers come later. The takeaway line: the lessons are in the trip, not just the destination.",
     col_w=[0.7, 3.2, 5.5], font=12)
 
 bullets_slide("Dead end #1: tilting at windmills",
@@ -433,11 +432,11 @@ _fn(_rcf.text_frame.add_paragraph(),
     "** Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are.")
 
 bullets_slide("So the decision is about how close, not parity",
-    [B("Don't chase a number that isn't for sale"),
-     B("**Buy hardware for the 80%; keep an explicit `claude-cloud` for the 20%**"),
-     B("Denominate the choice in your actual task mix, not dollars or principle"),
-     B("Sweet spot for one dev: **~$4-5K, one Mac Studio, 96GB**")],
-    "1:00 | The reframe. Once parity is off the table, the question changes from 'can I match it' to 'how close can I get for sensible money, and what do I do about the gap.' The answer is hybrid: buy hardware for the eighty percent of work you do every day, keep a cloud escape hatch for the hard twenty percent. The discipline: decide on your actual task mix, not on ideology and not on the sticker price. Don't buy local because it's cool, don't avoid it because cloud is easier. And I'll say the number out loud now so it's not a surprise later: for one developer, the sweet spot is about four to five thousand dollars, a single ninety-six-gig Mac Studio.")
+    [B("Parity's off the table, so stop chasing it."),
+     B("The real question becomes: **how close can I get for sensible money, and what do I do about the gap?**"),
+     B("Answer that with your actual task mix, not dollars or ideology."),
+     B("So I bought a box to find out.")],
+    "1:00 | The reframe, and keep it a question, do NOT answer it here. Once parity is off the table, the question changes from 'can I match it' to 'how close can I get for sensible money, and what do I do about the gap.' The discipline: you'll decide on your actual task mix, not on ideology and not on the sticker price. Hold the actual recommendation, the hybrid setup and the dollar figure, for Act Four, that's the payoff. Here you just land the reframe and the fact that I went and bought a box to answer it. Next slide is the buy.")
 
 _buy = bullets_slide("The buy: $4,676 for a used M3 Ultra 96GB",
     [B("Apple-direct was 4 months backordered (M3 Ultra was EOL'd)"),
@@ -465,12 +464,12 @@ table_slide("The verdict: local ties cloud on coding",
     "1:30 | Open Act Three on the win, this is the 'yes' half of the answer. Stress the rigor before the result: twenty-four coding problems, easy up to LeetCode-hard, scored deterministically with pytest, no model judging itself. The result, the local thirty-billion coder tied Opus on every single problem, at sixty-eight tokens a second, for free. But plant the honesty that's coming: this bench saturated, my local model couldn't lose on it, and a benchmark your best model can't lose on has stopped measuring anything. That's exactly why I had to build harder tests, which is the rest of this act. Don't oversell, the next two slides deliberately complicate this win.",
     col_w=[4, 2, 2.5])
 
-bullets_slide("What the tie means",
-    [B("**Local owns:** self-contained coding, functions, scripts, algorithms, single and moderate multi-file"),
-     B("**Cloud still wins:** open-ended, multi-file, sprawling-context repo work (real SWE-bench, the software-engineering benchmark)"),
-     B("The gap is real but lives on a different axis than most benchmarks test."),
-     B("A bench your best model can't lose on has stopped measuring.")],
-    "1:30 | The precision slide, this is what keeps the whole talk honest, so slow down and make eye contact. The win is real but bounded. Local owns self-contained coding, functions, scripts, algorithms, single and moderate multi-file work. Cloud still wins the open-ended, sprawling-context stuff, a vague bug report across a huge unfamiliar repo, that's real SWE-bench. The insight to deliver: most benchmarks test the axis local already wins on, isolated problems, and they under-test the axis that actually matters day to day, navigating a big codebase. So leaderboard parity overstates real-world parity. Naming this honestly is what earns you credibility for the rest of the talk.")
+bullets_slide("But a benchmark you can't lose isn't measuring",
+    [B("coder-30b **and** Opus both went 24/24, the bench saturated."),
+     B("A benchmark your best model can't lose on has stopped telling you anything."),
+     B("What it can't see is the axis that matters day to day: long, multi-file, agentic work."),
+     B("So I built harder tests. The rest of this act is what they found.")],
+    "1:30 | The bridge, NOT the verdict, resist stating who-wins-what here. The point is narrow and honest: my local model couldn't lose on this bench, both it and Opus went twenty-four for twenty-four, so the bench has stopped measuring anything. A benchmark your best model can't lose on is dead weight. What it can't see is the axis that actually bites day to day, long multi-file agentic work in a big unfamiliar repo. So I built harder tests, and the rest of this act is what they turned up. Keep them in suspense, the reconciliation at the end of the act is where the verdict lands.")
 
 table_slide("Why the Studio is fast: bandwidth, not parameters",
     ["Box", "Memory bandwidth", "coder-30b speed"],
@@ -519,15 +518,6 @@ table_slide("Tested it: the instability was the model",
     "1:30 | The payoff, and it overturns my own headline, so own it. A few slides back the agent loop was spiraling to forty-one turns. Hypothesis from Boykis and Hacker News: that's the model, not local inference. So I re-ran the exact same five tasks on the same box across four current models. Result: every one is five-out-of-five and stable, the wild four-to-forty-one swing is gone. The standout, gpt-oss, a twenty-billion model, does it in forty-eight seconds, within about one-and-a-half times of cloud, stable. So the real story is sharper than the deck I built: the instability AND most of the speed gap were a stale model, not a hardware limit. The fix was a newer model, not a bigger box.",
     col_w=[3.6, 1.1, 1.8, 1.6], font=12)
 
-table_slide("The reconciliation",
-    ["Workload", "Local verdict"],
-    [["One-shot bounded coding", "**Ties Opus**, fast, free"],
-     ["Multi-turn agent loops", "**Current models: stable, 5/5. gpt-oss 20b within ~1.5x of cloud**"],
-     ["Open-ended multi-file repos", "**Loses on capability too**"]],
-    "The instability was a stale-model artifact, a current model is stable and 5/5. What's left is wall-clock (~5x) and big-context repo work. **Measure the agent loop, and keep your model current.**",
-    "1:00 | This collapses the whole act into one honest table, the 'what's actually true' summary. One-shot bounded coding, ties Opus. Multi-turn agent loops, it works, four out of five, but eight times slower and unstable. Open-ended repos, it loses outright. The line that is the spine of the entire talk: local is genuinely capable, AND the daily experience is worse than the raw speed implies, and both of those are true at the same time. Resist the urge to pick a side, the nuance is the finding. This is usually where a skeptic's question lands, so own the complexity out loud before they get the chance.",
-    col_w=[4, 5])
-
 table_slide("But on open-ended building, the gap collapses",
     ["backend", "playable", "build time", "turns", "cost"],
     [["Opus 4.8 (cloud)", "**7 / 7**", "50 s", "2", "$0.40"],
@@ -541,6 +531,16 @@ image_slide("Same task, three models, all playable",
     REPO / "viz" / "appbench" / "side_by_side_2x.gif", width_in=11.2,
     sub="The actual games the three agents built, being played. Polish climbs left to right. coder-30b gatekept its own game behind a START menu.",
     notes="1:00 | Show, don't tell, let it loop. These are the actual games the three agents built, being played by a script. Left, the small local model, it works, emoji invaders, scoring, a game-over screen, but it shipped the game behind a START menu, which was its one rubric miss. Middle, the eighty-billion, clean and auto-running. Right, Opus, the richest, sprite invaders, a lives counter, restart hints. The polish climbs left to right and maps exactly to the table, but the point is all three are real, runnable, in the repo, and the local ones cost zero dollars. Invite them: clone it and play them yourself.")
+
+table_slide("The reconciliation",
+    ["Workload", "Local verdict"],
+    [["One-shot bounded coding", "**Ties Opus**, fast, free"],
+     ["Multi-turn debug loops", "**Current models stable, 5/5; gpt-oss 20b within ~1.5x of cloud**"],
+     ["Open-ended building (from scratch)", "**80B ties cloud, ~2x slower, $0**"],
+     ["Open-ended repo work (big context)", "**Cloud still wins, on capability**"]],
+    "The 41-turn instability was a stale-model artifact; a current model is stable and 5/5. What's left is wall-clock (~5x on debug) and big-context repo work. **Measure the agent loop, keep your model current, route by task.**",
+    "1:00 | The act-end synthesis, everything Act Three measured in one honest table, so land it slowly. One-shot bounded, ties Opus, fast and free. Multi-turn debug loops, current models are stable and five-for-five, gpt-oss lands within about one-and-a-half times cloud. Open-ended building from scratch, the local eighty-billion ties cloud at twice the wall-clock and zero dollars. Open-ended repo work across big unfamiliar context, cloud still wins on raw capability. The spine of the talk: local is genuinely capable on most of what I do, AND cloud still earns its keep on the hardest open-ended repo work, both true at once. This is the verdict the whole act built to, so let it sit a beat, then move to the money.",
+    col_w=[4, 5])
 
 section_slide("ACT FOUR", "Economics & the call",
     notes="5 sec | Quick beat. Say: 'Act Four. So what does this actually cost, and what should you do on Monday morning?' Move.")

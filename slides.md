@@ -166,17 +166,16 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 | Agent loop | few turns, converges fast | many turns, sustained reasoning |
 | Examples | a parser, a failing unit test, a data structure, a CLI tool, LeetCode | refactor across the repo, a feature touching 12 files, real SWE-bench |
 | Benchmark | **HumanEval, LiveCodeBench** (function-level) | **SWE-bench Verified** (repository-level) |
-| Who wins | **local ties (even leads) Opus** | **cloud wins** |
 
-The benchmarks prove the split: open models tie or even lead on bounded ([Qwen3.5 tops LiveCodeBench at 83.6%](https://www.codesota.com/llm); HumanEval saturated, ~90%+ for all), but trail on [SWE-bench Verified](https://llm-stats.com/benchmarks/swe-bench-verified) (Qwen3.6-27B 77.2 vs Opus 88.6).
+Two genuinely different jobs, measured by two different benchmarks. **So which side does local actually win, and where does cloud stay ahead?** That's the question the rest of the talk measures.
 
 <!--
-1:00 | The definition slide; the whole talk hinges on this distinction. Bounded coding = a self-contained problem you hold in your head and converge on in a few turns: a parser, a failing test, a small CLI tool. Open-ended = a vague task across a big unfamiliar codebase where the model must discover structure, juggle 64k+ context, grind through many turns: a repo-wide refactor, a real SWE-bench task. Local owns the left, free and fast; cloud earns the right. The rest of the deck measures where the line falls.
+1:00 | The definition slide; the whole talk hinges on this distinction. Bounded coding = a self-contained problem you hold in your head and converge on in a few turns: a parser, a failing test, a small CLI tool. Open-ended = a vague task across a big unfamiliar codebase where the model must discover structure, juggle 64k+ context, grind through many turns: a repo-wide refactor, a real SWE-bench task. Two genuinely different jobs, with two different benchmarks. Do NOT tell them who wins each yet, that is the entire payoff of the talk. Just plant the two-axis framing and the open question, and let the suspense carry.
 -->
 
 ---
 
-## Local owns the bottom-left; cloud the top-right
+## Where does the line fall? (the map we'll test)
 
 <div style="text-align:center">
 
@@ -208,16 +207,16 @@ The benchmarks prove the split: open models tie or even lead on bounded ([Qwen3.
 
 ## The route: three machines, three verdicts
 
-| Stop | Hardware | Verdict |
+| Stop | Hardware | What this stop taught me |
 |---|---|---|
 | 1 | Raspberry Pi 5 + AI HAT+ 2 (Hailo-10H) | Dead end: Hailo runs vision; LLMs fall to the Pi CPU at ~5 tok/s (measured) |
 | 2 | MacBook Air M2 16GB ('Maral') | Did the grunt work (~5 hrs). qwen3:14b ~10 tok/s, kinda slow |
 | 3 | The tuning wall | think:false = ~3x; quant sweep; prompt slim |
-| 4 | Reality check | Frontier parity NOT purchasable locally at any price |
-| 5 | Mac Studio M3 Ultra 96GB ($4,676) | Ties Opus on coding @ 68 tok/s, $0/mo |
+| 4 | Reality check | Can you just buy your way to the top? *(Act 2)* |
+| 5 | Mac Studio M3 Ultra 96GB ($4,676) | The machine that finally earned its keep *(Act 3)* |
 
 <!--
-1:30 | This is the map, don't read every cell, walk it. Stop one, the Raspberry Pi, total dead end, I'll explain why in two slides. Stop two, a spare MacBook Air I call Maral, that's where I learned everything even though it only ran a few hours. Stop three, I hit a tuning wall and found the single best speedup of the whole project. Stop four, the reality check, the thing you cannot buy at any price. Stop five, the Mac Studio, which finally ties Opus on coding at sixty-eight tokens a second for zero dollars a month. The takeaway line: the lessons are in the trip, not just the destination.
+1:30 | This is the map, don't read every cell, walk it. Stop one, the Raspberry Pi, total dead end, I'll explain why in two slides. Stop two, a spare MacBook Air I call Maral, that's where I learned everything even though it only ran a few hours. Stop three, I hit a tuning wall and found the single best speedup of the whole project. Stop four, the reality check, which asks whether you can simply buy your way to the top, that's Act Two. Stop five, the Mac Studio, the machine that finally earned its keep, the verdict is Act Three. Tease, don't spoil, the numbers come later. The takeaway line: the lessons are in the trip, not just the destination.
 -->
 
 ---
@@ -322,13 +321,13 @@ The best open-weight model won't even fit the biggest Mac Apple will sell you, a
 
 ## So the decision is about how close, not parity
 
-- Don't chase a number that isn't for sale
-- **Buy hardware for the 80%; keep an explicit `claude-cloud` for the 20%**
-- Denominate the choice in your actual task mix, not dollars or principle
-- Sweet spot for one dev: **~$4-5K, one Mac Studio, 96GB**
+- Parity's off the table, so stop chasing it.
+- The real question becomes: **how close can I get for sensible money, and what do I do about the gap?**
+- Answer that with your actual task mix, not dollars or ideology.
+- So I bought a box to find out.
 
 <!--
-1:00 | The reframe. Once parity is off the table, the question changes from 'can I match it' to 'how close can I get for sensible money, and what do I do about the gap.' The answer is hybrid: buy hardware for the eighty percent of work you do every day, keep a cloud escape hatch for the hard twenty percent. The discipline: decide on your actual task mix, not on ideology and not on the sticker price. Don't buy local because it's cool, don't avoid it because cloud is easier. And I'll say the number out loud now so it's not a surprise later: for one developer, the sweet spot is about four to five thousand dollars, a single ninety-six-gig Mac Studio.
+1:00 | The reframe, and keep it a question, do NOT answer it here. Once parity is off the table, the question changes from 'can I match it' to 'how close can I get for sensible money, and what do I do about the gap.' The discipline: you'll decide on your actual task mix, not on ideology and not on the sticker price. Hold the actual recommendation, the hybrid setup and the dollar figure, for Act Four, that's the payoff. Here you just land the reframe and the fact that I went and bought a box to answer it. Next slide is the buy.
 -->
 
 ---
@@ -385,15 +384,15 @@ Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest
 
 ---
 
-## What the tie means
+## But a benchmark you can't lose isn't measuring
 
-- **Local owns:** self-contained coding, functions, scripts, algorithms, single and moderate multi-file
-- **Cloud still wins:** open-ended, multi-file, sprawling-context repo work (real SWE-bench, the software-engineering benchmark)
-- The gap is real but lives on a different axis than most benchmarks test.
-- A bench your best model can't lose on has stopped measuring.
+- coder-30b **and** Opus both went 24/24 — the bench saturated.
+- A benchmark your best model can't lose on has stopped telling you anything.
+- What it can't see is the axis that matters day to day: long, multi-file, agentic work.
+- So I built harder tests. The rest of this act is what they found.
 
 <!--
-1:30 | The precision slide, this is what keeps the whole talk honest, so slow down and make eye contact. The win is real but bounded. Local owns self-contained coding, functions, scripts, algorithms, single and moderate multi-file work. Cloud still wins the open-ended, sprawling-context stuff, a vague bug report across a huge unfamiliar repo, that's real SWE-bench. The insight to deliver: most benchmarks test the axis local already wins on, isolated problems, and they under-test the axis that actually matters day to day, navigating a big codebase. So leaderboard parity overstates real-world parity. Naming this honestly is what earns you credibility for the rest of the talk.
+1:30 | The bridge, NOT the verdict, resist stating who-wins-what here. The point is narrow and honest: my local model couldn't lose on this bench, both it and Opus went twenty-four for twenty-four, so the bench has stopped measuring anything. A benchmark your best model can't lose on is dead weight. What it can't see is the axis that actually bites day to day, long multi-file agentic work in a big unfamiliar repo. So I built harder tests, and the rest of this act is what they turned up. Keep them in suspense, the reconciliation at the end of the act is where the verdict lands.
 -->
 
 ---
@@ -489,22 +488,6 @@ Every current model is stable and 5/5, the 41-turn coder spiral was a stale mode
 
 ---
 
-## The reconciliation
-
-| Workload | Local verdict |
-|---|---|
-| One-shot bounded coding | **Ties Opus**, fast, free |
-| Multi-turn agent loops | **Current models: stable, 5/5. gpt-oss 20b within ~1.5x of cloud** |
-| Open-ended multi-file repos | **Loses on capability too** |
-
-The instability was a stale-model artifact, a current model is stable and 5/5. What's left is wall-clock (~5x) and big-context repo work. **Measure the agent loop, and keep your model current.**
-
-<!--
-1:00 | This collapses the whole act into one honest table, the 'what's actually true' summary. One-shot bounded coding, ties Opus. Multi-turn agent loops, it works, four out of five, but eight times slower and unstable. Open-ended repos, it loses outright. The line that is the spine of the entire talk: local is genuinely capable, AND the daily experience is worse than the raw speed implies, and both of those are true at the same time. Resist the urge to pick a side, the nuance is the finding. This is usually where a skeptic's question lands, so own the complexity out loud before they get the chance.
--->
-
----
-
 ## But on open-ended building, the gap collapses
 
 | backend | playable | build time | turns | cost |
@@ -529,6 +512,23 @@ Task: 'build playable Space Invaders as one index.html', scored by a Playwright 
 
 <!--
 1:00 | Show, don't tell, let it loop. These are the actual games the three agents built, being played by a script. Left, the small local model, it works, emoji invaders, scoring, a game-over screen, but it shipped the game behind a START menu, which was its one rubric miss. Middle, the eighty-billion, clean and auto-running. Right, Opus, the richest, sprite invaders, a lives counter, restart hints. The polish climbs left to right and maps exactly to the table, but the point is all three are real, runnable, in the repo, and the local ones cost zero dollars. Invite them: clone it and play them yourself.
+-->
+
+---
+
+## The reconciliation
+
+| Workload | Local verdict |
+|---|---|
+| One-shot bounded coding | **Ties Opus**, fast, free |
+| Multi-turn debug loops | **Current models stable, 5/5; gpt-oss 20b within ~1.5x of cloud** |
+| Open-ended building (from scratch) | **80B ties cloud, ~2x slower, $0** |
+| Open-ended repo work (big context) | **Cloud still wins, on capability** |
+
+The 41-turn instability was a stale-model artifact; a current model is stable and 5/5. What's left is wall-clock (~5x on debug) and big-context repo work. **Measure the agent loop, keep your model current, route by task.**
+
+<!--
+1:00 | The act-end synthesis, everything Act Three measured in one honest table, so land it slowly. One-shot bounded, ties Opus, fast and free. Multi-turn debug loops, current models are stable and five-for-five, gpt-oss lands within about one-and-a-half times cloud. Open-ended building from scratch, the local eighty-billion ties cloud at twice the wall-clock and zero dollars. Open-ended repo work across big unfamiliar context, cloud still wins on raw capability. The spine of the talk: local is genuinely capable on most of what I do, AND cloud still earns its keep on the hardest open-ended repo work, both true at once. This is the verdict the whole act built to, so let it sit a beat, then move to the money.
 -->
 
 ---
