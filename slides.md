@@ -49,6 +49,7 @@ section.section h1 { color:#fff; font-size:50px; }
 .cols { display:flex; gap:34px; align-items:center; }
 .cols .txt { flex:1.2; } .cols .pic { flex:1; text-align:center; }
 .cap { color:var(--dk2); font-style:italic; font-size:17px; }
+.fn { font-size:11px !important; color:var(--dk2); font-style:italic; line-height:1.6; display:block; }
 section.center { text-align:center; }
 </style>
 
@@ -311,7 +312,7 @@ The benchmarks prove the split: open models tie or even lead on bounded ([Qwen3.
 
 The best open-weight model won't even fit the biggest Mac Apple will sell you, and it's still 8 points behind Opus in the cloud. **The only thing that gives you Opus quality is Opus.**\*\* ([SWE-bench Verified, llm-stats.com](https://llm-stats.com/benchmarks/swe-bench-verified); same 77.2 / 88.6 in [Local AI is not Opus](https://blog.alexellis.io/local-ai-is-not-opus/))
 
-<span style="font-size:14px; color:#412B71; font-style:italic">\* DeepSeek-V4 is a 1.6T-param MoE: it won't fit a 512GB Mac, and Apple pulled the 512GB config in March 2026 anyway. Even granting cloud-scale hardware, the best open weight is still −8. &nbsp;&nbsp; \*\* Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are.</span>
+<span class="fn">&ast; DeepSeek-V4 is a 1.6T-param MoE: it won't fit a 512GB Mac, and Apple pulled the 512GB config in March 2026 anyway. Even granting cloud-scale hardware, the best open weight is still −8.<br>&ast;&ast; Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are.</span>
 
 <!--
 2:00 | The hinge, now with verified numbers I actually looked up. Myth-buster: 'just buy a big enough Mac and you'll match Opus' is false. The model I run on the 96GB box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven behind Opus. Max out to a 512GB box and the best open-weight model on earth, DeepSeek V4, gets you to eighty-point-six, still eight short. You cannot spend your way to parity. The only thing that gives you Opus quality is Opus. Note this is SWE-bench Verified, the hard open-ended-repo axis, exactly where local loses, consistent with the rest of the talk where local ties on bounded work.

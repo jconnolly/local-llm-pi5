@@ -421,11 +421,16 @@ _rc = table_slide("Reality check: you can't buy frontier parity",
     "The best open-weight model won't even fit the biggest Mac Apple will sell you, and it's still 8 points behind Opus in the cloud. **The only thing that gives you Opus quality is Opus.** (SWE-bench Verified, llm-stats.com; same 77.2 / 88.6 in 'Local AI is not Opus', blog.alexellis.io)",
     "2:00 | The hinge, now with verified numbers I actually looked up. Myth-buster: 'just buy a big enough Mac and you'll match Opus' is false, twice over. The model I run on the 96GB box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven points behind Opus. And the best open-weight model on earth, DeepSeek V4, only reaches eighty-point-six, still eight short, AND it's a 1.6-trillion-parameter model that won't even fit a 512-gig Mac, which Apple stopped selling in March anyway. So you can't buy the hardware, and even cloud-scale open weights lose. The only thing that gives you Opus quality is Opus. Note this is SWE-bench Verified, the hard open-ended-repo axis, exactly where local loses, consistent with the rest of the talk where local ties on bounded work.",
     col_w=[1.7, 3.4, 2.1, 2.3], font=13)
-_rcf = _rc.shapes.add_textbox(Inches(1.7), Inches(6.05), SW - Inches(2.3), Inches(0.7))
+_rcf = _rc.shapes.add_textbox(Inches(0.6), Inches(6.12), SW - Inches(1.2), Inches(0.8))
 _no_autofit(_rcf.text_frame)
-_rcr = _rcf.text_frame.paragraphs[0].add_run()
-_rcr.text = "* DeepSeek-V4 is a 1.6T-param MoE: won't fit a 512GB Mac, and Apple pulled the 512GB config in March 2026. Even on cloud-scale hardware the best open weight is still −8.\n* Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are."
-_rcr.font.size = Pt(11); _rcr.font.italic = True; _rcr.font.color.rgb = DK2
+_rcf.text_frame.word_wrap = True
+def _fn(p, txt):
+    r = p.add_run(); r.text = txt
+    r.font.size = Pt(9); r.font.italic = True; r.font.color.rgb = DK2
+_fn(_rcf.text_frame.paragraphs[0],
+    "* DeepSeek-V4 is a 1.6T-param MoE: it won't fit a 512GB Mac, and Apple pulled the 512GB config in March 2026 anyway. Even granting cloud-scale hardware, the best open weight is still −8.")
+_fn(_rcf.text_frame.add_paragraph(),
+    "** Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are.")
 
 bullets_slide("So the decision is about how close, not parity",
     [B("Don't chase a number that isn't for sale"),
