@@ -133,7 +133,7 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 <div class="pic">
 
 ![w:330](viz/pi5-aihat.png)
-<div class="cap">Raspberry Pi 5 + AI HAT+ 2 — <a href="https://vilros.com/products/raspberry-pi-ai-hat-2">bought from Vilros</a></div>
+<div class="cap">Raspberry Pi 5 + AI HAT+ 2 · <a href="https://vilros.com/products/raspberry-pi-ai-hat-2">bought from Vilros</a></div>
 
 </div>
 </div>
@@ -264,7 +264,7 @@ The benchmarks prove the split: open models tie or even lead on bounded ([Qwen3.
 
 ---
 
-## Maral: a spare 16GB Air, doing the most
+## Maral: a spare 16GB Air, punching above its weight
 
 - qwen3:8b / :14b via Ollama's Anthropic endpoint, wired into Claude Code with one env block
 - Plot twists:

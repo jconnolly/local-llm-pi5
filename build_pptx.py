@@ -395,7 +395,7 @@ _p2 = _fc.text_frame.add_paragraph(); _p2.alignment = PP_ALIGN.CENTER
 _r2 = _p2.add_run(); _r2.text = "— CNX Software, AI HAT+ 2 review"
 _r2.font.size = Pt(11); _r2.font.color.rgb = DK2
 
-bullets_slide("Maral: a spare 16GB Air, doing the most",
+bullets_slide("Maral: a spare 16GB Air, punching above its weight",
     [B("qwen3:8b / :14b via Ollama's Anthropic endpoint, wired into Claude Code with one env block"),
      B("Plot twists:"),
      B1("Tool-use was already at parity with cloud. The worry? Misplaced."),
