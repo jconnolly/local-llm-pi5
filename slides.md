@@ -56,9 +56,9 @@ section.center { text-align:center; }
 
 <div class="sub">Three weeks, three machines: from a Raspberry Pi to a $4,676 Mac Studio.</div>
 
-<div style="display:flex; align-items:center; gap:18px">
-<div class="tldr"><span class="lab">TL;DR</span> bounded coding <strong>ties the frontier, free</strong>. Open-ended repos:</div>
-<img src="viz/conceited.gif" style="height:120px; border-radius:8px" />
+<div class="tldr" style="display:flex; align-items:center; gap:22px">
+<span><span class="lab">TL;DR</span> bounded coding <strong>ties the frontier, free</strong>. Open-ended repos:</span>
+<img src="viz/conceited.gif" style="height:84px; border-radius:8px" />
 </div>
 
 <div class="byline">John Connolly, Lead Product Engineer &amp; tinkerer<br>June 2026</div>
