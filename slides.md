@@ -227,7 +227,7 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 | **512GB ($11.5K)** | **DeepSeek-V4 (best open weight)** | **80.6%** | **−8 (still short!)** |
 | Cloud | **Opus 4.8** | **88.6%** | 0 |
 
-Even the best open-weight model, on an $11.5K box, is 8 points behind Opus. **The only thing that gives you Opus quality is Opus.** ([SWE-bench Verified, llm-stats.com](https://llm-stats.com/benchmarks/swe-bench-verified), Jun 2026)
+Even the best open-weight model, on an $11.5K box, is 8 points behind Opus. **The only thing that gives you Opus quality is Opus.** ([SWE-bench Verified, llm-stats.com](https://llm-stats.com/benchmarks/swe-bench-verified); same 77.2 / 88.6 in [Local AI is not Opus](https://blog.alexellis.io/local-ai-is-not-opus/))
 
 <!--
 2:00 | The hinge, now with verified numbers I actually looked up. Myth-buster: 'just buy a big enough Mac and you'll match Opus' is false. The model I run on the 96GB box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven behind Opus. Max out to a 512GB box and the best open-weight model on earth, DeepSeek V4, gets you to eighty-point-six, still eight short. You cannot spend your way to parity. The only thing that gives you Opus quality is Opus. Note this is SWE-bench Verified, the hard open-ended-repo axis, exactly where local loses, consistent with the rest of the talk where local ties on bounded work.

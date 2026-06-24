@@ -342,7 +342,7 @@ table_slide("Reality check: you can't buy frontier parity",
     [["96GB Mac", "Qwen3.6-27B (what I benched)", "77.2%", "−11"],
      ["**512GB ($11.5K)**", "**DeepSeek-V4 (best open weight)**", "**80.6%**", "**−8 (still short!)**"],
      ["Cloud", "**Opus 4.8**", "**88.6%**", "0"]],
-    "Even the best open-weight model, on an $11.5K box, is 8 points behind Opus. **The only thing that gives you Opus quality is Opus.** (SWE-bench Verified, llm-stats.com, Jun 2026)",
+    "Even the best open-weight model, on an $11.5K box, is 8 points behind Opus. **The only thing that gives you Opus quality is Opus.** (SWE-bench Verified, llm-stats.com; same 77.2 / 88.6 in 'Local AI is not Opus', blog.alexellis.io)",
     "2:00 | The hinge, now with verified numbers I actually looked up. Myth-buster: 'just buy a big enough Mac and you'll match Opus' is false. The model I run on the 96GB box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven points behind Opus. Max out to a five-hundred-twelve-gig box and the best open-weight model on earth, DeepSeek V4, gets you to eighty-point-six, still eight short. You cannot spend your way to parity. Land it slowly: the only thing that gives you Opus quality is Opus. And note this is SWE-bench Verified, the hard open-ended-repo axis, which is exactly where local loses, consistent with the rest of the talk where local ties on bounded work.",
     col_w=[1.5, 3.5, 2.2, 2.3], font=13)
 
