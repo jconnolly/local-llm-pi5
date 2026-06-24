@@ -1,0 +1,63 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+  html,body{margin:0;background:#fff;font-family:Arial,Helvetica,sans-serif}
+  #c{position:relative;width:1060px;height:740px;background:#fff;padding:0}
+  #title{position:absolute;left:50px;top:22px;font-size:28px;font-weight:800;color:#251144}
+  #sub{position:absolute;left:50px;top:60px;font-size:15px;color:#412B71}
+  #chips{position:absolute;left:50px;top:88px;font-size:14px}
+  .chip{display:inline-block;padding:4px 12px;border-radius:14px;margin-right:10px;font-weight:700;color:#fff}
+  .rows{position:absolute;left:50px;top:130px;width:980px}
+  .row{display:flex;align-items:center;height:30px;margin:4px 0}
+  .lbl{width:280px;font-size:14px;color:#251144;text-align:right;padding-right:12px;white-space:nowrap;overflow:hidden}
+  .barwrap{flex:1;position:relative;height:22px}
+  .bar{height:22px;border-radius:3px}
+  .pct{position:absolute;top:1px;font-size:13px;font-weight:700;color:#251144;padding-left:8px}
+  .ldot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#2e7d32;margin-left:6px;vertical-align:middle}
+  #legend{position:absolute;left:50px;top:632px;font-size:13.5px;color:#412B71}
+  .lg{margin-right:26px;display:inline-block} .sw{display:inline-block;width:13px;height:13px;border-radius:3px;vertical-align:middle;margin-right:6px}
+  #callout{position:absolute;left:50px;top:664px;width:980px;background:#e9f7ec;border-left:5px solid #2e7d32;border-radius:8px;padding:12px 18px;font-size:14.5px;color:#1b5e20;box-sizing:border-box}
+</style></head><body>
+<div id="c">
+  <div id="title">What I actually use Claude Code for &mdash; all 2,177 prompts (68 projects)</div>
+  <div id="sub">Classified by project working-directory. Green dot = privacy-sensitive / bounded &rarr; a good local fit.</div>
+  <div id="chips">
+    <span class="chip" style="background:#835BA3">Work (DSG) 47%</span>
+    <span class="chip" style="background:#0d9488">Personal, outside work 49%</span>
+    <span class="chip" style="background:#888">Scratch 4%</span>
+    <span class="chip" style="background:#412B71">Jira/Slack/teammate coordination 9%</span>
+  </div>
+  <div class="rows" id="rows"></div>
+  <div id="legend">
+    <span class="lg"><span class="sw" style="background:#835BA3"></span>DSG work</span>
+    <span class="lg"><span class="sw" style="background:#0d9488"></span>personal (outside work)</span>
+    <span class="lg"><span class="ldot" style="margin:0 6px 0 0"></span>good local fit (privacy / bounded)</span>
+  </div>
+  <div id="callout"><b>The privacy angle:</b> ~half of this is personal, done outside work &mdash; and a lot of it is privacy-sensitive (finance, home network, thermostat). That's local's natural home: my credit-card-categorizer ran <b>fully local</b>, no cloud, for obvious privacy reasons &mdash; and it was genuinely good at it. I didn't need the frontier.</div>
+</div>
+<script>
+// [label, pct, kind(work/personal/scratch), localFit]
+const data=[
+ ["internal gateway POC", 21.5, "work", false],
+ ["Home networking (OpenWRT router)", 13.8, "personal", true],
+ ["Personal finance app (categorizer)", 11.4, "personal", true],
+ ["CMS / CRM integration", 11.1, "work", false],
+ ["This local-LLM project + deck", 10.9, "personal", false],
+ ["Travel: campsite + flight automation", 7.5, "personal", true],
+ ["Course-deploy automation", 5.1, "work", false],
+ ["internal CLI tooling", 3.7, "work", false],
+ ["Home automation (thermostat / AC)", 2.6, "personal", true],
+ ["reporting dashboard", 2.0, "work", false],
+ ["Personal blog", 1.9, "personal", false],
+ ["AI course recommender", 1.6, "work", false],
+ ["Scratch / misc / LeetCode", 4.9, "scratch", false],
+];
+const col={work:"#835BA3",personal:"#0d9488",scratch:"#aaa"};
+const max=21.5, W=640;
+const R=document.getElementById("rows");
+for(const [lbl,pct,kind,fit] of data){
+  const row=document.createElement("div"); row.className="row";
+  row.innerHTML=`<div class="lbl">${lbl}${fit?'<span class="ldot"></span>':''}</div>`+
+    `<div class="barwrap"><div class="bar" style="width:${pct/max*W}px;background:${col[kind]}"></div>`+
+    `<div class="pct" style="left:${pct/max*W}px">${pct}%</div></div>`;
+  R.appendChild(row);
+}
+</script></body></html>

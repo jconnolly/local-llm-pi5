@@ -162,6 +162,20 @@ The benchmarks prove the split: open models tie or even lead on bounded ([Qwen3.
 
 ---
 
+## Half work, half personal (outside work)
+
+<div style="text-align:center">
+
+![h:515](viz/usage.png)
+
+</div>
+
+<!--
+1:30 | Full audit, all 2,177 prompts, classified by project (more reliable than guessing from text). Two headlines. One: almost exactly half DSG work, half personal projects outside work. Biggest is the internal gateway POC; then my home network, a personal finance app, and building this deck. Two: a huge chunk of the personal half is privacy-sensitive (finances, home network, thermostat) = local's natural home, data never leaves the house. And not a compromise: my local credit-card categorizer was genuinely good, didn't need cloud. So local isn't just bounded coding, it's the obvious pick for the private, personal, bounded-classification work that's half my usage.
+-->
+
+---
+
 ## The route: three machines, three verdicts
 
 | Stop | Hardware | Verdict |

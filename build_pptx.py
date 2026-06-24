@@ -337,6 +337,11 @@ _qcr.text = "Teal circle = my real usage (90-prompt sample of my own history): c
 _qcr.font.size = Pt(12); _qcr.font.color.rgb = DK2
 _notes(_q, "1:30 | The honest gut-check. I built this whole chart, then went and looked at my actual Claude Code history, 2,264 prompts across 68 projects. Two findings. One, the teal circle: my real coding tasks straddle the line and lean to the cloud side, about sixty percent open-ended, exactly where local is weakest, so for me the hybrid case is even stronger. Two, the bigger surprise, about eighty percent of what I use Claude Code for isn't even on this chart, it's ops, Jira and Slack coordination, infrastructure debugging, a personal finance app, even building this deck. Be honest it's a sampled estimate, manually classified, but the shape is clear: my Claude Code is more of a general agent than a code generator, and the coding I do leans open-ended.")
 
+_u = _title_only("Half work, half personal (outside work)")
+_up = _u.shapes.add_picture(str(REPO / "viz" / "usage.png"), 0, 0, height=Inches(4.95))
+_up.left = int((SW - _up.width) // 2); _up.top = Inches(1.45)
+_notes(_u, "1:30 | The full audit, all 2,177 prompts, classified by which project they came from, far more reliable than guessing from the text. Two headlines. One, it's almost exactly half DSG work, half personal projects I do outside work, plus a sliver of scratch. The biggest single thing is the internal gateway POC for work; right behind it, my home network, a personal finance app, and yes, building this very deck. Two, and this changes the local story: a huge chunk of the personal half is privacy-sensitive, my finances, my home network, my thermostat. That is local's natural home, the data never leaves the house. And it's not a compromise: when I had a local model categorize my credit-card charges, it was genuinely good, I didn't need the cloud. So local isn't just for bounded coding, it's the obvious choice for the private, personal, bounded-classification work that's half of what I do.")
+
 table_slide("The route: three machines, three verdicts",
     ["Stop", "Hardware", "Verdict"],
     [["1", "Raspberry Pi 5 + AI HAT+ 2 (Hailo-10H)", "Dead end: Hailo runs vision; LLMs fall to the Pi CPU at ~5 tok/s (measured)"],
