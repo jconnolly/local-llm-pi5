@@ -91,13 +91,30 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 
 ---
 
+## Got a question? Tell me live.
+
+<div style="text-align:center">
+
+![h:330](viz/slido-qr.png)
+
+</div>
+
+<div class="sub" style="text-align:center; margin-top:10px">Scan to ask anything, upvote, or drop feedback in real time</div>
+<div class="cap" style="text-align:center">app.sli.do/event/9YznQ5rvRQcGAqDi2v8jaW &nbsp;·&nbsp; I'll check it at every act break</div>
+
+<!--
+0:40 | Before Act One, while people settle. QR up: 'This talk is about measuring, not vibing, so hold me to it. Scan this Slido, ask questions, drop feedback, upvote what you want answered, any time, don't wait for the end.' Say you'll check at each act break and read the top question aloud. Leave it up a beat for the back row to scan.
+-->
+
+---
+
 <!-- _class: section -->
 <div class="kicker">ACT ONE</div>
 
 # The route: three machines
 
 <!--
-5 sec | Quick beat, don't linger on dividers. Say: 'Act One, the route. How I got from a thirty-five-dollar Raspberry Pi to a forty-six-hundred-dollar Mac Studio, and what each machine taught me.' Then move.
+5 sec | Quick beat, don't linger on dividers. Say: 'Act One, the route. How I got from a thirty-five-dollar Raspberry Pi to a forty-six-hundred-dollar Mac Studio, and what each machine taught me.' Then move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
 -->
 
 ---
@@ -267,7 +284,7 @@ The benchmarks prove the split: open models tie or even lead on bounded ([Qwen3.
 # Reality check & the $4,676 call
 
 <!--
-5 sec | Quick beat. Say: 'Act Two. I've got a working setup, now the uncomfortable part, how good can local actually get, and can you just buy your way to the top? Short answer, no.' Move.
+5 sec | Quick beat. Say: 'Act Two. I've got a working setup, now the uncomfortable part, how good can local actually get, and can you just buy your way to the top? Short answer, no.' Move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
 -->
 
 ---
@@ -334,7 +351,7 @@ The best open-weight model won't even fit the biggest Mac Apple will sell you, a
 # The measured verdict
 
 <!--
-5 sec | Quick beat, but build energy here, this is the best part. Say: 'Act Three. Enough story, enough vibes. Here are the actual benchmarks, and this is where it surprised me.' Move.
+5 sec | Quick beat, but build energy here, this is the best part. Say: 'Act Three. Enough story, enough vibes. Here are the actual benchmarks, and this is where it surprised me.' Move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
 -->
 
 ---
@@ -509,7 +526,7 @@ Task: 'build playable Space Invaders as one index.html', scored by a Playwright 
 # Economics & the call
 
 <!--
-5 sec | Quick beat. Say: 'Act Four. So what does this actually cost, and what should you do on Monday morning?' Move.
+5 sec | Quick beat. Say: 'Act Four. So what does this actually cost, and what should you do on Monday morning?' Move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
 -->
 
 ---
@@ -567,6 +584,25 @@ One toggle, per task. Denominated in your real workload.
 
 <!--
 1:00 | End on momentum, this is live research, not a post-mortem. Three threads: cut my real agents fully over to local and live on it, keep the measurement rig running on real daily tasks not synthetic benches, and the exciting one, add verification-loop scaffolding. Land this hard: published results show guardrails took an eight-billion-parameter model from fifty-three percent to ninety-nine percent on agentic workflows. So the instability we measured a few slides ago might be a software problem, not a model-size problem, the fix could be code, not a ten-thousand-dollar box. That single reframe turns the whole weakness into something solvable, and it leaves the room optimistic instead of resigned.
+-->
+
+---
+
+## Stumbling blocks (learned the hard way)
+
+<div style="font-size:18px">
+
+- **Swapping models mid-conversation = instant `API Error: 400`.** Claude Code replays the whole stored history (tool blocks, cache, system prompt); it no longer matches the new backend. Fix: `/clear` or a fresh session per swap.
+- **Low quant silently breaks tool-calling.** q4 degrades the agent loop, not just the prose; q6 is the agentic sweet spot.
+- **Forgetting `think:false`** = an invisible ~3-8x token + latency tax. One env var, easy to leave off.
+- **A stale model IS the instability.** A last-gen coder spiraled to 41 turns on a 1-line fix; a current model did it in 7. Re-bench monthly, the field moves weekly.
+- **Ollama traps:** restarting the service kills an in-flight `ollama pull`; `ollama ps` reads empty (0.30.7 display bug, check `ps aux | grep llama-server`); needs the full `Resources/` dir or it 500s.
+- **16GB is a demo, not a platform:** the WiFi driver crashed under memory pressure, and the bus starves the model.
+
+</div>
+
+<!--
+1:00 | The practical warnings, the stuff that bit me, so anyone who tries this skips the pain. The one that gets everybody: swap the model mid-conversation in Claude Code and you get an instant 400, because CC replays the entire stored history, tool calls, cache, system prompt, and it no longer matches the new backend. Fix is dumb-simple: clear or restart the session when you change models. Low quant quietly degrades tool-calling, so the agent gets worse at USING tools even when answers look fine; run q6 not q4. Forgetting think:false is a silent multiple-x tax. The instability was a stale model, re-bench monthly. A pile of Ollama operational traps. And 16GB is a demo, not a platform. None are dealbreakers, they're the potholes, now you know where they are.
 -->
 
 ---

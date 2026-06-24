@@ -275,6 +275,8 @@ def section_slide(kicker, title, notes=""):
     _no_autofit(tb.text_frame)
     tr = tb.text_frame.paragraphs[0].add_run()
     tr.text = title; tr.font.size = Pt(40); tr.font.bold = True; tr.font.color.rgb = WHITE
+    if notes:
+        notes = notes.rstrip() + "  ||  SLIDO CHECK: glance at the live feed (app.sli.do/event/9YznQ5rvRQcGAqDi2v8jaW), read any new question aloud before you start the act."
     _notes(s, notes)
     return s
 
@@ -298,6 +300,11 @@ table_slide("Agenda, where we're going (~29 min)",
      ["4", "Economics, recommendation, honest caveats", "5"]],
     notes="0:30 | Don't dwell. Four acts. Act 1 is the journey across three machines, that's the story. Act 2 is the uncomfortable truth that you can't buy your way to parity. Act 3 is the heart, the actual benchmarks, and it's where the surprise lives, so flag it now: 'Act 3 is the part that changed my mind.' Act 4 is the money and the recommendation. Tell them you'll leave time for Q&A. If you're running long, Act 1 is the part to compress.",
     col_w=[1, 7, 1.4])
+
+_sl = image_slide("Got a question? Tell me live.",
+    REPO / "viz" / "slido-qr.png", width_in=3.4,
+    sub="**Scan** to ask anything, upvote, or drop feedback in real time   ·   app.sli.do/event/9YznQ5rvRQcGAqDi2v8jaW",
+    notes="0:40 | Do this before Act One, while everyone's still settling. Put the QR up and say: 'This whole talk is about measuring instead of vibing, so hold me to it. Scan this, it's a Slido, ask questions, drop feedback, upvote whatever you want answered, any time, you don't have to wait for the end.' Tell them you'll check it at every act break and read the top question aloud. Leave it up for a beat so the back row can scan. Lowers the bar for the quiet folks and gives you a live read on what's landing.")
 
 section_slide("ACT ONE", "The route: three machines",
     notes="5 sec | Quick beat, don't linger on dividers. Say: 'Act One, the route. How I got from a thirty-five-dollar Raspberry Pi to a forty-six-hundred-dollar Mac Studio, and what each machine taught me.' Then move.")
@@ -555,6 +562,16 @@ bullets_slide("What's next (this is being measured)",
      B("Add verification-loop scaffolding, guardrails took an 8B from 53% to 99% on agentic workflows (Forge, Show HN, news.ycombinator.com/item?id=48192383)"),
      B("The instability may be a software problem, not a model-size one. The fix might be code, not a $10k box.")],
     "1:00 | End on momentum, this is live research, not a post-mortem. Three threads: cut my real agents fully over to local and live on it, keep the measurement rig running on real daily tasks not synthetic benches, and the exciting one, add verification-loop scaffolding. Land this hard: published results show guardrails took an eight-billion-parameter model from fifty-three percent to ninety-nine percent on agentic workflows. So the instability we measured a few slides ago might be a software problem, not a model-size problem, the fix could be code, not a ten-thousand-dollar box. That single reframe turns the whole weakness into something solvable, and it leaves the room optimistic instead of resigned.")
+
+bullets_slide("Stumbling blocks (learned the hard way)",
+    [B("Swapping models mid-conversation = instant `API Error: 400`. Claude Code replays the whole stored history (tool blocks, cache, system prompt) and it doesn't match the new backend. Fix: /clear or a fresh session per swap."),
+     B("Low quant silently breaks tool-calling. q4 degrades the agent loop, not just the prose; q6 is the agentic sweet spot."),
+     B("Forgetting think:false = an invisible ~3-8x token + latency tax. One env var, easy to leave off."),
+     B("A stale model IS the instability. A last-gen coder spiraled to 41 turns on a 1-line fix; a current model did it in 7. Re-bench monthly, the field moves weekly."),
+     B("Ollama traps: restarting the service kills an in-flight `ollama pull`; `ollama ps` reads empty (0.30.7 display bug, check `ps aux | grep llama-server`); it needs the full Resources/ dir or it 500s."),
+     B("16GB is a demo, not a platform: the WiFi driver crashed under memory pressure, and the bus starves the model.")],
+    "1:00 | The practical warnings, the stuff that actually bit me, so anyone who tries this skips the pain. Top of the list and the one that gets everybody: swap the model mid-conversation in Claude Code and you get an instant four-hundred error, because Claude Code replays the entire stored history, tool calls, cache, system prompt, and it no longer matches the new backend. The fix is dumb-simple, clear the session or start fresh whenever you change models. Then: low quantization quietly degrades tool-calling, so the agent gets worse at USING tools even when its answers still look fine, run q6 not q4 for agentic work. Forgetting the think-false flag is a silent multiple-x tax. The instability we measured was a stale model, so re-bench monthly. A pile of Ollama operational traps that cost me hours. And sixteen gigs is a demo, not a platform. None of these are dealbreakers, they're the potholes, and now you know where they are.",
+    font=15)
 
 title_slide("Thank you",
     "The win is real. So is the caveat.\n"
