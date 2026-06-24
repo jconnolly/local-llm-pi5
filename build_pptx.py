@@ -338,14 +338,13 @@ section_slide("ACT TWO", "Reality check & the $4,676 call",
     notes="5 sec | Quick beat. Say: 'Act Two. I've got a working setup, now the uncomfortable part, how good can local actually get, and can you just buy your way to the top? Short answer, no.' Move.")
 
 table_slide("Reality check: you can't buy frontier parity",
-    ["Tier", "Best model", "SWE-bench", "Gap to Opus 4.8"],
-    [["96GB Mac", "qwen3-coder:30b", "~77%", "−12"],
-     ["192GB", "qwen3-235b Q4", "~86%", "−3"],
-     ["**512GB ($11.5K)**", "**DeepSeek-V3 Q4**", "**~88%**", "**−4 (still short!)**"],
+    ["Tier", "Best model you can run", "SWE-bench Verified", "Gap to Opus 4.8"],
+    [["96GB Mac", "Qwen3.6-27B (what I benched)", "77.2%", "−11"],
+     ["**512GB ($11.5K)**", "**DeepSeek-V4 (best open weight)**", "**80.6%**", "**−8 (still short!)**"],
      ["Cloud", "**Opus 4.8**", "**88.6%**", "0"]],
-    "Open weights trail the closed frontier by 6-12 months. **The only thing that gives you Opus quality is Opus.**",
-    "2:00 | Slow down, this is the intellectual hinge of the talk. The myth I'm busting: 'just buy a big enough Mac and you'll match Opus.' It's false. Walk the table from the bottom. Even an eleven-and-a-half-thousand-dollar, five-hundred-twelve-gig machine running the best open model on earth is still four points behind Opus on the benchmark. You cannot spend your way to parity at home, full stop. The structural reason: open-weight models trail the closed frontier by roughly six to twelve months, it's a moving target, by the time open catches today's Opus, Opus has moved. So the line to land, slowly: the only thing that gives you Opus quality is Opus. This reframes the whole buying decision, which is the next slide.",
-    col_w=[2, 2.6, 1.6, 2.4], font=13)
+    "Even the best open-weight model, on an $11.5K box, is 8 points behind Opus. **The only thing that gives you Opus quality is Opus.** (SWE-bench Verified, llm-stats.com, Jun 2026)",
+    "2:00 | The hinge, now with verified numbers I actually looked up. Myth-buster: 'just buy a big enough Mac and you'll match Opus' is false. The model I run on the 96GB box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven points behind Opus. Max out to a five-hundred-twelve-gig box and the best open-weight model on earth, DeepSeek V4, gets you to eighty-point-six, still eight short. You cannot spend your way to parity. Land it slowly: the only thing that gives you Opus quality is Opus. And note this is SWE-bench Verified, the hard open-ended-repo axis, which is exactly where local loses, consistent with the rest of the talk where local ties on bounded work.",
+    col_w=[1.5, 3.5, 2.2, 2.3], font=13)
 
 bullets_slide("So the decision is about how close, not parity",
     [B("Don't chase a number that isn't for sale"),

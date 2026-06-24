@@ -221,17 +221,16 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 
 ## Reality check: you can't buy frontier parity
 
-| Tier | Best model | SWE-bench | Gap to Opus 4.8 |
+| Tier | Best model you can run | SWE-bench Verified | Gap to Opus 4.8 |
 |---|---|---|---|
-| 96GB Mac | qwen3-coder:30b | ~77% | −12 |
-| 192GB | qwen3-235b Q4 | ~86% | −3 |
-| **512GB ($11.5K)** | **DeepSeek-V3 Q4** | **~88%** | **−4 (still short!)** |
+| 96GB Mac | Qwen3.6-27B (what I benched) | 77.2% | −11 |
+| **512GB ($11.5K)** | **DeepSeek-V4 (best open weight)** | **80.6%** | **−8 (still short!)** |
 | Cloud | **Opus 4.8** | **88.6%** | 0 |
 
-Open weights trail the closed frontier by 6-12 months. **The only thing that gives you Opus quality is Opus.**
+Even the best open-weight model, on an $11.5K box, is 8 points behind Opus. **The only thing that gives you Opus quality is Opus.** ([SWE-bench Verified, llm-stats.com](https://llm-stats.com/benchmarks/swe-bench-verified), Jun 2026)
 
 <!--
-2:00 | Slow down, this is the intellectual hinge of the talk. The myth I'm busting: 'just buy a big enough Mac and you'll match Opus.' It's false. Walk the table from the bottom. Even an eleven-and-a-half-thousand-dollar, five-hundred-twelve-gig machine running the best open model on earth is still four points behind Opus on the benchmark. You cannot spend your way to parity at home, full stop. The structural reason: open-weight models trail the closed frontier by roughly six to twelve months, it's a moving target, by the time open catches today's Opus, Opus has moved. So the line to land, slowly: the only thing that gives you Opus quality is Opus. This reframes the whole buying decision, which is the next slide.
+2:00 | The hinge, now with verified numbers I actually looked up. Myth-buster: 'just buy a big enough Mac and you'll match Opus' is false. The model I run on the 96GB box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven behind Opus. Max out to a 512GB box and the best open-weight model on earth, DeepSeek V4, gets you to eighty-point-six, still eight short. You cannot spend your way to parity. The only thing that gives you Opus quality is Opus. Note this is SWE-bench Verified, the hard open-ended-repo axis, exactly where local loses, consistent with the rest of the talk where local ties on bounded work.
 -->
 
 ---
