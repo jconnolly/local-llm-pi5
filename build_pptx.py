@@ -315,6 +315,17 @@ bullets_slide("The question",
      B1("Is it good enough, measured, not vibes?")],
     "1:00 | Two real questions here. 'Possible' turned out to be the easy one, spoiler, yes, it works on modest hardware. The hard one is 'good enough,' and the whole talk hinges on the fact that good-enough splits in two: good enough for a single bounded task, versus good enough for a long multi-turn agent loop. Those give opposite answers. Plant the seed: 'hold onto the idea that good enough depends on which good.' And the last bullet is the north star, measured, not vibes. Every number you'll see came from a script, not a feeling.")
 
+table_slide("Bounded coding vs open-ended repos",
+    ["", "Bounded coding", "Open-ended repos"],
+    [["Scope", "one function, script, or algorithm; a file or a few you already know", "a vague bug or feature across a large, unfamiliar codebase"],
+     ["Context", "small, fits in your head", "huge (64k+), must be discovered first"],
+     ["Agent loop", "few turns, converges fast", "many turns, sustained reasoning"],
+     ["Examples", "a parser, a failing unit test, a data structure, a CLI tool, LeetCode", "refactor across the repo, a feature touching 12 files, real SWE-bench"],
+     ["Who wins", "**local ties Opus**", "**cloud wins**"]],
+    "Local owns the left column, free and fast. Cloud earns its keep on the right. The rest of the deck just measures where that line falls.",
+    "1:00 | The definition slide, and worth being concrete because the whole talk hinges on this one distinction. Bounded coding is a self-contained problem: a single function, a script, an algorithm, a file or a few you already understand, something you can hold in your head and the agent converges on in a few turns, a parser, a failing unit test, a small CLI tool. Open-ended repo work is the opposite: a vague bug or feature spread across a big, unfamiliar codebase, where the model first has to discover the structure, juggle sixty-thousand-plus tokens of context, and grind through many turns, a refactor across the whole repo or a real SWE-bench task. The one-sentence version: local owns the left column, free and fast; cloud earns its keep on the right. Everything else in this deck is me measuring exactly where that line falls.",
+    col_w=[1.3, 4.0, 4.3], font=13)
+
 table_slide("The route: three machines, three verdicts",
     ["Stop", "Hardware", "Verdict"],
     [["1", "Raspberry Pi 5 + AI HAT+ 2 (Hailo-10H)", "Dead end: Hailo runs vision; LLMs fall to the Pi CPU at ~5 tok/s (measured)"],

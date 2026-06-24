@@ -127,6 +127,24 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 
 ---
 
+## Bounded coding vs open-ended repos
+
+| | Bounded coding | Open-ended repos |
+|---|---|---|
+| Scope | one function, script, or algorithm; a file or a few you already know | a vague bug or feature across a large, unfamiliar codebase |
+| Context | small, fits in your head | huge (64k+), must be discovered first |
+| Agent loop | few turns, converges fast | many turns, sustained reasoning |
+| Examples | a parser, a failing unit test, a data structure, a CLI tool, LeetCode | refactor across the repo, a feature touching 12 files, real SWE-bench |
+| Who wins | **local ties Opus** | **cloud wins** |
+
+Local owns the left column, free and fast. Cloud earns its keep on the right. The rest of the deck just measures where that line falls.
+
+<!--
+1:00 | The definition slide; the whole talk hinges on this distinction. Bounded coding = a self-contained problem you hold in your head and converge on in a few turns: a parser, a failing test, a small CLI tool. Open-ended = a vague task across a big unfamiliar codebase where the model must discover structure, juggle 64k+ context, grind through many turns: a repo-wide refactor, a real SWE-bench task. Local owns the left, free and fast; cloud earns the right. The rest of the deck measures where the line falls.
+-->
+
+---
+
 ## The route: three machines, three verdicts
 
 | Stop | Hardware | Verdict |
