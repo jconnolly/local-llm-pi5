@@ -235,21 +235,21 @@
 <thead>
 <tr>
 <th>Tier</th>
-<th>Best model you can run</th>
+<th>Best open weight</th>
 <th>SWE-bench Verified</th>
 <th>Gap to Opus 4.8</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>96GB Mac</td>
+<td>96GB Mac (what you'd actually buy)</td>
 <td>Qwen3.6-27B (what I benched)</td>
 <td>77.2%</td>
 <td>−11</td>
 </tr>
 <tr>
-<td><strong>512GB ($11.5K)</strong></td>
-<td><strong>DeepSeek-V4 (best open weight)</strong></td>
+<td><strong>Cloud-scale only*</strong></td>
+<td><strong>DeepSeek-V4 (best open weight, 1.6T)</strong></td>
 <td><strong>80.6%</strong></td>
 <td><strong>−8 (still short!)</strong></td>
 </tr>
@@ -261,8 +261,8 @@
 </tr>
 </tbody>
 </table>
-<p>Even the best open-weight model, on an $11.5K box, is 8 points behind Opus. <strong>The only thing that gives you Opus quality is Opus.</strong>* (<a href="https://llm-stats.com/benchmarks/swe-bench-verified">SWE-bench Verified, llm-stats.com</a>; same 77.2 / 88.6 in <a href="https://blog.alexellis.io/local-ai-is-not-opus/">Local AI is not Opus</a>)</p>
-<p><span style="font-size:14px; color:#412B71; font-style:italic">* Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are.</span></p>
+<p>The best open-weight model won't even fit the biggest Mac Apple will sell you, and it's still 8 points behind Opus in the cloud. <strong>The only thing that gives you Opus quality is Opus.</strong>** (<a href="https://llm-stats.com/benchmarks/swe-bench-verified">SWE-bench Verified, llm-stats.com</a>; same 77.2 / 88.6 in <a href="https://blog.alexellis.io/local-ai-is-not-opus/">Local AI is not Opus</a>)</p>
+<p><span style="font-size:14px; color:#412B71; font-style:italic">* DeepSeek-V4 is a 1.6T-param MoE: it won't fit a 512GB Mac, and Apple pulled the 512GB config in March 2026 anyway. Even granting cloud-scale hardware, the best open weight is still −8.    ** Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are.</span></p>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="16" data-paginate="true" lang="en-US" data-marpit-pagination="16" style="--paginate:true;" data-marpit-pagination-total="38">
 <h2 id="so-the-decision-is-about-how-close-not-parity">So the decision is about how close, not parity</h2>
@@ -350,12 +350,13 @@
 </tr>
 <tr>
 <td><strong>Mac Studio M3 Ultra 96GB</strong></td>
-<td><strong>~800 GB/s</strong></td>
+<td><strong>819 GB/s</strong></td>
 <td><strong>68 tok/s</strong></td>
 </tr>
 </tbody>
 </table>
 <p>Same model, 4x faster, entirely the memory bus. <strong>MoE (mixture of experts) beats dense:</strong> dense 32B is mid; the 3B-active MoE ate, 3x faster and higher-scoring.</p>
+<div class="cap">Bandwidth: M3 Ultra [819 GB/s (Apple spec)](https://www.apple.com/mac-studio/specs/); Pi 5 LPDDR4X ~17 GB/s. Same idea, ~48x the bus.</div>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="22" data-paginate="true" lang="en-US" data-marpit-pagination="22" style="--paginate:true;" data-marpit-pagination-total="38">
 <h2 id="bonus-one-box--a-full-local-ai-server">Bonus: one box = a full local AI server</h2>
@@ -561,7 +562,7 @@
 <ul>
 <li>Cut my agents fully over to local</li>
 <li>Measure local vs Opus 4.8 on real tasks: token usage, latency, TTFT (time to first token), success</li>
-<li>Add verification-loop scaffolding: guardrails took an 8B from 53% to 99% on agentic workflows</li>
+<li>Add verification-loop scaffolding: guardrails took an 8B from 53% to 99% on agentic workflows (<a href="https://news.ycombinator.com/item?id=48192383">Forge, Show HN</a>)</li>
 <li>The instability may be a software problem, not a model-size one. The fix might be code, not a $10k box.</li>
 </ul>
 </section>

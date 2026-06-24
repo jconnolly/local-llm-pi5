@@ -274,15 +274,15 @@ The benchmarks prove the split: open models tie or even lead on bounded ([Qwen3.
 
 ## Reality check: you can't buy frontier parity
 
-| Tier | Best model you can run | SWE-bench Verified | Gap to Opus 4.8 |
+| Tier | Best open weight | SWE-bench Verified | Gap to Opus 4.8 |
 |---|---|---|---|
-| 96GB Mac | Qwen3.6-27B (what I benched) | 77.2% | −11 |
-| **512GB ($11.5K)** | **DeepSeek-V4 (best open weight)** | **80.6%** | **−8 (still short!)** |
+| 96GB Mac (what you'd actually buy) | Qwen3.6-27B (what I benched) | 77.2% | −11 |
+| **Cloud-scale only\*** | **DeepSeek-V4 (best open weight, 1.6T)** | **80.6%** | **−8 (still short!)** |
 | Cloud | **Opus 4.8** | **88.6%** | 0 |
 
-Even the best open-weight model, on an $11.5K box, is 8 points behind Opus. **The only thing that gives you Opus quality is Opus.**\* ([SWE-bench Verified, llm-stats.com](https://llm-stats.com/benchmarks/swe-bench-verified); same 77.2 / 88.6 in [Local AI is not Opus](https://blog.alexellis.io/local-ai-is-not-opus/))
+The best open-weight model won't even fit the biggest Mac Apple will sell you, and it's still 8 points behind Opus in the cloud. **The only thing that gives you Opus quality is Opus.**\*\* ([SWE-bench Verified, llm-stats.com](https://llm-stats.com/benchmarks/swe-bench-verified); same 77.2 / 88.6 in [Local AI is not Opus](https://blog.alexellis.io/local-ai-is-not-opus/))
 
-<span style="font-size:14px; color:#412B71; font-style:italic">\* Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are.</span>
+<span style="font-size:14px; color:#412B71; font-style:italic">\* DeepSeek-V4 is a 1.6T-param MoE: it won't fit a 512GB Mac, and Apple pulled the 512GB config in March 2026 anyway. Even granting cloud-scale hardware, the best open weight is still −8. &nbsp;&nbsp; \*\* Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are.</span>
 
 <!--
 2:00 | The hinge, now with verified numbers I actually looked up. Myth-buster: 'just buy a big enough Mac and you'll match Opus' is false. The model I run on the 96GB box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven behind Opus. Max out to a 512GB box and the best open-weight model on earth, DeepSeek V4, gets you to eighty-point-six, still eight short. You cannot spend your way to parity. The only thing that gives you Opus quality is Opus. Note this is SWE-bench Verified, the hard open-ended-repo axis, exactly where local loses, consistent with the rest of the talk where local ties on bounded work.
@@ -373,9 +373,11 @@ Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest
 | Box | Memory bandwidth | coder-30b speed |
 |---|---|---|
 | MacBook Air M2 16GB | ~100 GB/s | 16 tok/s |
-| **Mac Studio M3 Ultra 96GB** | **~800 GB/s** | **68 tok/s** |
+| **Mac Studio M3 Ultra 96GB** | **819 GB/s** | **68 tok/s** |
 
 Same model, 4x faster, entirely the memory bus. **MoE (mixture of experts) beats dense:** dense 32B is mid; the 3B-active MoE ate, 3x faster and higher-scoring.
+
+<div class="cap">Bandwidth: M3 Ultra [819 GB/s (Apple spec)](https://www.apple.com/mac-studio/specs/); Pi 5 LPDDR4X ~17 GB/s. Same idea, ~48x the bus.</div>
 
 <!--
 1:30 | The one genuinely technical slide, and a callback to the napkin math from Act One. Same model, same quant, eight times the memory bandwidth gives you about four times the tokens per second. The Mac Studio's eight-hundred-gigabyte-a-second memory bus is the entire story, it is not about raw compute. Then the mixture-of-experts punchline: a thirty-billion MoE model that only activates three billion parameters per token beats a dense thirty-two-billion model, faster AND higher-scoring, because only the active experts have to be streamed from memory each token. Practical advice for anyone buying: optimize for memory bandwidth and run MoE models, don't chase GPU teraflops.
@@ -560,7 +562,7 @@ One toggle, per task. Denominated in your real workload.
 
 - Cut my agents fully over to local
 - Measure local vs Opus 4.8 on real tasks: token usage, latency, TTFT (time to first token), success
-- Add verification-loop scaffolding: guardrails took an 8B from 53% to 99% on agentic workflows
+- Add verification-loop scaffolding: guardrails took an 8B from 53% to 99% on agentic workflows ([Forge, Show HN](https://news.ycombinator.com/item?id=48192383))
 - The instability may be a software problem, not a model-size one. The fix might be code, not a $10k box.
 
 <!--

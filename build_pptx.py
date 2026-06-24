@@ -400,18 +400,18 @@ section_slide("ACT TWO", "Reality check & the $4,676 call",
     notes="5 sec | Quick beat. Say: 'Act Two. I've got a working setup, now the uncomfortable part, how good can local actually get, and can you just buy your way to the top? Short answer, no.' Move.")
 
 _rc = table_slide("Reality check: you can't buy frontier parity",
-    ["Tier", "Best model you can run", "SWE-bench Verified", "Gap to Opus 4.8"],
-    [["96GB Mac", "Qwen3.6-27B (what I benched)", "77.2%", "−11"],
-     ["**512GB ($11.5K)**", "**DeepSeek-V4 (best open weight)**", "**80.6%**", "**−8 (still short!)**"],
+    ["Tier", "Best open weight", "SWE-bench Verified", "Gap to Opus 4.8"],
+    [["96GB Mac (what you'd buy)", "Qwen3.6-27B (what I benched)", "77.2%", "−11"],
+     ["**Cloud-scale only***", "**DeepSeek-V4 (best open weight, 1.6T)**", "**80.6%**", "**−8 (still short!)**"],
      ["Cloud", "**Opus 4.8**", "**88.6%**", "0"]],
-    "Even the best open-weight model, on an $11.5K box, is 8 points behind Opus. **The only thing that gives you Opus quality is Opus.*** (SWE-bench Verified, llm-stats.com; same 77.2 / 88.6 in 'Local AI is not Opus', blog.alexellis.io)",
-    "2:00 | The hinge, now with verified numbers I actually looked up. Myth-buster: 'just buy a big enough Mac and you'll match Opus' is false. The model I run on the 96GB box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven points behind Opus. Max out to a five-hundred-twelve-gig box and the best open-weight model on earth, DeepSeek V4, gets you to eighty-point-six, still eight short. You cannot spend your way to parity. Land it slowly: the only thing that gives you Opus quality is Opus. And note this is SWE-bench Verified, the hard open-ended-repo axis, which is exactly where local loses, consistent with the rest of the talk where local ties on bounded work.",
-    col_w=[1.5, 3.5, 2.2, 2.3], font=13)
-_rcf = _rc.shapes.add_textbox(Inches(1.7), Inches(6.15), SW - Inches(2.3), Inches(0.5))
+    "The best open-weight model won't even fit the biggest Mac Apple will sell you, and it's still 8 points behind Opus in the cloud. **The only thing that gives you Opus quality is Opus.** (SWE-bench Verified, llm-stats.com; same 77.2 / 88.6 in 'Local AI is not Opus', blog.alexellis.io)",
+    "2:00 | The hinge, now with verified numbers I actually looked up. Myth-buster: 'just buy a big enough Mac and you'll match Opus' is false, twice over. The model I run on the 96GB box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven points behind Opus. And the best open-weight model on earth, DeepSeek V4, only reaches eighty-point-six, still eight short, AND it's a 1.6-trillion-parameter model that won't even fit a 512-gig Mac, which Apple stopped selling in March anyway. So you can't buy the hardware, and even cloud-scale open weights lose. The only thing that gives you Opus quality is Opus. Note this is SWE-bench Verified, the hard open-ended-repo axis, exactly where local loses, consistent with the rest of the talk where local ties on bounded work.",
+    col_w=[1.7, 3.4, 2.1, 2.3], font=13)
+_rcf = _rc.shapes.add_textbox(Inches(1.7), Inches(6.05), SW - Inches(2.3), Inches(0.7))
 _no_autofit(_rcf.text_frame)
 _rcr = _rcf.text_frame.paragraphs[0].add_run()
-_rcr.text = "* Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are."
-_rcr.font.size = Pt(12); _rcr.font.italic = True; _rcr.font.color.rgb = DK2
+_rcr.text = "* DeepSeek-V4 is a 1.6T-param MoE: won't fit a 512GB Mac, and Apple pulled the 512GB config in March 2026. Even on cloud-scale hardware the best open weight is still −8.\n* Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are."
+_rcr.font.size = Pt(11); _rcr.font.italic = True; _rcr.font.color.rgb = DK2
 
 bullets_slide("So the decision is about how close, not parity",
     [B("Don't chase a number that isn't for sale"),
@@ -456,8 +456,8 @@ bullets_slide("What the tie means",
 table_slide("Why the Studio is fast: bandwidth, not parameters",
     ["Box", "Memory bandwidth", "coder-30b speed"],
     [["MacBook Air M2 16GB", "~100 GB/s", "16 tok/s"],
-     ["**Mac Studio M3 Ultra 96GB**", "**~800 GB/s**", "**68 tok/s**"]],
-    "Same model, 4x faster, entirely the memory bus. **MoE (mixture of experts) beats dense:** dense 32B is mid; the 3B-active MoE ate, 3x faster and higher-scoring.",
+     ["**Mac Studio M3 Ultra 96GB**", "**819 GB/s**", "**68 tok/s**"]],
+    "Same model, 4x faster, entirely the memory bus. **MoE (mixture of experts) beats dense:** dense 32B is mid; the 3B-active MoE ate, 3x faster and higher-scoring. (M3 Ultra 819 GB/s per Apple spec; Pi 5 ~17 GB/s.)",
     "1:30 | The one genuinely technical slide, and a callback to the napkin math from Act One. Same model, same quant, eight times the memory bandwidth gives you about four times the tokens per second. The Mac Studio's eight-hundred-gigabyte-a-second memory bus is the entire story, it is not about raw compute. Then the mixture-of-experts punchline: a thirty-billion MoE model that only activates three billion parameters per token beats a dense thirty-two-billion model, faster AND higher-scoring, because only the active experts have to be streamed from memory each token. Practical advice for anyone buying: optimize for memory bandwidth and run MoE models, don't chase GPU teraflops.",
     col_w=[3.2, 3, 3])
 
@@ -552,7 +552,7 @@ bullets_slide("Caveats that matter",
 bullets_slide("What's next (this is being measured)",
     [B("Cut my agents fully over to local"),
      B("Measure local vs Opus 4.8 on real tasks: token usage, latency, TTFT (time to first token), success"),
-     B("Add verification-loop scaffolding, guardrails took an 8B from 53% to 99% on agentic workflows"),
+     B("Add verification-loop scaffolding, guardrails took an 8B from 53% to 99% on agentic workflows (Forge, Show HN, news.ycombinator.com/item?id=48192383)"),
      B("The instability may be a software problem, not a model-size one. The fix might be code, not a $10k box.")],
     "1:00 | End on momentum, this is live research, not a post-mortem. Three threads: cut my real agents fully over to local and live on it, keep the measurement rig running on real daily tasks not synthetic benches, and the exciting one, add verification-loop scaffolding. Land this hard: published results show guardrails took an eight-billion-parameter model from fifty-three percent to ninety-nine percent on agentic workflows. So the instability we measured a few slides ago might be a software problem, not a model-size problem, the fix could be code, not a ten-thousand-dollar box. That single reframe turns the whole weakness into something solvable, and it leaves the room optimistic instead of resigned.")
 
