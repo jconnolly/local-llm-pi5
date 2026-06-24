@@ -328,9 +328,14 @@ table_slide("Bounded coding vs open-ended repos",
     col_w=[1.2, 4.0, 4.4], font=12)
 
 _q = _title_only("Local owns the bottom-left; cloud the top-right")
-_qp = _q.shapes.add_picture(str(REPO / "viz" / "quadrant.png"), 0, 0, height=Inches(4.85))
-_qp.left = int((SW - _qp.width) // 2); _qp.top = Inches(1.6)
-_notes(_q, "1:00 | The same split, but visual. X-axis is task scope, bounded on the left to whole-repo on the right. Y-axis is how much context and how many agent turns it takes. Bottom-left, local owns it, the function-level benchmarks, HumanEval, LiveCodeBench, my minibench, all in the green, local ties Opus for free. Top-right, cloud wins, SWE-bench Verified and Pro, repo-wide migrations. My own benchmarks, the orange diamonds, ladder right up the diagonal from the build task near the bottom to the debug loop up near the line. That diagonal is the line the whole talk is about. Then point at where your daily work actually lands.")
+_qp = _q.shapes.add_picture(str(REPO / "viz" / "quadrant.png"), 0, 0, height=Inches(4.35))
+_qp.left = int((SW - _qp.width) // 2); _qp.top = Inches(1.4)
+_qcap = _q.shapes.add_textbox(Inches(1.7), Inches(5.95), SW - Inches(2.4), Inches(0.7))
+_no_autofit(_qcap.text_frame); _qcp = _qcap.text_frame.paragraphs[0]; _qcp.alignment = PP_ALIGN.CENTER
+_qcr = _qcp.add_run()
+_qcr.text = "Teal circle = my real usage (90-prompt sample of my own history): coding tasks lean open-ended (~40% local / ~60% cloud), and ~80% of my Claude Code use is off this axis entirely (ops, Jira/Slack, infra, personal projects)."
+_qcr.font.size = Pt(12); _qcr.font.color.rgb = DK2
+_notes(_q, "1:30 | The honest gut-check. I built this whole chart, then went and looked at my actual Claude Code history, 2,264 prompts across 68 projects. Two findings. One, the teal circle: my real coding tasks straddle the line and lean to the cloud side, about sixty percent open-ended, exactly where local is weakest, so for me the hybrid case is even stronger. Two, the bigger surprise, about eighty percent of what I use Claude Code for isn't even on this chart, it's ops, Jira and Slack coordination, infrastructure debugging, a personal finance app, even building this deck. Be honest it's a sampled estimate, manually classified, but the shape is clear: my Claude Code is more of a general agent than a code generator, and the coding I do leans open-ended.")
 
 table_slide("The route: three machines, three verdicts",
     ["Stop", "Hardware", "Verdict"],

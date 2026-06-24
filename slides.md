@@ -150,12 +150,14 @@ The benchmarks prove the split: open models tie or even lead on bounded ([Qwen3.
 
 <div style="text-align:center">
 
-![h:520](viz/quadrant.png)
+![h:470](viz/quadrant.png)
 
 </div>
 
+<div class="cap" style="text-align:center">Teal circle = my real usage (90-prompt sample of my own history): coding tasks lean open-ended (~40% local / ~60% cloud), and ~80% of my Claude Code use is off this axis entirely (ops, Jira/Slack, infra, personal projects).</div>
+
 <!--
-1:00 | The same split, but visual. X = task scope (bounded to whole-repo), Y = context + agent-loop length. Bottom-left green = local owns it: HumanEval, LiveCodeBench, my minibench, local ties Opus free. Top-right purple = cloud wins: SWE-bench Verified/Pro, repo migrations. My benchmarks (orange diamonds) ladder up the diagonal from build to debug-loop. The diagonal is the line. Point at where your daily work lands.
+1:30 | The honest gut-check. I built this chart, then looked at my actual CC history (2,264 prompts, 68 projects). Teal circle = my real coding tasks: they straddle the line and lean cloud (~60% open-ended), exactly where local is weakest, so for me the hybrid case is even stronger. Bigger surprise: ~80% of my CC use isn't even on this chart, it's ops, Jira/Slack, infra debugging, a personal finance app, building this deck. Sampled estimate, manually classified, but the shape is clear: my Claude Code is more general agent than code generator.
 -->
 
 ---
