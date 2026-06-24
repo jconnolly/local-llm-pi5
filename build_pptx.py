@@ -109,14 +109,15 @@ def title_slide(title, subtitle, byline="", tldr="", tldr_gif="", notes=""):
     # TL;DR as a separate styled callout box (brand tint, red label, bold verdicts)
     if tldr:
         box_top, box_h = (4.05, 1.55) if tldr_gif else (4.2, 1.15)
+        box_w = 8.2 if tldr_gif else 10.2
         box = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
-                                 Inches(0.9), Inches(box_top), Inches(10.2), Inches(box_h))
+                                 Inches(0.9), Inches(box_top), Inches(box_w), Inches(box_h))
         box.fill.solid(); box.fill.fore_color.rgb = RGBColor(0xF1, 0xEC, 0xF7)
         box.line.fill.background()
         box.shadow.inherit = False
         tf = box.text_frame; _no_autofit(tf)
         tf.vertical_anchor = MSO_ANCHOR.MIDDLE
-        tf.margin_left = Inches(0.3); tf.margin_right = Inches(2.8 if tldr_gif else 0.3)
+        tf.margin_left = Inches(0.3); tf.margin_right = Inches(2.6 if tldr_gif else 0.3)
         p = tf.paragraphs[0]
         lab = p.add_run(); lab.text = "TL;DR   "
         lab.font.bold = True; lab.font.size = Pt(19); lab.font.color.rgb = RED
@@ -126,7 +127,7 @@ def title_slide(title, subtitle, byline="", tldr="", tldr_gif="", notes=""):
         if tldr_gif:  # inside the box, right-aligned, vertically centered
             gh = 1.25
             gp = s.shapes.add_picture(str(tldr_gif), 0, 0, height=Inches(gh))
-            gp.left = int(Inches(0.9 + 10.2 - 0.22) - gp.width)
+            gp.left = int(Inches(0.9 + box_w - 0.22) - gp.width)
             gp.top = int(Inches(box_top + (box_h - gh) / 2))
     # byline: bottom-RIGHT (opposite the bottom-left footer logo), right-aligned, small.
     # multi-line via \n.
