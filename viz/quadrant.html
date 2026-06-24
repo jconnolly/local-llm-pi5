@@ -7,8 +7,8 @@
   #plot{position:absolute;left:150px;top:110px;width:800px;height:600px;border:2px solid #251144;
     background:linear-gradient(135deg, #e9f7ec 0%, #e9f7ec 32%, #f3eef8 60%, #efe7f6 100%);}
   .zone{position:absolute;font-weight:800;font-size:26px;letter-spacing:.5px;opacity:.5}
-  .zoneL{left:130px;bottom:140px;color:#2e7d32}
-  .zoneC{right:130px;top:88px;color:#835BA3;text-align:right}
+  .zoneL{left:24px;top:345px;color:#2e7d32}
+  .zoneC{left:330px;top:8px;color:#835BA3}
   .zsub{font-weight:600;font-size:14px;display:block;margin-top:2px}
   .diag{position:absolute;left:0;top:0;width:100%;height:100%;
     background:linear-gradient(45deg, transparent calc(50% - 1px), #b9a6cf calc(50% - 1px), #b9a6cf calc(50% + 1px), transparent calc(50% + 1px));opacity:.7}
@@ -46,7 +46,7 @@
   <div id="xL">bounded / self-contained</div>
   <div id="xR">open-ended / whole repo</div>
   <div id="usage" style="position:absolute;left:478px;top:310px;width:176px;height:176px;border-radius:50%;background:rgba(13,148,136,.14);border:2.5px dashed #0d9488"></div>
-  <div id="usagelbl" style="position:absolute;left:560px;top:300px;width:230px;font-size:13.5px;font-weight:700;color:#0d9488;line-height:1.25">my actual coding tasks<br><span style="font-weight:400">~40% local &middot; ~60% cloud (sampled)</span></div>
+  <div id="usagelbl" style="position:absolute;left:300px;top:352px;width:172px;text-align:right;font-size:13.5px;font-weight:700;color:#0d9488;line-height:1.25">my actual coding tasks<br><span style="font-weight:400">~40% local &middot; ~60% cloud (sampled)</span></div>
   <div id="legend">
     <span class="lg"><span class="lgs" style="background:#251144;border-radius:50%"></span>public benchmark</span>
     <span class="lg"><span class="lgs" style="background:#F78166;transform:rotate(45deg)"></span>my tests</span>
@@ -64,7 +64,7 @@ const pts=[
  {n:"my minibench (24 algos)",x:20,y:11,c:"ours"},
  {n:"my appbench (build a game)",x:40,y:31,c:"ours"},
  {n:"my repobench (multi-file)",x:54,y:46,c:"ours"},
- {n:"my agentbench (debug loop)",x:64,y:60,c:"ours",s:"L"},
+ {n:"my agentbench (debug loop)",x:64,y:60,c:"ours"},
  {n:"single function / CLI tool",x:6,y:20,c:"task"},
  {n:"repo-wide refactor / migration",x:88,y:94,c:"task",s:"L"},
 ];

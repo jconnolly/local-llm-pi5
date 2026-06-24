@@ -309,11 +309,18 @@ _sl = image_slide("Got a question? Tell me live.",
 section_slide("ACT ONE", "The route: three machines",
     notes="5 sec | Quick beat, don't linger on dividers. Say: 'Act One, the route. How I got from a thirty-five-dollar Raspberry Pi to a forty-six-hundred-dollar Mac Studio, and what each machine taught me.' Then move.")
 
-bullets_slide("Why start on a Raspberry Pi? Why not?",
+_pi5 = bullets_slide("Why start on a Raspberry Pi? Why not?",
     [B("I learn by jumping in and getting my hands on the thing."),
      B("I already had a Raspberry Pi from tinkering projects with my daughter."),
      B("Could it run a little LLM for the house? It did, so I got greedy: could it handle my actual dev workload?")],
     "1:00 | The human hook, and it matters because it stops the Raspberry Pi from looking naive. Be honest about how I work: I learn by jumping in and getting my hands on the thing, not by reading a spec sheet first. The origin is genuinely mundane, I had a Raspberry Pi lying around from tinkering projects with my daughter, and I wondered if it could run a little LLM for the house. It did, well enough that I got greedy and asked the real question, could it handle my actual dev workload? That escalating curiosity is the whole talk. So when the Pi turns out to be a dead end, that isn't me being dumb, it was intentionally myopic, I wanted to see the limits with my own eyes and feel them with my own hands, not predict them from a datasheet.")
+_pi5.placeholders[1].width = Inches(6.3)
+_pi5p = _pi5.shapes.add_picture(str(REPO / "viz" / "pi5-aihat.png"), Inches(7.0), Inches(2.45), width=Inches(3.45))
+_pi5c = _pi5.shapes.add_textbox(Inches(6.85), _pi5p.top + _pi5p.height + Inches(0.12), Inches(3.75), Inches(0.6))
+_no_autofit(_pi5c.text_frame)
+_pi5cp = _pi5c.text_frame.paragraphs[0]; _pi5cp.alignment = PP_ALIGN.CENTER
+_pi5cr = _pi5cp.add_run(); _pi5cr.text = "Raspberry Pi 5 + AI HAT+ 2 (bought from Vilros)"
+_pi5cr.font.size = Pt(12); _pi5cr.font.italic = True; _pi5cr.font.color.rgb = DK2
 
 bullets_slide("The question",
     [B("Can I run a 'SOTA' local LLM at home, usable as my Claude Code backend, and stop paying for cloud?"),

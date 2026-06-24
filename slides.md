@@ -121,9 +121,21 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 
 ## Why start on a Raspberry Pi? Why not?
 
+<div class="cols">
+<div class="txt">
+
 - I learn by jumping in and getting my hands on the thing.
 - I already had a Raspberry Pi from tinkering projects with my daughter.
 - Could it run a little LLM for the house? It did, so I got greedy: could it handle my actual dev workload?
+
+</div>
+<div class="pic">
+
+![w:330](viz/pi5-aihat.png)
+<div class="cap">Raspberry Pi 5 + AI HAT+ 2 — <a href="https://vilros.com/products/raspberry-pi-ai-hat-2">bought from Vilros</a></div>
+
+</div>
+</div>
 
 <!--
 1:00 | The human hook, and it matters because it stops the Raspberry Pi from looking naive. I learn by jumping in, not reading a spec sheet. The origin is mundane: I had a Raspberry Pi from tinkering projects with my daughter, and wondered if it could run a little LLM for the house. It did, so I got greedy and asked the real question, could it handle my actual dev workload. That escalating curiosity is the whole talk. So when the Pi is a dead end, that isn't naive, it was intentionally myopic, I wanted to see the limits with my own eyes, not predict them from a datasheet.

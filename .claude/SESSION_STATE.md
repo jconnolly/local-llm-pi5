@@ -3,6 +3,20 @@
 Running flight-recorder. Updated after each meaningful step. Newest info wins.
 
 ## Now
+- **2026-06-24: DECK polish — fact-check pass + Slido + pitfalls (40 pptx / 42 marp).**
+  - Verified every slide claim, added citations. Fixed 1 real error: "you can't buy parity"
+    slide implied a 512GB Mac runs DeepSeek-V4 (it's 1.6T MoE, won't fit; Apple pulled the
+    512GB config Mar 2026). Reframed -> cloud-scale-only, still -8 to Opus. Confirmed:
+    guardrails 53->99 = Forge (HN 48192383), bandwidth 819 GB/s (Apple), $200/mo=Max 20x,
+    M3 Ultra EOL/backorder, DeepSeek-V4 80.6 open-weight ceiling.
+  - Added Slido live-feedback QR slide after Agenda (viz/slido-qr.png; event 9YznQ5rvRQcGAqDi2v8jaW);
+    auto-"SLIDO CHECK" reminder appended to every act-divider's presenter notes.
+  - Added "Stumbling blocks" slide before close: model-swap-mid-session=400, q4 breaks tool-call,
+    think:false tax, stale-model instability, Ollama traps, 16GB ceiling. All real.
+  - Added "Half work, half personal" usage-breakdown chart slide (all 2,177 prompts, viz/usage.png).
+  - OPEN: stupidest/cleverest closing-slide idea parked (user: "not funny enough"); funnier
+    finance/meta candidates surfaced but not chosen.
+
 - **2026-06-23 (cont): CROSS-FAMILY AGENT-LOOP BENCH — instability was a STALE-MODEL artifact.**
   - Prompted by Boykis/HN: re-ran agentbench (5 hard tasks, same box) across current models.
     Added `AGENTBENCH_LOCAL_MODEL` env override to run.py. Results (durable record:
