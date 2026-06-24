@@ -100,10 +100,9 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 
 ## Why start on a Raspberry Pi? Because that's how I learn
 
-- I learn by jumping in and getting my hands on the thing, not by reading a spec sheet first.
-- The origin is mundane: I already had a Raspberry Pi from tinkering projects with my daughter.
-- Started simple, could it run a little LLM for the house? It did, so I got greedy: could it handle my actual dev workload?
-- That escalating curiosity is the whole journey. Starting on a Pi was intentionally myopic, I wanted to see the limits with my own eyes, not predict them from a datasheet.
+- I learn by jumping in and getting my hands on the thing.
+- I already had a Raspberry Pi from tinkering projects with my daughter.
+- Could it run a little LLM for the house? It did, so I got greedy: could it handle my actual dev workload?
 
 <!--
 1:00 | The human hook, and it matters because it stops the Raspberry Pi from looking naive. I learn by jumping in, not reading a spec sheet. The origin is mundane: I had a Raspberry Pi from tinkering projects with my daughter, and wondered if it could run a little LLM for the house. It did, so I got greedy and asked the real question, could it handle my actual dev workload. That escalating curiosity is the whole talk. So when the Pi is a dead end, that isn't naive, it was intentionally myopic, I wanted to see the limits with my own eyes, not predict them from a datasheet.
@@ -140,7 +139,7 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 
 ---
 
-## Dead end #1: a brilliant vision box, wrong job
+## Dead end #1: a valiant vision box, wrong job
 
 - Verified on the actual board (I SSH'd in): Pi 5 + Hailo-10H, 40-TOPS (tera-operations per second) INT4 NPU (neural processing unit), 8GB on-board, HailoRT 5.1.1. A real gen-AI accelerator.
 - But every model compiled to the Hailo is **vision** (YOLO, ResNet). Using it for LLMs needs Hailo's own build pipeline (`simple_llm_chat`), not a drop-in OpenAI/Ollama endpoint.
@@ -157,12 +156,24 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 
 ## Showing the work: 2 slow 2 furious
 
+<div class="cols">
+<div class="txt" style="font-size:19px">
+
 - I SSH'd in and measured both paths myself. qwen2.5-coder:3b on the Pi 5 CPU (ollama): **5 tok/s**. Qwen2.5-1.5B on the Hailo accelerator itself: **7.3 tok/s** (downloaded the HEF, ran it).
 - The numbers felt sus, so I checked independent reviewers, and **the plain CPU often beats the Hailo on LLMs:**
   - DeepSeek-R1 1.5B: 6.7 (Hailo) vs 9.0 (CPU). Qwen2.5-Coder 1.5B: 8.1 vs 10.3. Llama3.2 3B: 2.6 vs 4.8.
-- One reviewer called it **"more like an AI decelerator than an AI accelerator."** The real win is offloading the CPU and low power, not speed.
+- Its real win is offloading the CPU and sipping power, not speed.
 - **Bottom line:** the whole Hailo LLM zoo is 1-3B (yes, a 1.5B coder), and the accelerator can't beat the CPU. (Mine even botched "reverse a string".) Great low-power chatbot, never a coding agent.
 - Sources: [CNX Software](https://www.cnx-software.com/2026/01/20/raspberry-pi-ai-hat-2-review-a-40-tops-ai-accelerator-tested-with-computer-vision-llm-and-vlm-workloads/) + [hardware-corner.net](https://www.hardware-corner.net/local-llms-raspberry-pi-ai-hat-plus-2/)
+
+</div>
+<div class="pic">
+
+![w:400](viz/fast-furious.gif)
+<div class="cap">"more like an AI decelerator than an AI accelerator"<br>— CNX Software, AI HAT+ 2 review</div>
+
+</div>
+</div>
 
 <!--
 1:30 | The fun one, fully verified. I SSHed into the actual Pi and measured both paths myself. The easy path, ollama on the CPU, about five tokens a second on a 3B coder. The fancy path, I downloaded the model onto the Hailo accelerator and ran it, seven-point-three tokens a second on a 1.5B. Then, because those numbers felt sus, I checked independent reviewers, and the plain Pi CPU often beats the Hailo on language models. One literally called it more like an AI decelerator than an accelerator. The chip's real benefit is offloading the CPU and low power, not speed. So the whole lineup is one-to-three-billion, there's even a 1.5B coder, the accelerator can't beat the CPU, and when I ran it the model got 'reverse a string' wrong. Two slow, two furious. Great low-power chatbot, never a coding backend. Sources on the slide.

@@ -268,10 +268,9 @@ section_slide("ACT ONE", "The route: three machines",
     notes="5 sec | Quick beat, don't linger on dividers. Say: 'Act One, the route. How I got from a thirty-five-dollar Raspberry Pi to a forty-six-hundred-dollar Mac Studio, and what each machine taught me.' Then move.")
 
 bullets_slide("Why start on a Raspberry Pi? Because that's how I learn",
-    [B("I learn by jumping in and getting my hands on the thing, not by reading a spec sheet first."),
-     B("The origin is mundane: I already had a Raspberry Pi from tinkering projects with my daughter."),
-     B("Started simple, could it run a little LLM for the house? It did, so I got greedy: could it handle my actual dev workload?"),
-     B("That escalating curiosity is the whole journey. Starting on a Pi was intentionally myopic, I wanted to see the limits with my own eyes, not predict them from a datasheet.")],
+    [B("I learn by jumping in and getting my hands on the thing."),
+     B("I already had a Raspberry Pi from tinkering projects with my daughter."),
+     B("Could it run a little LLM for the house? It did, so I got greedy: could it handle my actual dev workload?")],
     "1:00 | The human hook, and it matters because it stops the Raspberry Pi from looking naive. Be honest about how I work: I learn by jumping in and getting my hands on the thing, not by reading a spec sheet first. The origin is genuinely mundane, I had a Raspberry Pi lying around from tinkering projects with my daughter, and I wondered if it could run a little LLM for the house. It did, well enough that I got greedy and asked the real question, could it handle my actual dev workload? That escalating curiosity is the whole talk. So when the Pi turns out to be a dead end, that isn't me being dumb, it was intentionally myopic, I wanted to see the limits with my own eyes and feel them with my own hands, not predict them from a datasheet.")
 
 bullets_slide("The question",
@@ -291,7 +290,7 @@ table_slide("The route: three machines, three verdicts",
     notes="1:30 | This is the map, don't read every cell, walk it. Stop one, the Raspberry Pi, total dead end, I'll explain why in two slides. Stop two, a spare MacBook Air I call Maral, that's where I learned everything even though it only ran a few hours. Stop three, I hit a tuning wall and found the single best speedup of the whole project. Stop four, the reality check, the thing you cannot buy at any price. Stop five, the Mac Studio, which finally ties Opus on coding at sixty-eight tokens a second for zero dollars a month. The takeaway line: the lessons are in the trip, not just the destination.",
     col_w=[0.7, 3.2, 5.5], font=12)
 
-bullets_slide("Dead end #1: a brilliant vision box, wrong job",
+bullets_slide("Dead end #1: a valiant vision box, wrong job",
     [B("Verified on the actual board (I SSH'd in): Pi 5 + Hailo-10H, 40-TOPS (tera-operations per second) INT4 NPU (neural processing unit), 8GB on-board, HailoRT 5.1.1. A real gen-AI accelerator."),
      B("But every model compiled to the Hailo is **vision** (YOLO, ResNet). Using it for LLMs needs Hailo's own build pipeline (`simple_llm_chat`), not a drop-in OpenAI/Ollama endpoint."),
      B("The connectable path is **ollama on the Pi 5 CPU** (port 11434, qwen2.5-coder 3b/7b). Claude Code can point at it, but it's the slow CPU, not the accelerator."),
@@ -299,15 +298,26 @@ bullets_slide("Dead end #1: a brilliant vision box, wrong job",
      B("**Lesson:** the accelerator is real, but there's no fast, drop-in LLM endpoint, the easy path is the slow CPU. Right edge box, wrong job for a coding agent.")],
     "1:00 | The cautionary tale, and I'm honest here that I went back and verified it on the actual hardware. The board is genuinely capable, a Hailo-10H, forty INT4 TOPS, eight gigs of its own memory, a real edge gen-AI accelerator. So why a dead end? Two things I confirmed by SSHing into the box. One, every model actually compiled onto the Hailo is a vision model, YOLO and ResNet, using it for language models needs Hailo's own build pipeline, not a drop-in endpoint. Two, the path that IS drop-in, ollama on the Pi, runs on the Pi's CPU, not the accelerator, and I measured it at about five tokens a second on a three-billion coder model. Five tokens a second, on a small model, with a small context. Fine for a chatbot demo, unusable as a coding agent that needs many fast turns over a big context. So it's not that you can't connect, it's that the connectable path is the slow CPU and the fast path only runs vision. Right edge box, wrong job.")
 
-bullets_slide("Showing the work: 2 slow 2 furious",
+_sw = bullets_slide("Showing the work: 2 slow 2 furious",
     [B("I SSH'd in and measured both paths myself. qwen2.5-coder:3b on the Pi 5 CPU (ollama): **5 tok/s**. Qwen2.5-1.5B on the Hailo accelerator itself: **7.3 tok/s** (downloaded the HEF, ran it)."),
      B("The numbers felt sus, so I checked independent reviewers, and **the plain CPU often beats the Hailo on LLMs:**"),
      B1("DeepSeek-R1 1.5B: 6.7 (Hailo) vs 9.0 (CPU). Qwen2.5-Coder 1.5B: 8.1 vs 10.3. Llama3.2 3B: 2.6 vs 4.8."),
-     B("One reviewer called it **'more like an AI decelerator than an AI accelerator.'** The real win is offloading the CPU and low power, not speed."),
+     B("Its real win is offloading the CPU and sipping power, not speed."),
      B("**Bottom line:** the whole Hailo LLM zoo is 1-3B (yes, a 1.5B coder), and the accelerator can't beat the CPU. (Mine even botched 'reverse a string'.) Great low-power chatbot, never a coding agent."),
      B("Sources: CNX Software + hardware-corner.net, AI HAT+ 2 reviews.")],
-    font=16,
+    font=13,
     notes="1:30 | The fun one, fully verified. I SSHed into the actual Pi and measured both paths myself. The easy path, ollama on the CPU, about five tokens a second on a 3B coder. The fancy path, I downloaded the model onto the Hailo accelerator and ran it, seven-point-three tokens a second on a 1.5B. Then, because those numbers felt sus, I checked independent reviewers, and the plain Pi CPU often BEATS the Hailo on language models. One literally called it more like an AI decelerator than an accelerator. The chip's real benefit is offloading the CPU and low power, not speed. So the whole LLM lineup is one-to-three-billion, there's even a 1.5B coder, the accelerator can't beat the CPU, and when I ran it the model confidently got 'reverse a string' wrong. Two slow, two furious. Great low-power chatbot, never a coding backend. Sources are on the slide.")
+# narrow bullets + the Fast & Furious gif (right) with the 'decelerator' quote as its caption
+_sw.placeholders[1].width = Inches(6.9)
+_fg = _sw.shapes.add_picture(str(REPO / "viz" / "fast-furious.gif"), Inches(7.55), Inches(2.1), width=Inches(4.0))
+_fc = _sw.shapes.add_textbox(Inches(7.55), Inches(2.1) + _fg.height + Inches(0.06), Inches(4.0), Inches(1.0))
+_no_autofit(_fc.text_frame)
+_p = _fc.text_frame.paragraphs[0]; _p.alignment = PP_ALIGN.CENTER
+_r1 = _p.add_run(); _r1.text = "“more like an AI decelerator than an AI accelerator”"
+_r1.font.size = Pt(13); _r1.font.italic = True; _r1.font.color.rgb = DK2
+_p2 = _fc.text_frame.add_paragraph(); _p2.alignment = PP_ALIGN.CENTER
+_r2 = _p2.add_run(); _r2.text = "— CNX Software, AI HAT+ 2 review"
+_r2.font.size = Pt(11); _r2.font.color.rgb = DK2
 
 bullets_slide("Maral: a spare 16GB Air, doing the most",
     [B("qwen3:8b / :14b via Ollama's Anthropic endpoint, wired into Claude Code with one env block"),
