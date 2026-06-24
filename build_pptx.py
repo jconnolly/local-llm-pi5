@@ -561,6 +561,27 @@ bullets_slide("PS: the field moved while I built this deck",
      B("Sources: vickiboykis.com/2026/06/15 + Hacker News (items 48555993, 48542100)")],
     "0:30 | The honest closer-after-the-closer. While I was literally building this deck, Vicki Boykis published almost exactly this argument, and Hacker News spent fifteen hundred points debating it the same week. Two points. One, it corroborates the structure, context is the wall, thirty-billion MoE is the sweet spot, that's not just me. Two, the humbling part, my specific models are already a step behind, the community is on Qwen three-six and Gemma four now, and several people flagged that low quantization weakens tool-calling, which might be the actual cause of the instability I measured, not the model size. So the verdict holds, but the numbers have a one-week shelf life, and I'm already re-running with newer models at higher quant. Ends on intellectual honesty and momentum.")
 
+table_slide("Appendix: my 4 benchmarks (all reproducible, in the repo)",
+    ["Benchmark", "What it tests", "Scoring", "Axis"],
+    [["minibench", "24 algorithmic problems, easy to brutal (LeetCode-hard)", "hidden pytest, no LLM judge", "bounded (function-level)"],
+     ["repobench", "multi-file bugs, subtle off-by-ones (4 moderate + 5 hard)", "hidden pytest", "middle (multi-file)"],
+     ["appbench", "build a playable game in one index.html (Space Invaders)", "Playwright 7-check rubric", "bounded build, long-horizon"],
+     ["agentbench", "the real Claude Code agent loop on multi-file bug-fixes", "re-run tests + turns / time / cost", "agentic (multi-turn)"]],
+    "Not a replacement for SWE-bench Verified (real GitHub issues across huge repos). These are small, deterministic, reproducible probes I run on my own box to map the bounded-to-open-ended axis. minibench ~ HumanEval/LiveCodeBench; agentbench + repobench ~ a controlled mini-SWE-bench. Full code: github.com/jconnolly/local-llm-pi5/tree/main/benchmarks",
+    "1:00 | Appendix, for the methodology-curious and for Q&A. I built four small benchmarks, all in the repo, all reproducible, all deterministic, no model grading another model. minibench is the bounded, function-level axis, like HumanEval and LiveCodeBench. repobench and agentbench move toward the open-ended axis, multi-file and agentic, a controlled miniature of SWE-bench. appbench is the long-horizon build. The honest caveat: these aren't SWE-bench Verified, which uses real GitHub issues on huge real repos, mine are smaller and synthetic, but the point was a reproducible probe I could run on my own hardware to see where the line falls, and they agree with the public leaderboards.",
+    col_w=[1.3, 4.3, 2.6, 2.2], font=12)
+
+table_slide("Appendix: minibench's 24 problems",
+    ["Tier", "Problems"],
+    [["Easy (3)", "valid parentheses, two-sum, roman to integer"],
+     ["Medium (3)", "merge intervals, longest unique substring, spiral matrix"],
+     ["Hard (6)", "word break, coin change, LRU cache, edit distance, trapping rain water, median of two sorted arrays"],
+     ["Expert (6)", "regex matching, N-queens, basic calculator, longest increasing subsequence, min path sum, decode ways"],
+     ["Brutal (6)", "Dijkstra, calculator with parentheses, longest palindromic subsequence, buy/sell stock (k txns), word ladder, eval RPN"]],
+    "All scored deterministically with hidden pytest tests, no LLM judge. coder-30b and Opus both went 24/24. Full prompts + tests: github.com/jconnolly/local-llm-pi5/tree/main/benchmarks/minibench",
+    "0:45 | The 24, grouped by my own difficulty tiers, easy up to brutal. These are classic LeetCode-style problems, two-sum and valid-parentheses at the easy end, Dijkstra and word-ladder and a recursive-descent calculator at the brutal end. The key thing is they're scored by hidden pytest tests, deterministic, no model judging. Both my local coder and Opus went twenty-four for twenty-four, which is exactly why I needed harder, open-ended tests, this bench saturated. Full list and the tests are in the repo if anyone wants to run it.",
+    col_w=[1.4, 8.2], font=12)
+
 prs.save(str(OUT))
 print(f"saved {OUT}  ({len(prs.slides.__iter__.__self__._sldIdLst)} slides)")
 print(f"slides: {len(list(prs.slides))}")

@@ -148,7 +148,11 @@ The benchmarks prove the split: open models tie or even lead on bounded ([Qwen3.
 
 ## Local owns the bottom-left; cloud the top-right
 
+<div style="text-align:center">
+
 ![h:520](viz/quadrant.png)
+
+</div>
 
 <!--
 1:00 | The same split, but visual. X = task scope (bounded to whole-repo), Y = context + agent-loop length. Bottom-left green = local owns it: HumanEval, LiveCodeBench, my minibench, local ties Opus free. Top-right purple = cloud wins: SWE-bench Verified/Pro, repo migrations. My benchmarks (orange diamonds) ladder up the diagonal from build to debug-loop. The diagonal is the line. Point at where your daily work lands.
@@ -571,4 +575,39 @@ One toggle, per task. Denominated in your real workload.
 
 <!--
 0:30 | The honest closer-after-the-closer. While I was literally building this deck, Vicki Boykis published almost exactly this argument, and HN spent fifteen hundred points debating it the same week. It corroborates the structure, context is the wall, thirty-billion MoE is the sweet spot, that's not just me. The humbling part: my specific models are already a step behind, the community is on Qwen three-six and Gemma four now, and people flagged that low quantization weakens tool-calling, which might be the real cause of the instability I measured. So the verdict holds but the numbers have a one-week shelf life, and I'm already re-running with newer models at higher quant.
+-->
+
+---
+
+## Appendix: my 4 benchmarks (all reproducible, in the repo)
+
+| Benchmark | What it tests | Scoring | Axis |
+|---|---|---|---|
+| minibench | 24 algorithmic problems, easy to brutal (LeetCode-hard) | hidden pytest, no LLM judge | bounded (function-level) |
+| repobench | multi-file bugs, subtle off-by-ones (4 moderate + 5 hard) | hidden pytest | middle (multi-file) |
+| appbench | build a playable game in one index.html (Space Invaders) | Playwright 7-check rubric | bounded build, long-horizon |
+| agentbench | the real Claude Code agent loop on multi-file bug-fixes | re-run tests + turns / time / cost | agentic (multi-turn) |
+
+Not a replacement for [SWE-bench Verified](https://www.swebench.com/verified.html) (real GitHub issues across huge repos). Small, deterministic, reproducible probes to map the bounded-to-open-ended axis. minibench ≈ HumanEval/LiveCodeBench; agentbench + repobench ≈ a controlled mini-SWE-bench. Full code: [github.com/jconnolly/local-llm-pi5](https://github.com/jconnolly/local-llm-pi5/tree/main/benchmarks)
+
+<!--
+1:00 | Appendix for the methodology-curious and for Q&A. Four small benchmarks, all in the repo, all deterministic, no model grading a model. minibench = bounded/function-level (like HumanEval/LiveCodeBench); repobench + agentbench move toward open-ended/agentic (a controlled mini-SWE-bench); appbench = the long-horizon build. Honest caveat: not SWE-bench Verified (real GitHub issues on huge repos), mine are smaller/synthetic, but they're a reproducible probe on my own hardware and they agree with the public leaderboards.
+-->
+
+---
+
+## Appendix: minibench's 24 problems
+
+| Tier | Problems |
+|---|---|
+| Easy (3) | valid parentheses, two-sum, roman to integer |
+| Medium (3) | merge intervals, longest unique substring, spiral matrix |
+| Hard (6) | word break, coin change, LRU cache, edit distance, trapping rain water, median of two sorted arrays |
+| Expert (6) | regex matching, N-queens, basic calculator, longest increasing subsequence, min path sum, decode ways |
+| Brutal (6) | Dijkstra, calculator with parentheses, longest palindromic subsequence, buy/sell stock (k txns), word ladder, eval RPN |
+
+All scored deterministically with hidden pytest tests, no LLM judge. coder-30b and Opus both went 24/24. Full prompts + tests: [github.com/jconnolly/local-llm-pi5/.../minibench](https://github.com/jconnolly/local-llm-pi5/tree/main/benchmarks/minibench)
+
+<!--
+0:45 | The 24, grouped by my own easy-to-brutal tiers. Classic LeetCode-style: two-sum and valid-parens at the easy end, Dijkstra, word-ladder, a recursive-descent calculator at the brutal end. Scored by hidden pytest tests, deterministic, no model judging. Local coder and Opus both went 24/24, which is exactly why I needed harder open-ended tests; this bench saturated. Full list + tests in the repo.
 -->
