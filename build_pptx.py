@@ -276,7 +276,7 @@ bullets_slide("The question",
 
 table_slide("The route: three machines, three verdicts",
     ["Stop", "Hardware", "Verdict"],
-    [["1", "Raspberry Pi 5 + AI HAT+ 2 (Hailo-10H)", "Dead end: no API for Claude Code to connect to (~2B / small context anyway)"],
+    [["1", "Raspberry Pi 5 + AI HAT+ 2 (Hailo-10H)", "Dead end: Hailo runs vision; LLMs fall to the Pi CPU at ~5 tok/s (measured)"],
      ["2", "MacBook Air M2 16GB ('Maral')", "Did the grunt work (~5 hrs). qwen3:14b ~10 tok/s, kinda slow"],
      ["3", "The tuning wall", "think:false = ~3x; quant sweep; prompt slim"],
      ["4", "Reality check", "Frontier parity NOT purchasable locally at any price"],
@@ -284,21 +284,21 @@ table_slide("The route: three machines, three verdicts",
     notes="1:30 | This is the map, don't read every cell, walk it. Stop one, the Raspberry Pi, total dead end, I'll explain why in two slides. Stop two, a spare MacBook Air I call Maral, that's where I learned everything even though it only ran a few hours. Stop three, I hit a tuning wall and found the single best speedup of the whole project. Stop four, the reality check, the thing you cannot buy at any price. Stop five, the Mac Studio, which finally ties Opus on coding at sixty-eight tokens a second for zero dollars a month. The takeaway line: the lessons are in the trip, not just the destination.",
     col_w=[0.7, 3.2, 5.5], font=12)
 
-bullets_slide("Dead end #1: the AI HAT+ 2 couldn't talk to Claude Code",
-    [B("The AI HAT+ 2 (Hailo-10H, 40-TOPS (tera-operations per second) NPU (neural processing unit), 8GB on-board) is a real generative-AI accelerator, it runs small LLMs on-chip, not just vision."),
-     B("**The wall:** it speaks Hailo's own runtime, not an Anthropic- or Ollama-style endpoint. Claude Code had nothing to connect to, so the tool-use loop never wired up."),
-     B("Even past that: Hailo's supported models are ~1-2B class with a small context, far short of the 64k+ a coding agent needs."),
-     B("**Lesson:** the blocker was the API surface, not the silicon. A brilliant accelerator with no drop-in endpoint is still a dead end for an agent.")],
-    "1:00 | The cautionary tale, and get the framing right because it's a common mistake. The board is genuinely capable: the AI HAT+ 2 with a Hailo-10H is a real generative-AI accelerator, forty TOPS, eight gigs of its own memory, it runs small language models on-chip. So why a dead end? Not the silicon, the plumbing. It only speaks Hailo's own runtime, there's no Anthropic- or Ollama-style endpoint, so Claude Code had literally nothing to connect to, the tool-use loop never wired up. And even if you solved that, the models Hailo supports are tiny, one-to-two-billion class with a small context, nowhere near the sixty-four-thousand-plus a coding agent needs. The lesson that travels: the blocker was the API surface, not the chip. A brilliant accelerator with no door in is still a dead end. Tee up the next slide: even if it had an endpoint, here's why it'd still be too small.")
+bullets_slide("Dead end #1: a brilliant vision box, wrong job",
+    [B("Verified on the actual board (I SSH'd in): Pi 5 + Hailo-10H, 40-TOPS (tera-operations per second) INT4 NPU (neural processing unit), 8GB on-board, HailoRT 5.1.1. A real gen-AI accelerator."),
+     B("But every model compiled to the Hailo is **vision** (YOLO, ResNet). Using it for LLMs needs Hailo's own build pipeline (`simple_llm_chat`), not a drop-in OpenAI/Ollama endpoint."),
+     B("The connectable path is **ollama on the Pi 5 CPU** (port 11434, qwen2.5-coder 3b/7b). Claude Code can point at it, but it's the slow CPU, not the accelerator."),
+     B("**Measured on the box: qwen2.5-coder:3b = 5 tok/s on the Pi CPU.** Too slow, and 3-8B with small context is too small for a 64k-context coding agent."),
+     B("**Lesson:** the accelerator is real, but there's no fast, drop-in LLM endpoint, the easy path is the slow CPU. Right edge box, wrong job for a coding agent.")],
+    "1:00 | The cautionary tale, and I'm honest here that I went back and verified it on the actual hardware. The board is genuinely capable, a Hailo-10H, forty INT4 TOPS, eight gigs of its own memory, a real edge gen-AI accelerator. So why a dead end? Two things I confirmed by SSHing into the box. One, every model actually compiled onto the Hailo is a vision model, YOLO and ResNet, using it for language models needs Hailo's own build pipeline, not a drop-in endpoint. Two, the path that IS drop-in, ollama on the Pi, runs on the Pi's CPU, not the accelerator, and I measured it at about five tokens a second on a three-billion coder model. Five tokens a second, on a small model, with a small context. Fine for a chatbot demo, unusable as a coding agent that needs many fast turns over a big context. So it's not that you can't connect, it's that the connectable path is the slow CPU and the fast path only runs vision. Right edge box, wrong job.")
 
-bullets_slide("Showing the work: it'd be too small anyway",
-    [B("Integration was the real wall (last slide). But say it had an endpoint, the ceiling is still low. Napkin math:"),
-     B("The model lives in the Hailo-10H's 8GB on-board memory. Max model size is roughly on-board RAM / bytes-per-parameter."),
-     B1("At Q4 (4-bit quantization) that's ~0.5 bytes/param: 8GB caps you near ~10B in theory, and Hailo's supported set is smaller in practice, ~1-2B class."),
-     B1("Decode speed follows the same rule: tok/s ~ memory bandwidth / active model bytes (the same formula that makes the Mac Studio fast later)."),
-     B("**Bottom line:** a ~1-2B model with a small context can't be a 64k-context coding agent. Right silicon, wrong job."),
-     B("Honest caveat: I didn't push further, the Mac path was clearly better, so this is back-of-envelope, not an exhaustive benchmark.")],
-    "1:30 | The show-our-work slide, but be honest about what it is. The real wall was integration, last slide, so this is the 'even if I'd solved that' argument. The model has to live in the Hailo's eight gigs of on-board memory, and a rough ceiling is on-board RAM divided by bytes-per-parameter. At four-bit that's about half a byte per parameter, so eight gigs tops out near a ten-billion model on paper, but Hailo's actually-supported set is smaller, one-to-two-billion class. Speed follows the same memory-bandwidth rule you'll see again for the Mac Studio. Bottom line, a one-to-two-billion model with a small context just can't be a sixty-four-thousand-context coding agent, right silicon, wrong job. Then say the honest part out loud: I didn't exhaustively benchmark this, the Mac path was obviously better, so this is napkin math, not a deep study.")
+bullets_slide("Showing the work: I measured it on the actual Pi",
+    [B("Skeptical of my own slide, I SSH'd into the box and measured it, instead of guessing."),
+     B("qwen2.5-coder:3b via ollama on the Pi 5 CPU: **5 tok/s decode, 9.6 tok/s prefill** (size_vram=0, confirmed CPU, not the Hailo)."),
+     B("The Hailo accelerator isn't in that path, it only has **vision** models compiled (.hef). Driving it for LLMs needs Hailo's gen_ai pipeline, no ollama/Anthropic drop-in."),
+     B("At 5 tok/s, one agent turn of a few hundred tokens takes minutes, prefilling a big context is worse, and a coding agent needs many turns."),
+     B("**Bottom line:** the connectable LLM path on the Pi is ~5 tok/s on the CPU. Fine for a chatbot demo, unusable as a coding agent.")],
+    "1:30 | The show-our-work slide, the honest version after I went and checked. I didn't want to assert numbers I hadn't measured, so I SSHed into the actual Pi. Result: qwen2.5-coder three-billion, via ollama, runs about five tokens a second decode, nine and a half prefill, and ollama confirms zero VRAM, it's the CPU, not the Hailo. The Hailo only has vision models compiled onto it, driving it for language models is a whole separate Hailo build pipeline, not a drop-in. So the bottleneck is concrete: five tokens a second, one agent turn takes minutes, and a coding agent needs many turns over a big context. Fine for a chatbot demo, unusable as a coding backend. The credibility beat: I checked my own claim against the real hardware and corrected it.")
 
 bullets_slide("Maral: a spare 16GB Air, doing the most",
     [B("qwen3:8b / :14b via Ollama's Anthropic endpoint, wired into Claude Code with one env block"),

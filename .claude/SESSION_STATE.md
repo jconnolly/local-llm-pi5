@@ -3,6 +3,22 @@
 Running flight-recorder. Updated after each meaningful step. Newest info wins.
 
 ## Now
+- **2026-06-23 (cont): CROSS-FAMILY AGENT-LOOP BENCH — instability was a STALE-MODEL artifact.**
+  - Prompted by Boykis/HN: re-ran agentbench (5 hard tasks, same box) across current models.
+    Added `AGENTBENCH_LOCAL_MODEL` env override to run.py. Results (durable record:
+    `benchmarks/agentbench/cross_family_results.md`):
+    - coder-30b q8 (old deck baseline): 4/5, **4-41 turns (wild)**, 248s, ~8x cloud
+    - qwen3.6:27b-mtp q8: 5/5, 7-9 stable, 161s, ~5x
+    - **gpt-oss:20b: 5/5, 7-9 stable, 48s, ~1.5x cloud** <- STANDOUT
+    - gemma4:26b: 5/5, 8-20, 69s, ~2x
+    - Opus cloud: 5/5, 5-9, 31s
+  - FINDING: every current model is stable + 5/5. The 41-turn ttl spiral was the MODEL, not
+    local inference (coder vs qwen3.6 both q8 -> it's the model, not quant). gpt-oss 20b nearly
+    catches cloud. Our deck's "8x slower, unstable" headline was a stale-model artifact.
+  - Deck UPDATED (both, 32 slides): new "Tested it: the instability was the model" slide (full
+    cross-family table) + reconciliation + PS now reflect this. Committed 2f5e7aa.
+  - Quant angle (q6 vs q4 on the 80B) still untested + separate.
+
 - **2026-06-23 (cont): PRESENTATION DECK built (DS-branded) + Boykis/HN reality-check.**
   - Two decks, 31 slides each, content-synced: `local-llm-datasociety.pptx` (native Data Society
     template via `build_pptx.py` + python-pptx) and `slides.html`/`slides.pdf` (Marp, brand-themed,
