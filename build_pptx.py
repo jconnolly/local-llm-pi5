@@ -143,6 +143,34 @@ def title_slide(title, subtitle, byline="", tldr="", tldr_gif="", notes=""):
     return s
 
 
+def _tldr_two_gif(s):
+    """Custom title-slide TL;DR: two reaction gifs, each with a parenthetical caption."""
+    box = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
+                             Inches(0.9), Inches(3.9), Inches(6.5), Inches(1.7))
+    box.fill.solid(); box.fill.fore_color.rgb = RGBColor(0xF1, 0xEC, 0xF7)
+    box.line.fill.background(); box.shadow.inherit = False
+
+    def tb(text, left, top, w, sz, color, italic=False, bold=False):
+        b = s.shapes.add_textbox(Inches(left), Inches(top), Inches(w), Inches(0.35))
+        _no_autofit(b.text_frame)
+        p = b.text_frame.paragraphs[0]; p.alignment = PP_ALIGN.CENTER
+        r = p.add_run(); r.text = text
+        r.font.size = Pt(sz); r.font.color.rgb = color
+        r.font.italic = italic; r.font.bold = bold
+
+    tb("TL;DR", 1.0, 4.55, 1.0, 19, RED, bold=True)
+    # column 1: bounded coding -> "not bad"
+    tb("bounded coding", 2.1, 3.98, 2.4, 14, DK)
+    g1 = s.shapes.add_picture(str(REPO / "viz" / "not-bad.gif"), 0, 0, height=Inches(0.82))
+    g1.left = int(Inches(3.3) - g1.width // 2); g1.top = int(Inches(4.3))
+    tb("(ties the frontier, free)", 2.1, 5.18, 2.4, 12, DK2, italic=True)
+    # column 2: open-ended repos -> conceited
+    tb("Open-ended repos:", 4.6, 3.98, 2.4, 14, DK)
+    g2 = s.shapes.add_picture(str(REPO / "viz" / "conceited.gif"), 0, 0, height=Inches(0.82))
+    g2.left = int(Inches(5.8) - g2.width // 2); g2.top = int(Inches(4.3))
+    tb("(not quite)", 4.6, 5.18, 2.4, 12, DK2, italic=True)
+
+
 def bullets_slide(title, items, notes="", font=18):
     """items: list of (text, level)."""
     s = prs.slides.add_slide(LAY["OBJECT"])  # white content layout WITH the DS logo
@@ -255,13 +283,12 @@ B = lambda t: (t, 0)   # level-0 bullet
 B1 = lambda t: (t, 1)  # level-1 bullet
 
 # ============================ THE DECK ============================
-title_slide(
+_title = title_slide(
     "Can a local LLM replace cloud Claude Code?",
     "Three weeks, three machines: from a Raspberry Pi to a $4,676 Mac Studio.",
-    tldr="bounded coding **ties the frontier, free**. Open-ended repos:",
-    tldr_gif=REPO / "viz" / "conceited.gif",
     byline="John Connolly, Lead Product Engineer & tinkerer\nJune 2026",
-    notes="0:30 | Open cold, don't read the title. Say: 'Three weeks ago I asked a simple question, could I stop paying for cloud Claude Code and run the whole thing on hardware in my house. I spent $4,676 finding out.' Then point at the TL;DR box: the answer is a qualified yes, and the qualification is the entire talk. For bounded coding, local ties the frontier and it's free. For open-ended repo work, you still want cloud. Everything after this slide is me earning that one sentence with data. Set the tone: this is a measurement talk, not a vibes talk, every claim has a benchmark behind it.")
+    notes="0:30 | Open cold, don't read the title. Say: 'Three weeks ago I asked a simple question, could I stop paying for cloud Claude Code and run the whole thing on hardware in my house. I spent $4,676 finding out.' Then point at the TL;DR box: bounded coding ties the frontier and it's free, the not-bad nod; open-ended repo work, not quite, you still want cloud, the skeptical face. Everything after this slide is me earning that one sentence with data. Set the tone: this is a measurement talk, not a vibes talk, every claim has a benchmark behind it.")
+_tldr_two_gif(_title)
 
 table_slide("Agenda, where we're going (~29 min)",
     ["Act", "Topic", "~min"],
