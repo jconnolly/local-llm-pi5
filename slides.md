@@ -532,7 +532,7 @@ One toggle, per task. Denominated in your real workload.
 - But my models are already last-gen, the community moved to **Qwen 3.6** (27b / 35b-a3b) and **Gemma 4**; my coder-30b is a step behind.
 - **Already tested:** re-ran the agent loop across Qwen 3.6, gpt-oss, and Gemma 4 (same box). All 5/5, all stable, no spirals. **gpt-oss 20b landed within ~1.5x of cloud.** The instability was the stale model.
 - **Still open:** the quant angle (q6 vs q4 on the 80B), and living on it daily. The verdict holds; the models won't, this moves weekly.
-- Sources: [blog](https://vickiboykis.com/2026/06/15/running-local-models-is-good-now/) + [HN](https://news.ycombinator.com/item?id=48555993)
+- Sources: [blog](https://vickiboykis.com/2026/06/15/running-local-models-is-good-now/) + HN [discussion](https://news.ycombinator.com/item?id=48555993) and a [same-question thread](https://news.ycombinator.com/item?id=48542100)
 
 <!--
 0:30 | The honest closer-after-the-closer. While I was literally building this deck, Vicki Boykis published almost exactly this argument, and HN spent fifteen hundred points debating it the same week. It corroborates the structure, context is the wall, thirty-billion MoE is the sweet spot, that's not just me. The humbling part: my specific models are already a step behind, the community is on Qwen three-six and Gemma four now, and people flagged that low quantization weakens tool-calling, which might be the real cause of the instability I measured. So the verdict holds but the numbers have a one-week shelf life, and I'm already re-running with newer models at higher quant.
