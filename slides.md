@@ -56,7 +56,10 @@ section.center { text-align:center; }
 
 <div class="sub">Three weeks, three machines: from a Raspberry Pi to a $4,676 Mac Studio.</div>
 
-<div class="tldr"><span class="lab">TL;DR</span> bounded coding <strong>ties the frontier, free</strong>. Open-ended repos: <strong>still cloud</strong>.</div>
+<div style="display:flex; align-items:center; gap:18px">
+<div class="tldr"><span class="lab">TL;DR</span> bounded coding <strong>ties the frontier, free</strong>. Open-ended repos:</div>
+<img src="viz/conceited.gif" style="height:120px; border-radius:8px" />
+</div>
 
 <div class="byline">John Connolly, Lead Product Engineer &amp; tinkerer<br>June 2026</div>
 
@@ -98,7 +101,7 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 
 ---
 
-## Why start on a Raspberry Pi? Because that's how I learn
+## Why start on a Raspberry Pi? Why not?
 
 - I learn by jumping in and getting my hands on the thing.
 - I already had a Raspberry Pi from tinkering projects with my daughter.

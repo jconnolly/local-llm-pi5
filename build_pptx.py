@@ -88,7 +88,7 @@ def _fmt_body(tf, lvl_sizes={0: 18, 1: 15}):
             r.font.size = sz
 
 
-def title_slide(title, subtitle, byline="", tldr="", notes=""):
+def title_slide(title, subtitle, byline="", tldr="", tldr_gif="", notes=""):
     s = prs.slides.add_slide(LAY["Title Slide No Image"])
     def place(ph, left, top, w, h):
         ph.left, ph.top, ph.width, ph.height = Inches(left), Inches(top), Inches(w), Inches(h)
@@ -108,8 +108,9 @@ def title_slide(title, subtitle, byline="", tldr="", notes=""):
                 r.font.size = Pt(20); r.font.color.rgb = DK2
     # TL;DR as a separate styled callout box (brand tint, red label, bold verdicts)
     if tldr:
+        box_w = 8.4 if tldr_gif else 10.2
         box = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
-                                 Inches(0.9), Inches(4.2), Inches(10.2), Inches(1.15))
+                                 Inches(0.9), Inches(4.2), Inches(box_w), Inches(1.15))
         box.fill.solid(); box.fill.fore_color.rgb = RGBColor(0xF1, 0xEC, 0xF7)
         box.line.fill.background()
         box.shadow.inherit = False
@@ -122,6 +123,9 @@ def title_slide(title, subtitle, byline="", tldr="", notes=""):
         _md_runs(p, tldr)
         for r in p.runs[1:]:
             r.font.size = Pt(18); r.font.color.rgb = DK
+        if tldr_gif:
+            gp = s.shapes.add_picture(str(tldr_gif), Inches(9.45), Inches(4.05), height=Inches(1.45))
+            gp.left = int(Inches(0.9 + box_w + 0.2))
     # byline: bottom-RIGHT (opposite the bottom-left footer logo), right-aligned, small.
     # multi-line via \n.
     if byline:
@@ -251,7 +255,8 @@ B1 = lambda t: (t, 1)  # level-1 bullet
 title_slide(
     "Can a local LLM replace cloud Claude Code?",
     "Three weeks, three machines: from a Raspberry Pi to a $4,676 Mac Studio.",
-    tldr="bounded coding **ties the frontier, free**. Open-ended repos: **still cloud**.",
+    tldr="bounded coding **ties the frontier, free**. Open-ended repos:",
+    tldr_gif=REPO / "viz" / "conceited.gif",
     byline="John Connolly, Lead Product Engineer & tinkerer\nJune 2026",
     notes="0:30 | Open cold, don't read the title. Say: 'Three weeks ago I asked a simple question, could I stop paying for cloud Claude Code and run the whole thing on hardware in my house. I spent $4,676 finding out.' Then point at the TL;DR box: the answer is a qualified yes, and the qualification is the entire talk. For bounded coding, local ties the frontier and it's free. For open-ended repo work, you still want cloud. Everything after this slide is me earning that one sentence with data. Set the tone: this is a measurement talk, not a vibes talk, every claim has a benchmark behind it.")
 
@@ -267,7 +272,7 @@ table_slide("Agenda, where we're going (~29 min)",
 section_slide("ACT ONE", "The route: three machines",
     notes="5 sec | Quick beat, don't linger on dividers. Say: 'Act One, the route. How I got from a thirty-five-dollar Raspberry Pi to a forty-six-hundred-dollar Mac Studio, and what each machine taught me.' Then move.")
 
-bullets_slide("Why start on a Raspberry Pi? Because that's how I learn",
+bullets_slide("Why start on a Raspberry Pi? Why not?",
     [B("I learn by jumping in and getting my hands on the thing."),
      B("I already had a Raspberry Pi from tinkering projects with my daughter."),
      B("Could it run a little LLM for the house? It did, so I got greedy: could it handle my actual dev workload?")],
