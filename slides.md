@@ -135,12 +135,23 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 | Context | small, fits in your head | huge (64k+), must be discovered first |
 | Agent loop | few turns, converges fast | many turns, sustained reasoning |
 | Examples | a parser, a failing unit test, a data structure, a CLI tool, LeetCode | refactor across the repo, a feature touching 12 files, real SWE-bench |
-| Who wins | **local ties Opus** | **cloud wins** |
+| Benchmark | **HumanEval, LiveCodeBench** (function-level) | **SWE-bench Verified** (repository-level) |
+| Who wins | **local ties (even leads) Opus** | **cloud wins** |
 
-Local owns the left column, free and fast. Cloud earns its keep on the right. The rest of the deck just measures where that line falls.
+The benchmarks prove the split: open models tie or even lead on bounded ([Qwen3.5 tops LiveCodeBench at 83.6%](https://www.codesota.com/llm); HumanEval saturated, ~90%+ for all), but trail on [SWE-bench Verified](https://llm-stats.com/benchmarks/swe-bench-verified) (Qwen3.6-27B 77.2 vs Opus 88.6).
 
 <!--
 1:00 | The definition slide; the whole talk hinges on this distinction. Bounded coding = a self-contained problem you hold in your head and converge on in a few turns: a parser, a failing test, a small CLI tool. Open-ended = a vague task across a big unfamiliar codebase where the model must discover structure, juggle 64k+ context, grind through many turns: a repo-wide refactor, a real SWE-bench task. Local owns the left, free and fast; cloud earns the right. The rest of the deck measures where the line falls.
+-->
+
+---
+
+## Local owns the bottom-left; cloud the top-right
+
+![h:520](viz/quadrant.png)
+
+<!--
+1:00 | The same split, but visual. X = task scope (bounded to whole-repo), Y = context + agent-loop length. Bottom-left green = local owns it: HumanEval, LiveCodeBench, my minibench, local ties Opus free. Top-right purple = cloud wins: SWE-bench Verified/Pro, repo migrations. My benchmarks (orange diamonds) ladder up the diagonal from build to debug-loop. The diagonal is the line. Point at where your daily work lands.
 -->
 
 ---
@@ -161,7 +172,7 @@ Local owns the left column, free and fast. Cloud earns its keep on the right. Th
 
 ---
 
-## Dead end #1: a valiant vision box, wrong job
+## Dead end #1: tilting at windmills
 
 - Verified on the actual board (I SSH'd in): Pi 5 + Hailo-10H, 40-TOPS (tera-operations per second) INT4 NPU (neural processing unit), 8GB on-board, HailoRT 5.1.1. A real gen-AI accelerator.
 - But every model compiled to the Hailo is **vision** (YOLO, ResNet). Using it for LLMs needs Hailo's own build pipeline (`simple_llm_chat`), not a drop-in OpenAI/Ollama endpoint.
@@ -249,7 +260,9 @@ Local owns the left column, free and fast. Cloud earns its keep on the right. Th
 | **512GB ($11.5K)** | **DeepSeek-V4 (best open weight)** | **80.6%** | **−8 (still short!)** |
 | Cloud | **Opus 4.8** | **88.6%** | 0 |
 
-Even the best open-weight model, on an $11.5K box, is 8 points behind Opus. **The only thing that gives you Opus quality is Opus.** ([SWE-bench Verified, llm-stats.com](https://llm-stats.com/benchmarks/swe-bench-verified); same 77.2 / 88.6 in [Local AI is not Opus](https://blog.alexellis.io/local-ai-is-not-opus/))
+Even the best open-weight model, on an $11.5K box, is 8 points behind Opus. **The only thing that gives you Opus quality is Opus.**\* ([SWE-bench Verified, llm-stats.com](https://llm-stats.com/benchmarks/swe-bench-verified); same 77.2 / 88.6 in [Local AI is not Opus](https://blog.alexellis.io/local-ai-is-not-opus/))
+
+<span style="font-size:14px; color:#412B71; font-style:italic">\* Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are.</span>
 
 <!--
 2:00 | The hinge, now with verified numbers I actually looked up. Myth-buster: 'just buy a big enough Mac and you'll match Opus' is false. The model I run on the 96GB box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven behind Opus. Max out to a 512GB box and the best open-weight model on earth, DeepSeek V4, gets you to eighty-point-six, still eight short. You cannot spend your way to parity. The only thing that gives you Opus quality is Opus. Note this is SWE-bench Verified, the hard open-ended-repo axis, exactly where local loses, consistent with the rest of the talk where local ties on bounded work.

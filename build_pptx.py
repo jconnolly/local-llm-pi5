@@ -321,10 +321,16 @@ table_slide("Bounded coding vs open-ended repos",
      ["Context", "small, fits in your head", "huge (64k+), must be discovered first"],
      ["Agent loop", "few turns, converges fast", "many turns, sustained reasoning"],
      ["Examples", "a parser, a failing unit test, a data structure, a CLI tool, LeetCode", "refactor across the repo, a feature touching 12 files, real SWE-bench"],
-     ["Who wins", "**local ties Opus**", "**cloud wins**"]],
-    "Local owns the left column, free and fast. Cloud earns its keep on the right. The rest of the deck just measures where that line falls.",
-    "1:00 | The definition slide, and worth being concrete because the whole talk hinges on this one distinction. Bounded coding is a self-contained problem: a single function, a script, an algorithm, a file or a few you already understand, something you can hold in your head and the agent converges on in a few turns, a parser, a failing unit test, a small CLI tool. Open-ended repo work is the opposite: a vague bug or feature spread across a big, unfamiliar codebase, where the model first has to discover the structure, juggle sixty-thousand-plus tokens of context, and grind through many turns, a refactor across the whole repo or a real SWE-bench task. The one-sentence version: local owns the left column, free and fast; cloud earns its keep on the right. Everything else in this deck is me measuring exactly where that line falls.",
-    col_w=[1.3, 4.0, 4.3], font=13)
+     ["Benchmark", "**HumanEval, LiveCodeBench** (function-level)", "**SWE-bench Verified** (repository-level)"],
+     ["Who wins", "**local ties (even leads) Opus**", "**cloud wins**"]],
+    "The benchmarks prove the split: open models tie or even lead on bounded (Qwen3.5 tops LiveCodeBench at 83.6%; HumanEval is saturated, ~90%+ for everyone), but trail on SWE-bench Verified (Qwen3.6-27B 77.2 vs Opus 88.6). Sources: codesota.com, benchlm.ai, llm-stats.com",
+    "1:00 | The definition slide, now with the benchmarks that prove it. Bounded coding is a self-contained problem you hold in your head and the agent converges on in a few turns, a parser, a failing unit test, a small CLI tool. The benchmarks for that are HumanEval and LiveCodeBench, function-level problems, and there open models tie or even lead, Qwen 3.5 actually tops LiveCodeBench. Open-ended is a vague bug or feature across a big, unfamiliar codebase where the model has to discover structure, juggle sixty-thousand-plus tokens, grind through many turns. The benchmark for that is SWE-bench Verified, repository-level, and there they trail, seventy-seven versus Opus's eighty-nine. Same models, opposite results, because the benchmarks test fundamentally different things. That is the whole talk in one table.",
+    col_w=[1.2, 4.0, 4.4], font=12)
+
+_q = _title_only("Local owns the bottom-left; cloud the top-right")
+_qp = _q.shapes.add_picture(str(REPO / "viz" / "quadrant.png"), 0, 0, height=Inches(4.85))
+_qp.left = int((SW - _qp.width) // 2); _qp.top = Inches(1.6)
+_notes(_q, "1:00 | The same split, but visual. X-axis is task scope, bounded on the left to whole-repo on the right. Y-axis is how much context and how many agent turns it takes. Bottom-left, local owns it, the function-level benchmarks, HumanEval, LiveCodeBench, my minibench, all in the green, local ties Opus for free. Top-right, cloud wins, SWE-bench Verified and Pro, repo-wide migrations. My own benchmarks, the orange diamonds, ladder right up the diagonal from the build task near the bottom to the debug loop up near the line. That diagonal is the line the whole talk is about. Then point at where your daily work actually lands.")
 
 table_slide("The route: three machines, three verdicts",
     ["Stop", "Hardware", "Verdict"],
@@ -336,7 +342,7 @@ table_slide("The route: three machines, three verdicts",
     notes="1:30 | This is the map, don't read every cell, walk it. Stop one, the Raspberry Pi, total dead end, I'll explain why in two slides. Stop two, a spare MacBook Air I call Maral, that's where I learned everything even though it only ran a few hours. Stop three, I hit a tuning wall and found the single best speedup of the whole project. Stop four, the reality check, the thing you cannot buy at any price. Stop five, the Mac Studio, which finally ties Opus on coding at sixty-eight tokens a second for zero dollars a month. The takeaway line: the lessons are in the trip, not just the destination.",
     col_w=[0.7, 3.2, 5.5], font=12)
 
-bullets_slide("Dead end #1: a valiant vision box, wrong job",
+bullets_slide("Dead end #1: tilting at windmills",
     [B("Verified on the actual board (I SSH'd in): Pi 5 + Hailo-10H, 40-TOPS (tera-operations per second) INT4 NPU (neural processing unit), 8GB on-board, HailoRT 5.1.1. A real gen-AI accelerator."),
      B("But every model compiled to the Hailo is **vision** (YOLO, ResNet). Using it for LLMs needs Hailo's own build pipeline (`simple_llm_chat`), not a drop-in OpenAI/Ollama endpoint."),
      B("The connectable path is **ollama on the Pi 5 CPU** (port 11434, qwen2.5-coder 3b/7b). Claude Code can point at it, but it's the slow CPU, not the accelerator."),
@@ -383,14 +389,19 @@ bullets_slide("The single best tuning knob: kill the thinking tax",
 section_slide("ACT TWO", "Reality check & the $4,676 call",
     notes="5 sec | Quick beat. Say: 'Act Two. I've got a working setup, now the uncomfortable part, how good can local actually get, and can you just buy your way to the top? Short answer, no.' Move.")
 
-table_slide("Reality check: you can't buy frontier parity",
+_rc = table_slide("Reality check: you can't buy frontier parity",
     ["Tier", "Best model you can run", "SWE-bench Verified", "Gap to Opus 4.8"],
     [["96GB Mac", "Qwen3.6-27B (what I benched)", "77.2%", "−11"],
      ["**512GB ($11.5K)**", "**DeepSeek-V4 (best open weight)**", "**80.6%**", "**−8 (still short!)**"],
      ["Cloud", "**Opus 4.8**", "**88.6%**", "0"]],
-    "Even the best open-weight model, on an $11.5K box, is 8 points behind Opus. **The only thing that gives you Opus quality is Opus.** (SWE-bench Verified, llm-stats.com; same 77.2 / 88.6 in 'Local AI is not Opus', blog.alexellis.io)",
+    "Even the best open-weight model, on an $11.5K box, is 8 points behind Opus. **The only thing that gives you Opus quality is Opus.*** (SWE-bench Verified, llm-stats.com; same 77.2 / 88.6 in 'Local AI is not Opus', blog.alexellis.io)",
     "2:00 | The hinge, now with verified numbers I actually looked up. Myth-buster: 'just buy a big enough Mac and you'll match Opus' is false. The model I run on the 96GB box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven points behind Opus. Max out to a five-hundred-twelve-gig box and the best open-weight model on earth, DeepSeek V4, gets you to eighty-point-six, still eight short. You cannot spend your way to parity. Land it slowly: the only thing that gives you Opus quality is Opus. And note this is SWE-bench Verified, the hard open-ended-repo axis, which is exactly where local loses, consistent with the rest of the talk where local ties on bounded work.",
     col_w=[1.5, 3.5, 2.2, 2.3], font=13)
+_rcf = _rc.shapes.add_textbox(Inches(1.7), Inches(6.15), SW - Inches(2.3), Inches(0.5))
+_no_autofit(_rcf.text_frame)
+_rcr = _rcf.text_frame.paragraphs[0].add_run()
+_rcr.text = "* Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are."
+_rcr.font.size = Pt(12); _rcr.font.italic = True; _rcr.font.color.rgb = DK2
 
 bullets_slide("So the decision is about how close, not parity",
     [B("Don't chase a number that isn't for sale"),
