@@ -371,7 +371,7 @@
 </tr>
 </tbody>
 </table>
-<p>Same model, 4x faster, entirely the memory bus. <strong>MoE (mixture of experts) beats dense:</strong> dense 32B is mid; the 3B-active MoE ate, 3x faster and higher-scoring.</p>
+<p>Same model, 4x faster, purely the memory bus. <strong>MoE (mixture of experts) beats dense:</strong> the dense 32B was mediocre and slow; the 30B MoE activates only 3B params per token, so it streams far less from memory each step, running 3x faster than the dense 32B and scoring higher.</p>
 <div class="cap">Bandwidth: M3 Ultra [819 GB/s (Apple spec)](https://www.apple.com/mac-studio/specs/); Pi 5 LPDDR4X ~17 GB/s. Same idea, ~48x the bus.</div>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="23" data-paginate="true" lang="en-US" data-marpit-pagination="23" style="--paginate:true;" data-marpit-pagination-total="40">

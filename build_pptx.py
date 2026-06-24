@@ -476,7 +476,7 @@ table_slide("Why the Studio is fast: bandwidth, not parameters",
     ["Box", "Memory bandwidth", "coder-30b speed"],
     [["MacBook Air M2 16GB", "~100 GB/s", "16 tok/s"],
      ["**Mac Studio M3 Ultra 96GB**", "**819 GB/s**", "**68 tok/s**"]],
-    "Same model, 4x faster, entirely the memory bus. **MoE (mixture of experts) beats dense:** dense 32B is mid; the 3B-active MoE ate, 3x faster and higher-scoring. (M3 Ultra 819 GB/s per Apple spec; Pi 5 ~17 GB/s.)",
+    "Same model, 4x faster, purely the memory bus. **MoE (mixture of experts) beats dense:** the dense 32B was mediocre and slow; the 30B MoE activates only 3B params per token, so it streams far less from memory each step, running 3x faster than the dense 32B and scoring higher. (M3 Ultra 819 GB/s per Apple spec; Pi 5 ~17 GB/s.)",
     "1:30 | The one genuinely technical slide, and a callback to the napkin math from Act One. Same model, same quant, eight times the memory bandwidth gives you about four times the tokens per second. The Mac Studio's eight-hundred-gigabyte-a-second memory bus is the entire story, it is not about raw compute. Then the mixture-of-experts punchline: a thirty-billion MoE model that only activates three billion parameters per token beats a dense thirty-two-billion model, faster AND higher-scoring, because only the active experts have to be streamed from memory each token. Practical advice for anyone buying: optimize for memory bandwidth and run MoE models, don't chase GPU teraflops.",
     col_w=[3.2, 3, 3])
 

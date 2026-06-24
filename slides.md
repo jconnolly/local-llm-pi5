@@ -405,7 +405,7 @@ Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest
 | MacBook Air M2 16GB | ~100 GB/s | 16 tok/s |
 | **Mac Studio M3 Ultra 96GB** | **819 GB/s** | **68 tok/s** |
 
-Same model, 4x faster, entirely the memory bus. **MoE (mixture of experts) beats dense:** dense 32B is mid; the 3B-active MoE ate, 3x faster and higher-scoring.
+Same model, 4x faster, purely the memory bus. **MoE (mixture of experts) beats dense:** the dense 32B was mediocre and slow; the 30B MoE activates only 3B params per token, so it streams far less from memory each step, running 3x faster than the dense 32B and scoring higher.
 
 <div class="cap">Bandwidth: M3 Ultra [819 GB/s (Apple spec)](https://www.apple.com/mac-studio/specs/); Pi 5 LPDDR4X ~17 GB/s. Same idea, ~48x the bus.</div>
 
