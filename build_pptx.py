@@ -267,6 +267,13 @@ table_slide("Agenda, where we're going (~29 min)",
 section_slide("ACT ONE", "The route: three machines",
     notes="5 sec | Quick beat, don't linger on dividers. Say: 'Act One, the route. How I got from a thirty-five-dollar Raspberry Pi to a forty-six-hundred-dollar Mac Studio, and what each machine taught me.' Then move.")
 
+bullets_slide("Why start on a Raspberry Pi? Because that's how I learn",
+    [B("I learn by jumping in and getting my hands on the thing, not by reading a spec sheet first."),
+     B("The origin is mundane: I already had a Raspberry Pi from tinkering projects with my daughter."),
+     B("Started simple, could it run a little LLM for the house? It did, so I got greedy: could it handle my actual dev workload?"),
+     B("That escalating curiosity is the whole journey. Starting on a Pi was intentionally myopic, I wanted to see the limits with my own eyes, not predict them from a datasheet.")],
+    "1:00 | The human hook, and it matters because it stops the Raspberry Pi from looking naive. Be honest about how I work: I learn by jumping in and getting my hands on the thing, not by reading a spec sheet first. The origin is genuinely mundane, I had a Raspberry Pi lying around from tinkering projects with my daughter, and I wondered if it could run a little LLM for the house. It did, well enough that I got greedy and asked the real question, could it handle my actual dev workload? That escalating curiosity is the whole talk. So when the Pi turns out to be a dead end, that isn't me being dumb, it was intentionally myopic, I wanted to see the limits with my own eyes and feel them with my own hands, not predict them from a datasheet.")
+
 bullets_slide("The question",
     [B("Can I run a 'SOTA' local LLM at home, usable as my Claude Code backend, and stop paying for cloud?"),
      B("Two things to find out:"),
