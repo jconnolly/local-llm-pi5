@@ -136,7 +136,7 @@ def title_slide(title, subtitle, byline="", tldr="", notes=""):
     return s
 
 
-def bullets_slide(title, items, notes=""):
+def bullets_slide(title, items, notes="", font=18):
     """items: list of (text, level)."""
     s = prs.slides.add_slide(LAY["OBJECT"])  # white content layout WITH the DS logo
     s.placeholders[0].text = title
@@ -147,7 +147,7 @@ def bullets_slide(title, items, notes=""):
         p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
         p.level = lvl
         _md_runs(p, text)
-    _fmt_body(tf)
+    _fmt_body(tf, {0: font, 1: font - 3})
     _notes(s, notes)
     return s
 
@@ -292,13 +292,15 @@ bullets_slide("Dead end #1: a brilliant vision box, wrong job",
      B("**Lesson:** the accelerator is real, but there's no fast, drop-in LLM endpoint, the easy path is the slow CPU. Right edge box, wrong job for a coding agent.")],
     "1:00 | The cautionary tale, and I'm honest here that I went back and verified it on the actual hardware. The board is genuinely capable, a Hailo-10H, forty INT4 TOPS, eight gigs of its own memory, a real edge gen-AI accelerator. So why a dead end? Two things I confirmed by SSHing into the box. One, every model actually compiled onto the Hailo is a vision model, YOLO and ResNet, using it for language models needs Hailo's own build pipeline, not a drop-in endpoint. Two, the path that IS drop-in, ollama on the Pi, runs on the Pi's CPU, not the accelerator, and I measured it at about five tokens a second on a three-billion coder model. Five tokens a second, on a small model, with a small context. Fine for a chatbot demo, unusable as a coding agent that needs many fast turns over a big context. So it's not that you can't connect, it's that the connectable path is the slow CPU and the fast path only runs vision. Right edge box, wrong job.")
 
-bullets_slide("Showing the work: I measured it on the actual Pi",
-    [B("Skeptical of my own slide, I SSH'd into the box and measured it, instead of guessing."),
-     B("qwen2.5-coder:3b via ollama on the Pi 5 CPU: **5 tok/s decode, 9.6 tok/s prefill** (size_vram=0, confirmed CPU, not the Hailo)."),
-     B("The Hailo accelerator isn't in that path, it only has **vision** models compiled (.hef). Driving it for LLMs needs Hailo's gen_ai pipeline, no ollama/Anthropic drop-in."),
-     B("At 5 tok/s, one agent turn of a few hundred tokens takes minutes, prefilling a big context is worse, and a coding agent needs many turns."),
-     B("**Bottom line:** the connectable LLM path on the Pi is ~5 tok/s on the CPU. Fine for a chatbot demo, unusable as a coding agent.")],
-    "1:30 | The show-our-work slide, the honest version after I went and checked. I didn't want to assert numbers I hadn't measured, so I SSHed into the actual Pi. Result: qwen2.5-coder three-billion, via ollama, runs about five tokens a second decode, nine and a half prefill, and ollama confirms zero VRAM, it's the CPU, not the Hailo. The Hailo only has vision models compiled onto it, driving it for language models is a whole separate Hailo build pipeline, not a drop-in. So the bottleneck is concrete: five tokens a second, one agent turn takes minutes, and a coding agent needs many turns over a big context. Fine for a chatbot demo, unusable as a coding backend. The credibility beat: I checked my own claim against the real hardware and corrected it.")
+bullets_slide("Showing the work: 2 slow 2 furious",
+    [B("I SSH'd in and measured both paths myself. qwen2.5-coder:3b on the Pi 5 CPU (ollama): **5 tok/s**. Qwen2.5-1.5B on the Hailo accelerator itself: **7.3 tok/s** (downloaded the HEF, ran it)."),
+     B("The numbers felt sus, so I checked independent reviewers, and **the plain CPU often beats the Hailo on LLMs:**"),
+     B1("DeepSeek-R1 1.5B: 6.7 (Hailo) vs 9.0 (CPU). Qwen2.5-Coder 1.5B: 8.1 vs 10.3. Llama3.2 3B: 2.6 vs 4.8."),
+     B("One reviewer called it **'more like an AI decelerator than an AI accelerator.'** The real win is offloading the CPU and low power, not speed."),
+     B("**Bottom line:** the whole Hailo LLM zoo is 1-3B (yes, a 1.5B coder), and the accelerator can't beat the CPU. (Mine even botched 'reverse a string'.) Great low-power chatbot, never a coding agent."),
+     B("Sources: CNX Software + hardware-corner.net, AI HAT+ 2 reviews.")],
+    font=16,
+    notes="1:30 | The fun one, fully verified. I SSHed into the actual Pi and measured both paths myself. The easy path, ollama on the CPU, about five tokens a second on a 3B coder. The fancy path, I downloaded the model onto the Hailo accelerator and ran it, seven-point-three tokens a second on a 1.5B. Then, because those numbers felt sus, I checked independent reviewers, and the plain Pi CPU often BEATS the Hailo on language models. One literally called it more like an AI decelerator than an accelerator. The chip's real benefit is offloading the CPU and low power, not speed. So the whole LLM lineup is one-to-three-billion, there's even a 1.5B coder, the accelerator can't beat the CPU, and when I ran it the model confidently got 'reverse a string' wrong. Two slow, two furious. Great low-power chatbot, never a coding backend. Sources are on the slide.")
 
 bullets_slide("Maral: a spare 16GB Air, doing the most",
     [B("qwen3:8b / :14b via Ollama's Anthropic endpoint, wired into Claude Code with one env block"),

@@ -142,16 +142,17 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 
 ---
 
-## Showing the work: I measured it on the actual Pi
+## Showing the work: 2 slow 2 furious
 
-- Skeptical of my own slide, I SSH'd into the box and measured it, instead of guessing.
-- qwen2.5-coder:3b via ollama on the Pi 5 CPU: **5 tok/s decode, 9.6 tok/s prefill** (`size_vram=0`, confirmed CPU, not the Hailo).
-- The Hailo accelerator isn't in that path, it only has **vision** models compiled (`.hef`). Driving it for LLMs needs Hailo's gen_ai pipeline, no ollama/Anthropic drop-in.
-- At 5 tok/s, one agent turn of a few hundred tokens takes minutes, prefilling a big context is worse, and a coding agent needs many turns.
-- **Bottom line:** the connectable LLM path on the Pi is ~5 tok/s on the CPU. Fine for a chatbot demo, unusable as a coding agent.
+- I SSH'd in and measured both paths myself. qwen2.5-coder:3b on the Pi 5 CPU (ollama): **5 tok/s**. Qwen2.5-1.5B on the Hailo accelerator itself: **7.3 tok/s** (downloaded the HEF, ran it).
+- The numbers felt sus, so I checked independent reviewers, and **the plain CPU often beats the Hailo on LLMs:**
+  - DeepSeek-R1 1.5B: 6.7 (Hailo) vs 9.0 (CPU). Qwen2.5-Coder 1.5B: 8.1 vs 10.3. Llama3.2 3B: 2.6 vs 4.8.
+- One reviewer called it **"more like an AI decelerator than an AI accelerator."** The real win is offloading the CPU and low power, not speed.
+- **Bottom line:** the whole Hailo LLM zoo is 1-3B (yes, a 1.5B coder), and the accelerator can't beat the CPU. (Mine even botched "reverse a string".) Great low-power chatbot, never a coding agent.
+- Sources: [CNX Software](https://www.cnx-software.com/2026/01/20/raspberry-pi-ai-hat-2-review-a-40-tops-ai-accelerator-tested-with-computer-vision-llm-and-vlm-workloads/) + [hardware-corner.net](https://www.hardware-corner.net/local-llms-raspberry-pi-ai-hat-plus-2/)
 
 <!--
-1:30 | The show-our-work slide, the honest version after I went and checked. I didn't want to assert numbers I hadn't measured, so I SSHed into the actual Pi. Result: qwen2.5-coder three-billion, via ollama, runs about five tokens a second decode, nine and a half prefill, and ollama confirms zero VRAM, it's the CPU, not the Hailo. The Hailo only has vision models compiled, driving it for language models is a separate Hailo build pipeline, not a drop-in. So the bottleneck is concrete: five tokens a second, one agent turn takes minutes, a coding agent needs many. Fine for a chatbot demo, unusable as a coding backend. The beat: I checked my own claim against the real hardware and corrected it.
+1:30 | The fun one, fully verified. I SSHed into the actual Pi and measured both paths myself. The easy path, ollama on the CPU, about five tokens a second on a 3B coder. The fancy path, I downloaded the model onto the Hailo accelerator and ran it, seven-point-three tokens a second on a 1.5B. Then, because those numbers felt sus, I checked independent reviewers, and the plain Pi CPU often beats the Hailo on language models. One literally called it more like an AI decelerator than an accelerator. The chip's real benefit is offloading the CPU and low power, not speed. So the whole lineup is one-to-three-billion, there's even a 1.5B coder, the accelerator can't beat the CPU, and when I ran it the model got 'reverse a string' wrong. Two slow, two furious. Great low-power chatbot, never a coding backend. Sources on the slide.
 -->
 
 ---
