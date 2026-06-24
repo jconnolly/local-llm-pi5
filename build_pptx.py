@@ -532,9 +532,18 @@ image_slide("Same task, three models, all playable",
     sub="The actual games the three agents built, being played. Polish climbs left to right. coder-30b gatekept its own game behind a START menu.",
     notes="1:00 | Show, don't tell, let it loop. These are the actual games the three agents built, being played by a script. Left, the small local model, it works, emoji invaders, scoring, a game-over screen, but it shipped the game behind a START menu, which was its one rubric miss. Middle, the eighty-billion, clean and auto-running. Right, Opus, the richest, sprite invaders, a lives counter, restart hints. The polish climbs left to right and maps exactly to the table, but the point is all three are real, runnable, in the repo, and the local ones cost zero dollars. Invite them: clone it and play them yourself.")
 
+table_slide("Concrete: real DSG tasks, local vs cloud wall-clock",
+    ["Task (internal-web-app stack)", "Type", "Cloud", "Local", "Result"],
+    [["Write an ECR Terraform module", "bounded", "**15 s**", "**150 s**", "both pass, 10x"],
+     ["Scaffold an ECS Fargate service module", "build", "**34 s**", "**262 s**", "both pass, 8x"],
+     ["Fix an ALB OIDC header parser (failing test)", "debug", "**21 s**", "**155 s**", "both pass, 7x"]],
+    "Local got the right answer on all three, same capability, but you wait ~7-10x longer. The gap is wall-clock, not correctness. The bounded task has the worst ratio: cloud finishes in 15s, so local's per-turn latency is a bigger multiple. Measured this session: qwen3.6:27b (q8) on the Studio vs Opus 4.8, sandboxed (throwaway dirs, AWS creds stripped, nothing deployed).",
+    "1:30 | The concrete, on-your-own-work slide, the honest counterweight to the raw tokens-per-second numbers. Three real tasks shaped like my internal-web-app infra: one bounded, a small ECR Terraform module; one build, scaffold a whole ECS Fargate service module; one debug, fix a planted bug in an ALB OIDC header parser with a failing test so the agent has to iterate. Each ran through the real Claude Code loop, local on the Studio versus cloud Opus, fully sandboxed, throwaway directories, AWS credentials stripped so nothing could touch a real account. The honest result: local got the correct answer on all three, the work shipped, same capability, but you wait seven to ten times longer. Note the twist, the bounded task has the WORST ratio, ten-x, because cloud finishes it in fifteen seconds flat and local's fixed per-turn latency is a bigger multiple of a tiny number. So 'local ties' is about whether the answer is right, not how long you wait. A faster local model like gpt-oss closes the gap, but the shape holds: same destination, longer drive.",
+    col_w=[4.6, 1.2, 1.2, 1.2, 1.8], font=12)
+
 table_slide("The reconciliation",
     ["Workload", "Local verdict"],
-    [["One-shot bounded coding", "**Ties Opus**, fast, free"],
+    [["One-shot bounded coding", "**Ties Opus** on capability; ~7-10x slower wall-clock, free"],
      ["Multi-turn debug loops", "**Current models stable, 5/5; gpt-oss 20b within ~1.5x of cloud**"],
      ["Open-ended building (from scratch)", "**80B ties cloud, ~2x slower, $0**"],
      ["Open-ended repo work (big context)", "**Cloud still wins, on capability**"]],

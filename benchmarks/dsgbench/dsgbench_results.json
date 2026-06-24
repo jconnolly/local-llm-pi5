@@ -1,0 +1,12 @@
+[
+  {
+    "backend": "local",
+    "success": true,
+    "duration_ms": 149665,
+    "num_turns": 4,
+    "out_tokens": 660,
+    "cost_usd": 0.30952999999999997,
+    "task": "ecr_module",
+    "kind": "bounded"
+  }
+]
