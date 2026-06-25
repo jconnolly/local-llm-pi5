@@ -422,7 +422,10 @@ CUE: Breather, tell it like a story. Gesture at the photo, that's the box runnin
 # The measured verdict
 
 <!--
-5 sec | Quick beat, but build energy here, this is the best part. Say: 'Part Three. Enough story, enough vibes. Here are the actual benchmarks, and this is where it surprised me.' Move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
+[0:05]
+SAY: "Part three. Enough story, enough vibes. Here are the actual benchmarks, and this is where it surprised me."
+
+CUE: Build energy here, this is the best part. SLIDO: glance at the feed, read any new question first.
 -->
 
 ---
@@ -438,7 +441,10 @@ CUE: Breather, tell it like a story. Gesture at the photo, that's the box runnin
 Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest scoring. Local understood the assignment: tied Opus on every one.
 
 <!--
-1:30 | Open Part Three on the win, this is the 'yes' half of the answer. Stress the rigor before the result: twenty-four coding problems, easy up to LeetCode-hard, scored deterministically with pytest, no model judging itself. The result, the local thirty-billion coder tied Opus on every single problem, at sixty-eight tokens a second, for free. But plant the honesty that's coming: this bench saturated, my local model couldn't lose on it, and a benchmark your best model can't lose on has stopped measuring anything. That's exactly why I had to build harder tests, which is the rest of this part. Don't oversell, the next two slides deliberately complicate this win.
+[1:30]
+SAY: "Twenty-four coding problems, easy up to LeetCode-hard, scored deterministically with pytest, no model judging itself. The local thirty-billion coder tied Opus on every single one, at sixty-eight tokens a second, for free."
+
+CUE: Stress the rigor before the result. Then plant the honesty coming: this bench saturated, my model couldn't lose on it. Don't oversell, the next slides complicate this.
 -->
 
 ---
@@ -451,7 +457,10 @@ Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest
 - So I built harder tests. The rest of this part is what they found.
 
 <!--
-1:30 | The bridge, NOT the verdict, resist stating who-wins-what here. The point is narrow and honest: my local model couldn't lose on this bench, both it and Opus went twenty-four for twenty-four, so the bench has stopped measuring anything. A benchmark your best model can't lose on is dead weight. What it can't see is the axis that actually bites day to day, long multi-file agentic work in a big unfamiliar repo. So I built harder tests, and the rest of this part is what they turned up. Keep them in suspense, the reconciliation at the end of the act is where the verdict lands.
+[1:30]
+SAY: "Here's the catch. Both my local model and Opus went twenty-four for twenty-four, so this bench has stopped measuring anything. A benchmark your best model can't lose on is dead weight. What it can't see is the axis that actually bites day to day, long multi-file agentic work in a big unfamiliar repo. So I built harder tests."
+
+CUE: The bridge, NOT the verdict. Keep them in suspense, the verdict lands at the reconciliation at the end of the part.
 -->
 
 ---
@@ -468,7 +477,10 @@ Same model, 4x faster, purely the memory bus. **MoE (mixture of experts) beats d
 <div class="cap">Bandwidth: M3 Ultra [819 GB/s (Apple spec)](https://www.apple.com/mac-studio/specs/); Pi 5 LPDDR4X ~17 GB/s. Same idea, ~48x the bus.</div>
 
 <!--
-1:30 | The one genuinely technical slide, and a callback to the napkin math from Part One. Same model, same quant, eight times the memory bandwidth gives you about four times the tokens per second. The Mac Studio's eight-hundred-gigabyte-a-second memory bus is the entire story, it is not about raw compute. Then the mixture-of-experts punchline: a thirty-billion MoE model that only activates three billion parameters per token beats a dense thirty-two-billion model, faster AND higher-scoring, because only the active experts have to be streamed from memory each token. Practical advice for anyone buying: optimize for memory bandwidth and run MoE models, don't chase GPU teraflops.
+[1:30]
+SAY: "Same model, same quant, eight times the memory bandwidth gives you about four times the tokens per second. The Mac Studio's memory bus is the whole story, it's not about raw compute. And the mixture-of-experts punchline: a thirty-billion MoE that only activates three billion parameters per token beats a dense thirty-two-billion, faster and higher-scoring, because only the active experts stream from memory each token."
+
+CUE: The one technical slide. Buying advice: optimize for memory bandwidth, run MoE, don't chase GPU teraflops.
 -->
 
 ---
@@ -484,7 +496,10 @@ With `OLLAMA_MAX_LOADED_MODELS=3`, all resident at once (~38GB, 50GB free):
 Plus qwen3-next:80b (80B, 64 tok/s, bigger brain, same speed).
 
 <!--
-1:00 | Keep it brisk, this is a value-add, not the core argument. Ninety-six gigs holds the coding agent, a vision model, and an embedding model for search, all resident at the same time, thirty-eight gigs used, fifty free. So one box becomes the coding, vision, and retrieval backend for the whole house, the cloud bill you're replacing isn't only Claude Code. The kicker, and it ties back to the bandwidth point: the eighty-billion model runs at the same speed as the thirty-billion, because both only activate three billion parameters per token, so it's a free quality upgrade with no speed penalty. Don't dwell, it's a bonus slide.
+[1:00]
+SAY: "Ninety-six gigs holds the coding agent, a vision model, and an embedding model for search, all resident at once, thirty-eight gigs used, fifty free. So one box is the coding, vision, and retrieval backend for the whole house. And the eighty-billion model runs at the same speed as the thirty-billion, because both activate only three billion parameters per token, a free quality upgrade with no speed penalty."
+
+CUE: Brisk, it's a value-add, not the core argument. Don't dwell.
 -->
 
 ---
@@ -499,7 +514,10 @@ Plus qwen3-next:80b (80B, 64 tok/s, bigger brain, same speed).
 5 multi-file bug-fixes through the real Claude Code agent loop. **Local 8x slower, a one-line `>` to `>=` fix took it 41 turns / 584 s.**
 
 <!--
-2:00 | This is THE turning point of the talk, the moment that changed my mind, so give it room. The one-shot benchmarks said tie. But I wanted to measure what I actually feel day to day, so I drove the real Claude Code agent loop on five multi-file bug fixes, local versus Opus, measuring wall-clock, turns, everything. Cloud, five out of five, about thirty-one seconds average, rock-steady five to nine turns. Local, four out of five, but two hundred forty-eight seconds average, eight times slower, and wildly unstable, anywhere from four to forty-one turns. Then land the killer detail and pause: one of these was a one-line fix, changing a greater-than to a greater-than-or-equal, and the local model took forty-one turns and almost ten minutes flailing on it. Let that hang. The lesson the whole talk builds to: measure the agent loop, not tokens per second.
+[2:00]
+SAY: "The one-shot benchmarks said tie. But I wanted to measure what I actually feel day to day, so I drove the real Claude Code agent loop on five multi-file bug fixes, local versus Opus. Cloud, five out of five, about thirty-one seconds, rock-steady. Local, four out of five, but two hundred forty-eight seconds, eight times slower, and wildly unstable, four to forty-one turns. One of these was a one-line fix, a greater-than to a greater-than-or-equal, and local took forty-one turns and almost ten minutes flailing on it."
+
+CUE: THE turning point, give it room. Pause after the 41-turn line, let it hang. The lesson: measure the agent loop, not tokens per second.
 -->
 
 ---
@@ -511,20 +529,26 @@ Plus qwen3-next:80b (80B, 64 tok/s, bigger brain, same speed).
 <div class="cap">Real runs at 8x speed: left flails to 9 turns/110s, right is clean at 5 turns/17s.</div>
 
 <!--
-1:00 | The table you just saw, now in motion, let it play without talking for the first few seconds. Left is the local model flailing, reading the wrong file, failing the test twice, re-reading, finally fixing at turn nine. Right is cloud going straight to the fix, done in five turns. Point at the exact moment the right side freezes green while the left is still grinding and say: 'same one-line bug, the cloud agent has been done for ninety seconds.' Stress that this is a recording of the actual runs, sped up eight times, not a mockup, that badge in the corner is the real-time multiplier.
+[1:00]
+SAY: "Same one-line bug. The cloud agent, on the right, has been done for ninety seconds while the local one, on the left, is still grinding."
+
+CUE: Let it play silent the first few seconds. Point at the moment the right side freezes green. This is a recording of the real runs, sped up eight times, not a mockup.
 -->
 
 ---
 
 ## It's not caching, it's convergence
 
-- Ollama DOES prefix-cache (the big local token counts are CC's accounting, not the box re-computing)
-- The real cost is turn-count instability: the 30B fumbles, sometimes spiraling to 41 turns, sometimes giving up at 4
-- Cloud converges in 5 turns every time. Local swings 4-41.
-- The one-shot '68 tok/s, ties Opus' number was single-turn, it hid all of this.
+- Ollama **does** prefix-cache; the big token counts are CC's accounting, not re-compute
+- Real cost = turn-count instability: the 30B swings 4-41 turns
+- Cloud converges in 5, every time
+- The "68 tok/s, ties Opus" number was single-turn. It hid all of this.
 
 <!--
-1:30 | The diagnosis, and use the honest 'I was wrong' beat, it builds trust. My first theory was 'local has no prompt caching, so it re-computes everything, that's why it's slow.' I dug in. Wrong. Ollama does cache, the logs show about thirty thousand tokens cached and only two hundred fifty new per turn. The scary big token numbers were Claude Code's accounting display, not the machine re-crunching. The real culprit is convergence instability, the thirty-billion model just can't reliably drive a tool-use loop to the finish, it fumbles, sometimes spiraling to forty-one turns, sometimes quitting early at four. Cloud nails five turns every time. The meta-point: that headline sixty-eight-tokens-a-second, ties-Opus number was a single-turn measurement, and single-turn benchmarks structurally hide multi-turn instability. That's why you measure the loop.
+[1:30]
+SAY: "My first theory was, local has no prompt caching, so it re-computes everything. Wrong. Ollama does cache, about thirty thousand tokens cached, only two hundred fifty new per turn, the scary big numbers were just Claude Code's accounting display. The real culprit is convergence: the thirty-billion model can't reliably drive a tool-loop to the finish. And that headline sixty-eight-tokens-a-second, ties-Opus number was single-turn, it hid all of this."
+
+CUE: Use the honest "I was wrong" beat, it builds trust. Meta-point: single-turn benchmarks hide multi-turn instability. That's why you measure the loop.
 -->
 
 ---
@@ -542,7 +566,10 @@ Plus qwen3-next:80b (80B, 64 tok/s, bigger brain, same speed).
 Every current model is stable and 5/5, the 41-turn coder spiral was a stale model, not local inference. **gpt-oss 20b lands within ~1.5x of cloud**, stable, on a 20B model. The fix was a newer model, not a bigger box.
 
 <!--
-1:30 | The payoff slide, and it lands the 'maybe it's software, not hardware' thesis. A few slides ago the agent loop was fumbling, the forty-one-turn spiral. Hypothesis from Boykis and HN: maybe that's the model, not local inference. So I tested it, same box, same five tasks, swapped my last-gen coder for Qwen three-six, same eight-bit quant, only variable is the model. Result: five out of five, every task seven to nine turns, dead stable, like cloud. The forty-one-turn spiral became seven. So the instability was a stale model, the fix was a newer model, not a bigger box. Honest caveat: still about five times slower than cloud, but stable and correct. The most important update since I built the deck.
+[1:30]
+SAY: "Hypothesis from Boykis and Hacker News: maybe that instability is the model, not local inference. So I tested it, same box, same five tasks, swapped my last-gen coder for Qwen three-six, same quant, only the model changed. Five out of five, every task seven to nine turns, dead stable, like cloud. The forty-one-turn spiral became seven. The fix was a newer model, not a bigger box. And gpt-oss 20b lands within about one-and-a-half times cloud."
+
+CUE: The payoff: maybe it's software, not hardware. Honest caveat, still slower than cloud, but stable and correct. Most important update since I built the deck.
 -->
 
 ---
@@ -558,7 +585,10 @@ Every current model is stable and 5/5, the 41-turn coder spiral was a stale mode
 Task: 'build playable Space Invaders as one index.html', scored by a Playwright 7-check rubric. **No failing test to spiral on, so local 80B ties cloud, within 2x on speed.**
 
 <!--
-1:30 | The counterweight, and the most hopeful data in the talk, so lift the energy back up. Remember the eight-times tax was specifically about debugging, chasing a failing test, where the instability compounds. So I tried the opposite, an open-ended build, 'make a playable Space Invaders in one HTML file,' scored by an automated browser rubric. On a build-from-scratch task the gap nearly closes: the local eighty-billion model gets a perfect seven out of seven, same as Opus, at twice the wall-clock and zero dollars. Two sub-points worth making: the bigger local model beat the smaller one on speed AND quality AND used half the tokens, so convergence improves with size; and all three did it in just two turns. The takeaway: route by task type, build-from-scratch is great for local, debug-an-existing-repo is where cloud earns its keep.
+[1:30]
+SAY: "Remember the eight-times tax was specifically about debugging, chasing a failing test, where instability compounds. So I tried the opposite: build a playable Space Invaders in one HTML file, scored by an automated browser rubric. On a build-from-scratch task the gap nearly closes, the local eighty-billion gets a perfect seven out of seven, same as Opus, at twice the wall-clock and zero dollars."
+
+CUE: The most hopeful data, lift the energy. The bigger local model beat the smaller one on speed AND quality AND tokens. Takeaway: route by task type, build is great for local, debug-a-repo is where cloud earns its keep.
 -->
 
 ---
@@ -570,7 +600,10 @@ Task: 'build playable Space Invaders as one index.html', scored by a Playwright 
 <div class="cap">The actual games the agents built. Polish climbs left to right. coder-30b gatekept its own game behind a START menu.</div>
 
 <!--
-1:00 | Show, don't tell, let it loop. These are the actual games the three agents built, being played by a script. Left, the small local model, it works, emoji invaders, scoring, a game-over screen, but it shipped the game behind a START menu, which was its one rubric miss. Middle, the eighty-billion, clean and auto-running. Right, Opus, the richest, sprite invaders, a lives counter, restart hints. The polish climbs left to right and maps exactly to the table, but the point is all three are real, runnable, in the repo, and the local ones cost zero dollars. Invite them: clone it and play them yourself.
+[1:00]
+SAY: "These are the actual games the three agents built, being played by a script. The polish climbs left to right and maps exactly to the table, but the point is all three are real, runnable, in the repo, and the local ones cost zero dollars."
+
+CUE: Show, don't tell, let it loop. Left = small local (shipped behind a START menu, its one miss); middle = eighty-billion; right = Opus, richest. Invite them to clone and play.
 -->
 
 ---
@@ -588,7 +621,10 @@ Local got the **right answer on every run** (same capability), but you **wait ~5
 <div class="cap">Mean of 3 runs each (warm); local passed all 9. qwen3.6:27b (q8) on the Studio vs Opus 4.8, real `claude -p` loop. Sandboxed: throwaway dirs, AWS creds stripped, nothing deployed. A faster local model (gpt-oss:20b) narrows the gap.</div>
 
 <!--
-1:30 | The concrete, on-your-own-work slide, and the honest counterweight to the raw tokens-per-second numbers. Three real tasks shaped like my internal-web-app infra: one bounded, a small ECR Terraform module; one build, scaffold a whole ECS Fargate service module; one debug, fix a planted bug in an ALB OIDC header parser, with a failing test so the agent has to iterate. Each ran three times through the real Claude Code loop, local on the Studio versus cloud Opus, fully sandboxed, throwaway directories, AWS credentials stripped so nothing could touch a real account. These are the means of three runs, and they were tight, low variance. The honest result: local got the correct answer on all nine runs, same capability. But you wait, five to ten times longer. Note the twist, the bounded task has the WORST ratio, about ten-x, because cloud finishes it in roughly twenty seconds and local's fixed per-turn latency is a bigger multiple of a tiny number; the bigger debug task is only five-x. So 'local ties' is about whether the answer is right, not how long you wait. A faster local model like gpt-oss closes the gap, but the shape holds: same destination, longer drive.
+[1:30]
+SAY: "Three real tasks shaped like my own DSG infra: a bounded ECR Terraform module, a build, scaffolding a whole ECS Fargate service, and a debug, fixing a planted bug with a failing test. Each ran three times, local versus cloud, fully sandboxed. Local got the correct answer on all nine runs, same capability. But you wait, five to ten times longer. And the twist, the bounded task is the worst ratio, about ten-x, because cloud finishes it in twenty seconds and local's per-turn latency is a bigger multiple of a tiny number."
+
+CUE: The honest counterweight to tokens-per-second. Means of three runs, low variance. "Local ties" is about whether the answer is right, not how long you wait. gpt-oss narrows the gap.
 -->
 
 ---
@@ -605,7 +641,10 @@ Local got the **right answer on every run** (same capability), but you **wait ~5
 The 41-turn instability was a stale-model artifact; a current model is stable and 5/5. What's left is wall-clock, and it's **model-dependent**: ~1.5x on gpt-oss 20b, ~5-10x on qwen3.6/coder (my dsgbench numbers used the slower qwen3.6). Plus big-context repo work. **Measure the agent loop, keep your model current, route by task.**
 
 <!--
-1:00 | The part-end synthesis, everything Part Three measured in one honest table, so land it slowly. One-shot bounded, ties Opus, fast and free. Multi-turn debug loops, current models are stable and five-for-five, gpt-oss lands within about one-and-a-half times cloud. Open-ended building from scratch, the local eighty-billion ties cloud at twice the wall-clock and zero dollars. Open-ended repo work across big unfamiliar context, cloud still wins on raw capability. The spine of the talk: local is genuinely capable on most of what I do, AND cloud still earns its keep on the hardest open-ended repo work, both true at once. This is the verdict the whole part built to, so let it sit a beat, then move to the money.
+[1:00]
+SAY: "Everything Part Three measured, in one table. One-shot bounded, ties Opus, fast and free. Multi-turn debug loops, current models are stable and five-for-five, gpt-oss within about one-and-a-half times cloud. Open-ended building from scratch, the local eighty-billion ties cloud at twice the wall-clock and zero dollars. Open-ended repo work across big unfamiliar context, cloud still wins on raw capability. The spine of it: local is genuinely capable on most of what I do, and cloud still earns its keep on the hardest repo work, both true at once."
+
+CUE: The part-end synthesis, land it slowly. This is the verdict the whole part built to. Let it sit, then move to the money.
 -->
 
 ---
