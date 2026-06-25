@@ -287,7 +287,7 @@ B1 = lambda t: (t, 1)  # level-1 bullet
 # ============================ THE DECK ============================
 _title = title_slide(
     "Can a local LLM replace cloud Claude Code?",
-    "Three weeks, three machines: from a Raspberry Pi to a used Mac Studio.",
+    "Three weeks, three machines: from a Raspberry Pi to a gray-market used Mac Studio.",
     byline="John Connolly, Lead Product Engineer & tinkerer\nJune 2026",
     notes="0:30 | Open cold, don't read the title. Say: 'Three weeks ago I asked a simple question, could I stop paying for cloud Claude Code and run the whole thing on hardware in my house. I spent the price of a used Mac Studio finding out.' Then point at the TL;DR box: bounded coding ties the frontier and it's free, the not-bad nod; open-ended repo work, not quite, you still want cloud, the skeptical face. Everything after this slide is me earning that one sentence with data. Set the tone: this is a measurement talk, not a vibes talk, every claim has a benchmark behind it.")
 _tldr_two_gif(_title)

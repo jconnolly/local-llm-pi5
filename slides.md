@@ -61,7 +61,7 @@ section.center { text-align:center; }
 
 # Can a local LLM replace cloud Claude Code?
 
-<div class="sub">Three weeks, three machines: from a Raspberry Pi to a used Mac Studio.</div>
+<div class="sub">Three weeks, three machines: from a Raspberry Pi to a gray-market used Mac Studio.</div>
 
 <div class="tldrbox"><span class="tldrlab">TL;DR</span><div class="tldrcol">bounded coding<br><img src="viz/not-bad-slow.gif" /><br><span class="tldrcap">functionally equivalent, 10x slower</span></div><div class="tldrcol">Open-ended repos:<br><img src="viz/conceited.gif" /><br><span class="tldrcap">(not quite)</span></div></div>
 
