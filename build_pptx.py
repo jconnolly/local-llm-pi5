@@ -369,7 +369,7 @@ _de1 = bullets_slide("Dead end #1: tilting at windmills",
      B("It does run LLMs: Hailo ships a GenAI model zoo plus Hailo-Ollama, an Ollama/OpenAI-compatible runtime,¹² so Claude Code can point at the accelerator."),
      B("But the whole LLM zoo is **1-3B** (Llama-3.2-1B, Qwen2.5-1.5B, DeepSeek-R1-1.5B)³, too small for a 64k-context coding agent."),
      B("And it's **slow**: I measured ~7 tok/s on the accelerator; independent reviewers find the Pi CPU often matches it⁴⁵ (Hailo markets 30-50 tok/s¹, not what I, or they, saw)."),
-     B("**Lesson:** not a connection problem, a capability one. The models that fit are too small, the speed isn't there. Right edge box, wrong job for a coding agent.")],
+     B("**Takeaway:** not a connection problem, a capability one. The models that fit are too small, the speed isn't there. Right edge box, wrong job for a coding agent.")],
     "1:00 | The cautionary tale, verified on the actual hardware and corrected since I first built this. The board is genuinely capable, a Hailo-10H, forty INT4 TOPS, eight gigs of its own memory. And to be fair to it, it DOES run language models: Hailo ships a generative-AI model zoo and an Ollama-compatible runtime called Hailo-Ollama, so you CAN point Claude Code at the accelerator. So why a dead end? Two reasons, both capability not connection. One, every LLM in that zoo is one-to-three billion parameters, Llama-3.2-1B, Qwen-2.5-1.5B, DeepSeek-R1-1.5B, far too small to drive a sixty-four-thousand-token coding agent. Two, it's slow, I measured about seven tokens a second on the accelerator and independent reviewers find the plain Pi CPU often matches it. Hailo markets thirty to fifty, but that's not what I saw or what the reviewers saw. Honest lesson: not a connection problem, a capability problem. Right edge box, wrong job for a coding agent.",
     font=15)
 _de1f = _de1.shapes.add_textbox(Inches(0.6), Inches(6.18), SW - Inches(1.2), Inches(0.8))
@@ -460,7 +460,7 @@ _buy = bullets_slide("The buy: a used M3 Ultra 96GB",
     [B("Apple-direct was 4 months backordered (M3 Ultra was EOL'd)"),
      B("Every reseller went dry within days, only the grey market left"),
      B("Verified a sealed eBay unit (buyer protection, 99.3% seller). Wiring four figures to a stranger on eBay is its own personality test."),
-     B("**Lesson:** a just-discontinued machine vanishes from every channel at once. Buy current-gen before the refresh rumor.")],
+     B("**Takeaway:** a just-discontinued machine vanishes from every channel at once. Buy current-gen before the refresh rumor.")],
     "1:00 | Breather, tell it like a story. Right as I decided to buy, Apple discontinued the M3 Ultra, so Apple-direct was four months backordered and every reseller drained within days. I ended up on the grey market, a sealed unit on eBay, ninety-nine-point-three percent seller, strong buyer protection. Be honest about the feeling: wiring four figures to a stranger on eBay is its own little personality test. The transferable lesson: a just-discontinued Apple machine vanishes from every channel at once, so if you want a specific config, buy it before the refresh rumor hits. And gesture at the photo: that's the box, that's what's running the LLM.")
 # narrow the bullets and drop the Mac Studio photo on the right (the box in question)
 _buy.placeholders[1].width = Inches(6.3)
