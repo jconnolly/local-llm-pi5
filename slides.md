@@ -240,8 +240,8 @@ CUE: This is why local matters beyond coding, the private bounded-classification
 <div class="txt" style="font-size:19px">
 
 - Pi 5 + Hailo-10H, 40-TOPS NPU. A real gen-AI accelerator.
-- It *does* run LLMs — Hailo GenAI zoo + an Ollama/OpenAI-compatible runtime.<sup>1,2</sup>
-- But the zoo is **1-3B** — too small for a 64k-context coding agent.<sup>3</sup>
+- It *does* run LLMs: Hailo GenAI zoo + an Ollama/OpenAI-compatible runtime.<sup>1,2</sup>
+- But the zoo is **1-3B**, too small for a 64k-context coding agent.<sup>3</sup>
 - Measured **~7 tok/s**; reviewers find the **CPU often beats it**<sup>4,5</sup> (Hailo markets 30-50).
 - **Takeaway:** a capability problem, not a connection one. Wrong job for a coding agent.
 
@@ -388,7 +388,7 @@ CUE: Build energy here, this is the best part. SLIDO: glance at the feed, read a
 | Opus 4.8 (cloud) | 24 / 24 | — |
 | qwen3:32b dense | 16 / 18 | 20 tok/s (skip) |
 
-Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest scoring. Local tied Opus on every one. **But both went 24/24 — a bench your best model can't lose has stopped measuring. So I built harder tests.**
+Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest scoring. Local tied Opus on every one. **But both went 24/24, and a bench your best model can't lose has stopped measuring. So I built harder tests.**
 
 <!--
 [1:30]
@@ -583,11 +583,11 @@ CUE: The Monday-morning slide. If someone photographs one, it's this. Keep sayin
 
 <div style="font-size:19px">
 
-- 'Local SOTA at home' is real, narrowly — bounded coding only. Open-ended engineering, no.
-- 16GB too small, 96GB+ overkill for one dev. Benchmarks saturate — measure your task mix.
-- **Swapping models mid-session = instant `API Error: 400`** — `/clear` or a fresh session.
-- **Low quant (q4) silently breaks tool-calling** — q6 is the agentic sweet spot.
-- **Forgetting `think:false`** = a silent ~3-8x tax. **A stale model IS the instability** — re-bench monthly.
+- 'Local SOTA at home' is real, narrowly: bounded coding only. Open-ended engineering, no.
+- 16GB too small, 96GB+ overkill for one dev. Benchmarks saturate, so measure your task mix.
+- **Swapping models mid-session = instant `API Error: 400`.** Fix: `/clear` or a fresh session.
+- **Low quant (q4) silently breaks tool-calling**, q6 is the agentic sweet spot.
+- **Forgetting `think:false`** = a silent ~3-8x tax. **A stale model IS the instability**, re-bench monthly.
 - Ollama traps: restart kills an in-flight `pull`; `ollama ps` shows empty (check `ps aux | grep llama-server`).
 
 </div>

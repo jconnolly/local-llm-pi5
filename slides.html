@@ -122,8 +122,8 @@
 <div class="txt" style="font-size:19px">
 <ul>
 <li>Pi 5 + Hailo-10H, 40-TOPS NPU. A real gen-AI accelerator.</li>
-<li>It <em>does</em> run LLMs — Hailo GenAI zoo + an Ollama/OpenAI-compatible runtime.<sup>1,2</sup></li>
-<li>But the zoo is <strong>1-3B</strong> — too small for a 64k-context coding agent.<sup>3</sup></li>
+<li>It <em>does</em> run LLMs: Hailo GenAI zoo + an Ollama/OpenAI-compatible runtime.<sup>1,2</sup></li>
+<li>But the zoo is <strong>1-3B</strong>, too small for a 64k-context coding agent.<sup>3</sup></li>
 <li>Measured <strong>~7 tok/s</strong>; reviewers find the <strong>CPU often beats it</strong><sup>4,5</sup> (Hailo markets 30-50).</li>
 <li><strong>Takeaway:</strong> a capability problem, not a connection one. Wrong job for a coding agent.</li>
 </ul>
@@ -245,7 +245,7 @@
 </tr>
 </tbody>
 </table>
-<p>Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest scoring. Local tied Opus on every one. <strong>But both went 24/24 — a bench your best model can't lose has stopped measuring. So I built harder tests.</strong></p>
+<p>Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest scoring. Local tied Opus on every one. <strong>But both went 24/24, and a bench your best model can't lose has stopped measuring. So I built harder tests.</strong></p>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="18" data-paginate="true" lang="en-US" data-marpit-pagination="18" style="--paginate:true;" data-marpit-pagination-total="30">
 <h2 id="why-the-studio-is-fast-bandwidth-not-parameters">Why the Studio is fast: bandwidth, not parameters</h2>
@@ -481,11 +481,11 @@
 <h2 id="caveats--gotchas">Caveats &amp; gotchas</h2>
 <div style="font-size:19px">
 <ul>
-<li>'Local SOTA at home' is real, narrowly — bounded coding only. Open-ended engineering, no.</li>
-<li>16GB too small, 96GB+ overkill for one dev. Benchmarks saturate — measure your task mix.</li>
-<li><strong>Swapping models mid-session = instant <code>API Error: 400</code></strong> — <code>/clear</code> or a fresh session.</li>
-<li><strong>Low quant (q4) silently breaks tool-calling</strong> — q6 is the agentic sweet spot.</li>
-<li><strong>Forgetting <code>think:false</code></strong> = a silent ~3-8x tax. <strong>A stale model IS the instability</strong> — re-bench monthly.</li>
+<li>'Local SOTA at home' is real, narrowly: bounded coding only. Open-ended engineering, no.</li>
+<li>16GB too small, 96GB+ overkill for one dev. Benchmarks saturate, so measure your task mix.</li>
+<li><strong>Swapping models mid-session = instant <code>API Error: 400</code>.</strong> Fix: <code>/clear</code> or a fresh session.</li>
+<li><strong>Low quant (q4) silently breaks tool-calling</strong>, q6 is the agentic sweet spot.</li>
+<li><strong>Forgetting <code>think:false</code></strong> = a silent ~3-8x tax. <strong>A stale model IS the instability</strong>, re-bench monthly.</li>
 <li>Ollama traps: restart kills an in-flight <code>pull</code>; <code>ollama ps</code> shows empty (check <code>ps aux | grep llama-server</code>).</li>
 </ul>
 </div>
