@@ -520,18 +520,18 @@ Task: 'build playable Space Invaders as one index.html', scored by a Playwright 
 
 ## Concrete: real DSG tasks, local vs cloud wall-clock
 
-| Task (internal-web-app stack) | Type | Cloud | Local | Result |
+| Task (internal-web-app stack) | Type | Cloud | Local | Slower |
 |---|---|---|---|---|
-| Write an ECR Terraform module | bounded | **15 s** | **150 s** | both pass · 10x |
-| Scaffold an ECS Fargate service module | build | **34 s** | **262 s** | both pass · 8x |
-| Fix an ALB OIDC header parser (failing test) | debug | **21 s** | **155 s** | both pass · 7x |
+| Write an ECR Terraform module | bounded | **19 s** | **186 s** | **~10x** |
+| Scaffold an ECS Fargate service module | build | **36 s** | **256 s** | **~7x** |
+| Fix an ALB OIDC header parser (failing test) | debug | **29 s** | **154 s** | **~5x** |
 
-Local got the **right answer on all three** (same capability), but you **wait ~7-10x longer**. The gap is wall-clock, not correctness. The bounded task has the *worst* ratio: cloud finishes in 15s, so local's per-turn latency is a bigger multiple.
+Local got the **right answer on every run** (same capability), but you **wait ~5-10x longer**. The gap shrinks as tasks get bigger: bounded is *worst* (~10x) because cloud finishes it in ~19s, so local's per-turn latency is a bigger multiple.
 
-<div class="cap">Measured this session: qwen3.6:27b (q8) on the Studio vs Opus 4.8, real `claude -p` loop. Sandboxed: throwaway dirs, AWS creds stripped, nothing deployed. A faster local model (gpt-oss:20b) narrows the gap.</div>
+<div class="cap">Mean of 3 runs each (warm); local passed all 9. qwen3.6:27b (q8) on the Studio vs Opus 4.8, real `claude -p` loop. Sandboxed: throwaway dirs, AWS creds stripped, nothing deployed. A faster local model (gpt-oss:20b) narrows the gap.</div>
 
 <!--
-1:30 | The concrete, on-your-own-work slide, and the honest counterweight to the raw tokens-per-second numbers. Three real tasks shaped like my internal-web-app infra: one bounded, a small ECR Terraform module; one build, scaffold a whole ECS Fargate service module; one debug, fix a planted bug in an ALB OIDC header parser, with a failing test so the agent has to iterate. Each ran through the real Claude Code loop, local on the Studio versus cloud Opus, fully sandboxed, throwaway directories, AWS credentials stripped so nothing could touch a real account. The honest result: local got the correct answer on all three, the work shipped, same capability. But you wait, seven to ten times longer. Note the twist, the bounded task has the WORST ratio, ten-x, because cloud finishes it in fifteen seconds flat and local's fixed per-turn latency is a bigger multiple of a tiny number. So 'local ties' is about whether the answer is right, not how long you wait. A faster local model like gpt-oss closes the gap, but the shape holds: same destination, longer drive.
+1:30 | The concrete, on-your-own-work slide, and the honest counterweight to the raw tokens-per-second numbers. Three real tasks shaped like my internal-web-app infra: one bounded, a small ECR Terraform module; one build, scaffold a whole ECS Fargate service module; one debug, fix a planted bug in an ALB OIDC header parser, with a failing test so the agent has to iterate. Each ran three times through the real Claude Code loop, local on the Studio versus cloud Opus, fully sandboxed, throwaway directories, AWS credentials stripped so nothing could touch a real account. These are the means of three runs, and they were tight, low variance. The honest result: local got the correct answer on all nine runs, same capability. But you wait, five to ten times longer. Note the twist, the bounded task has the WORST ratio, about ten-x, because cloud finishes it in roughly twenty seconds and local's fixed per-turn latency is a bigger multiple of a tiny number; the bigger debug task is only five-x. So 'local ties' is about whether the answer is right, not how long you wait. A faster local model like gpt-oss closes the gap, but the shape holds: same destination, longer drive.
 -->
 
 ---
@@ -540,7 +540,7 @@ Local got the **right answer on all three** (same capability), but you **wait ~7
 
 | Workload | Local verdict |
 |---|---|
-| One-shot bounded coding | **Ties Opus** on capability; ~7-10x slower wall-clock, free |
+| One-shot bounded coding | **Ties Opus** on capability; ~10x slower wall-clock, free |
 | Multi-turn debug loops | **Current models stable, 5/5; gpt-oss 20b within ~1.5x of cloud** |
 | Open-ended building (from scratch) | **80B ties cloud, ~2x slower, $0** |
 | Open-ended repo work (big context) | **Cloud still wins, on capability** |

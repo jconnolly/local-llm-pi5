@@ -171,44 +171,69 @@ def run_one(task: dict, backend: str) -> dict:
         }
 
 
+def warmup_local() -> None:
+    """One untimed local call to load the model into the Studio's RAM before timing."""
+    env = dict(os.environ)
+    for k in AWS_NEUTRALIZE_STRIP:
+        env.pop(k, None)
+    env.update(AWS_NEUTRALIZE_SET)
+    env.update({k: v for k, v in BACKENDS["local"].items() if k != "__strip__"})
+    try:
+        subprocess.run([CLAUDE, "-p", "Reply with exactly: ok", "--output-format", "json"],
+                       env=env, capture_output=True, text=True, timeout=240)
+    except Exception:
+        pass
+
+
 def main() -> int:
+    import statistics
     ap = argparse.ArgumentParser()
     ap.add_argument("--task")
     ap.add_argument("--backends", default="local,cloud")
+    ap.add_argument("--repeat", type=int, default=3)
     args = ap.parse_args()
     tasks = [t for t in TASKS if not args.task or t["id"] == args.task]
     backends = args.backends.split(",")
-    print(f"local model: {LOCAL_MODEL}   |   AWS creds: NEUTRALIZED (no prod reachable)\n", flush=True)
+    print(f"local model: {LOCAL_MODEL}   |   AWS creds: NEUTRALIZED (no prod reachable)   |   "
+          f"repeat={args.repeat}\n", flush=True)
 
-    rows = []
+    if "local" in backends:
+        print("warming up local model (untimed) ...", flush=True)
+        warmup_local()
+
+    rows = []           # every individual run
+    agg = {}            # (task, backend) -> list of duration_ms
     for t in tasks:
         for b in backends:
-            print(f"running {t['id']:<14} ({t['kind']:<7}) [{b}] ...", flush=True)
-            row = run_one(t, b); row["task"] = t["id"]; row["kind"] = t["kind"]
-            rows.append(row)
-            sec = (row["duration_ms"] or 0) / 1000
-            print(f"  {'PASS' if row['success'] else 'FAIL'}  {sec:6.1f}s  "
-                  f"turns={row.get('num_turns')}  out={row.get('out_tokens')}  "
-                  f"${row.get('cost_usd') or 0:.3f}", flush=True)
+            for i in range(args.repeat):
+                print(f"running {t['id']:<14} ({t['kind']:<7}) [{b}] rep {i+1}/{args.repeat} ...", flush=True)
+                row = run_one(t, b); row.update(task=t["id"], kind=t["kind"], rep=i + 1)
+                rows.append(row)
+                agg.setdefault((t["id"], b), []).append((row["duration_ms"] or 0) / 1000)
+                sec = (row["duration_ms"] or 0) / 1000
+                print(f"  {'PASS' if row['success'] else 'FAIL'}  {sec:6.1f}s  "
+                      f"turns={row.get('num_turns')}  out={row.get('out_tokens')}", flush=True)
 
     (HERE / "dsgbench_results.json").write_text(json.dumps(rows, indent=2))
 
-    print("\n=== SUMMARY: wall-clock, local vs cloud ===")
-    print(f"{'task':<14}{'kind':<9}{'backend':<8}{'ok':<4}{'sec':>8}{'turns':>7}")
-    for r in rows:
-        print(f"{r['task']:<14}{r['kind']:<9}{r['backend']:<8}"
-              f"{('Y' if r['success'] else 'N'):<4}{(r['duration_ms'] or 0)/1000:>8.1f}"
-              f"{str(r.get('num_turns') or '-'):>7}")
-    # ratios per task
-    print("\n=== local : cloud wall-clock ratio ===")
-    by = {}
-    for r in rows:
-        by.setdefault(r["task"], {})[r["backend"]] = r
-    for tid, d in by.items():
-        if "local" in d and "cloud" in d and d["cloud"]["duration_ms"]:
-            ratio = d["local"]["duration_ms"] / d["cloud"]["duration_ms"]
-            print(f"  {tid:<14} {d['cloud']['duration_ms']/1000:6.1f}s cloud  "
-                  f"{d['local']['duration_ms']/1000:7.1f}s local  = {ratio:.1f}x")
+    def stat(vals):
+        return (statistics.mean(vals), min(vals), max(vals),
+                statistics.pstdev(vals) if len(vals) > 1 else 0.0)
+
+    print(f"\n=== SUMMARY: wall-clock mean of {args.repeat} runs (local vs cloud) ===")
+    print(f"{'task':<14}{'kind':<9}{'backend':<8}{'pass':>6}{'mean_s':>9}{'min':>7}{'max':>7}{'sd':>7}")
+    for (tid, b), vals in agg.items():
+        passes = sum(1 for r in rows if r["task"] == tid and r["backend"] == b and r["success"])
+        m, lo, hi, sd = stat(vals)
+        print(f"{tid:<14}{next(r['kind'] for r in rows if r['task']==tid):<9}{b:<8}"
+              f"{passes:>3}/{len(vals):<2}{m:>9.1f}{lo:>7.1f}{hi:>7.1f}{sd:>7.1f}")
+
+    print("\n=== mean local : cloud wall-clock ratio ===")
+    for tid in dict.fromkeys(r["task"] for r in rows):
+        if (tid, "local") in agg and (tid, "cloud") in agg:
+            ml = statistics.mean(agg[(tid, "local")]); mc = statistics.mean(agg[(tid, "cloud")])
+            if mc:
+                print(f"  {tid:<14} {mc:6.1f}s cloud  {ml:7.1f}s local  = {ml/mc:.1f}x")
     return 0
 
 
