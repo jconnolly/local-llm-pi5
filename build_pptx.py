@@ -345,9 +345,9 @@ _qp.left = int((SW - _qp.width) // 2); _qp.top = Inches(1.4)
 _qcap = _q.shapes.add_textbox(Inches(1.7), Inches(5.95), SW - Inches(2.4), Inches(0.7))
 _no_autofit(_qcap.text_frame); _qcp = _qcap.text_frame.paragraphs[0]; _qcp.alignment = PP_ALIGN.CENTER
 _qcr = _qcp.add_run()
-_qcr.text = "Teal circle = my real usage (90-prompt sample of my own history): coding tasks lean open-ended (~40% local / ~60% cloud), and ~80% of my Claude Code use is off this axis entirely (ops, Jira/Slack, infra, personal projects)."
+_qcr.text = "Teal circle = my coding tasks, manually classified: they lean open-ended (~40% local / ~60% cloud). Most of my Claude Code use isn't coding at all (ops, Jira/Slack, infra, personal projects) - full 2,177-prompt breakdown next."
 _qcr.font.size = Pt(12); _qcr.font.color.rgb = DK2
-_notes(_q, "1:30 | The honest gut-check. I built this whole chart, then went and looked at my actual Claude Code history, 2,264 prompts across 68 projects. Two findings. One, the teal circle: my real coding tasks straddle the line and lean to the cloud side, about sixty percent open-ended, exactly where local is weakest, so for me the hybrid case is even stronger. Two, the bigger surprise, about eighty percent of what I use Claude Code for isn't even on this chart, it's ops, Jira and Slack coordination, infrastructure debugging, a personal finance app, even building this deck. Be honest it's a sampled estimate, manually classified, but the shape is clear: my Claude Code is more of a general agent than a code generator, and the coding I do leans open-ended.")
+_notes(_q, "1:30 | The honest gut-check. I built this whole chart, then went and looked at my actual Claude Code history, 2,177 prompts across 68 projects. Two findings. One, the teal circle: my coding tasks, manually classified, straddle the line and lean to the cloud side, about sixty percent open-ended, exactly where local is weakest, so for me the hybrid case is even stronger. Two, the bigger surprise, most of what I use Claude Code for isn't even coding, it's ops, Jira and Slack coordination, infrastructure debugging, a personal finance app, even building this deck. The teal split is a manual estimate; the full project breakdown is the next slide. The shape is clear: my Claude Code is more of a general agent than a code generator, and the coding I do leans open-ended.")
 
 _u = _title_only("Half work, half personal (outside work)")
 _up = _u.shapes.add_picture(str(REPO / "viz" / "usage.png"), 0, 0, height=Inches(4.95))
@@ -415,9 +415,10 @@ _r2.font.size = Pt(11); _r2.font.color.rgb = DK2
 bullets_slide("Maral: a spare 16GB Air, punching above its weight",
     [B("qwen3:8b / :14b via Ollama's Anthropic endpoint, wired into Claude Code with one env block"),
      B("Plot twists:"),
-     B1("Tool-use was already at parity with cloud. The worry? Misplaced."),
+     B1("Tool-use was already at parity with cloud."),
      B1("Real pain wasn't the model, it was memory bandwidth and the WiFi driver crashing under load (rude)"),
-     B("16GB is the floor, not a platform. Ran on vibes and about 5 hours of uptime.")],
+     B("16GB is the floor, not a platform. Ran on vibes and about 5 hours of uptime."),
+     B("**Takeaway:** the model was never the weak link, the hardware was. 16GB is enough to prove the idea, not to live on it.")],
     "1:30 | The workhorse chapter, keep it light. A spare sixteen-gig MacBook Air, I call it Maral, carried the whole proof of concept, and honestly it only ran about five hours total. Two surprises worth landing. ONE, tool-use, and this is worth unpacking because it was my single biggest fear. Claude Code is not a chatbot, it works by calling tools, Read a file, Edit a file, run a Bash command, Grep the codebase, and it does that through a strict function-calling protocol: the model has to emit well-formed JSON, pick the right tool, fill in the right arguments, then read the tool result and decide the next call. My worry was that a small open model would faceplant on the mechanics, malformed JSON, hallucinated tool names, wrong arguments, basically unable to drive the loop at all. It didn't. Qwen3 on the Air, wired in through Ollama's Anthropic-compatible endpoint, produced clean valid tool calls, picked the right tool, formatted the arguments correctly, and consumed the results, at parity with cloud out of the box. But be precise about what parity means here: it nailed the MECHANICS of tool-calling, which is different from reliably driving a long multi-turn loop all the way to the finish, the convergence problem I hit later and measure in Part Three. The protocol was never the bottleneck. TWO, the real pain was never the model's intelligence, it was the memory bus being slow and the WiFi driver literally crashing under memory pressure. The lesson: sixteen gigs is the floor where you can prove the idea, but it is not a platform you can live on, it ran on vibes. That sets up the obvious question: okay, what do I actually buy?")
 
 bullets_slide("The single best tuning knob: kill the thinking tax",
@@ -565,7 +566,7 @@ table_slide("The reconciliation",
      ["Multi-turn debug loops", "**Current models stable, 5/5; gpt-oss 20b within ~1.5x of cloud**"],
      ["Open-ended building (from scratch)", "**80B ties cloud, ~2x slower, $0**"],
      ["Open-ended repo work (big context)", "**Cloud still wins, on capability**"]],
-    "The 41-turn instability was a stale-model artifact; a current model is stable and 5/5. What's left is wall-clock (~5x on debug) and big-context repo work. **Measure the agent loop, keep your model current, route by task.**",
+    "The 41-turn instability was a stale-model artifact; a current model is stable and 5/5. What's left is wall-clock, and it's **model-dependent**: ~1.5x on gpt-oss 20b, ~5-10x on qwen3.6/coder (my dsgbench numbers used the slower qwen3.6). Plus big-context repo work. **Measure the agent loop, keep your model current, route by task.**",
     "1:00 | The part-end synthesis, everything Part Three measured in one honest table, so land it slowly. One-shot bounded, ties Opus, fast and free. Multi-turn debug loops, current models are stable and five-for-five, gpt-oss lands within about one-and-a-half times cloud. Open-ended building from scratch, the local eighty-billion ties cloud at twice the wall-clock and zero dollars. Open-ended repo work across big unfamiliar context, cloud still wins on raw capability. The spine of the talk: local is genuinely capable on most of what I do, AND cloud still earns its keep on the hardest open-ended repo work, both true at once. This is the verdict the whole part built to, so let it sit a beat, then move to the money.",
     col_w=[4, 5])
 
