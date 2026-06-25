@@ -287,14 +287,14 @@ B1 = lambda t: (t, 1)  # level-1 bullet
 # ============================ THE DECK ============================
 _title = title_slide(
     "Can a local LLM replace cloud Claude Code?",
-    "Three weeks, three machines: from a Raspberry Pi to a $4,676 Mac Studio.",
+    "Three weeks, three machines: from a Raspberry Pi to a used Mac Studio.",
     byline="John Connolly, Lead Product Engineer & tinkerer\nJune 2026",
-    notes="0:30 | Open cold, don't read the title. Say: 'Three weeks ago I asked a simple question, could I stop paying for cloud Claude Code and run the whole thing on hardware in my house. I spent $4,676 finding out.' Then point at the TL;DR box: bounded coding ties the frontier and it's free, the not-bad nod; open-ended repo work, not quite, you still want cloud, the skeptical face. Everything after this slide is me earning that one sentence with data. Set the tone: this is a measurement talk, not a vibes talk, every claim has a benchmark behind it.")
+    notes="0:30 | Open cold, don't read the title. Say: 'Three weeks ago I asked a simple question, could I stop paying for cloud Claude Code and run the whole thing on hardware in my house. I spent the price of a used Mac Studio finding out.' Then point at the TL;DR box: bounded coding ties the frontier and it's free, the not-bad nod; open-ended repo work, not quite, you still want cloud, the skeptical face. Everything after this slide is me earning that one sentence with data. Set the tone: this is a measurement talk, not a vibes talk, every claim has a benchmark behind it.")
 _tldr_two_gif(_title)
 
 bullets_slide("Agenda, where we're going (~30m)",
     [B("**The route:** Raspberry Pi, Air, Studio"),
-     B("**Reality check:** you can't buy parity, the $4,676 call"),
+     B("**Reality check:** you can't buy parity, the hardware call"),
      B("**The measured verdict:** one-shot, agent loop, the build test"),
      B("**Economics, recommendation, honest caveats**")],
     "0:30 | Don't dwell. Four parts. Part 1 is the journey across three machines, that's the story. Part 2 is the uncomfortable truth that you can't buy your way to parity. Part 3 is the heart, the actual benchmarks, and it's where the surprise lives, so flag it now: 'Part 3 is the part that changed my mind.' Part 4 is the money and the recommendation. Tell them you'll leave time for Q&A. If you're running long, Part 1 is the part to compress.")
@@ -305,7 +305,7 @@ _sl = image_slide("Got a question? Tell me live.",
     notes="0:40 | Do this before Part One, while everyone's still settling. Put the QR up and say: 'This whole talk is about measuring instead of vibing, so hold me to it. Scan this, it's a Slido, ask questions, drop feedback, upvote whatever you want answered, any time, you don't have to wait for the end.' Tell them you'll check it at every part break and read the top question aloud. Leave it up for a beat so the back row can scan. Lowers the bar for the quiet folks and gives you a live read on what's landing.")
 
 section_slide("PART ONE", "The route: three machines",
-    notes="5 sec | Quick beat, don't linger on dividers. Say: 'Part One, the route. How I got from a thirty-five-dollar Raspberry Pi to a forty-six-hundred-dollar Mac Studio, and what each machine taught me.' Then move.")
+    notes="5 sec | Quick beat, don't linger on dividers. Say: 'Part One, the route. How I got from a thirty-five-dollar Raspberry Pi to a used Mac Studio, and what each machine taught me.' Then move.")
 
 bullets_slide("The question: how capable could a home LLM get?",
     [B("\"I want to run an LLM at home. How capable could it actually be?\""),
@@ -360,7 +360,7 @@ table_slide("The route: three machines, three verdicts",
      ["2", "MacBook Air M2 16GB ('Maral')", "Did the grunt work (~5 hrs). qwen3:14b ~10 tok/s, kinda slow"],
      ["3", "The tuning wall", "think:false = ~3x; quant sweep; prompt slim"],
      ["4", "Reality check", "Can you just buy your way to the top? (Part 2)"],
-     ["5", "Mac Studio M3 Ultra 96GB ($4,676)", "The machine that finally earned its keep (Part 3)"]],
+     ["5", "Mac Studio M3 Ultra 96GB", "The machine that finally earned its keep (Part 3)"]],
     notes="1:30 | This is the map, don't read every cell, walk it. Stop one, the Raspberry Pi, total dead end, I'll explain why in two slides. Stop two, a spare MacBook Air I call Maral, that's where I learned everything even though it only ran a few hours. Stop three, I hit a tuning wall and found the single best speedup of the whole project. Stop four, the reality check, which asks whether you can simply buy your way to the top, that's Part Two. Stop five, the Mac Studio, the machine that finally earned its keep, the verdict is Part Three. Tease, don't spoil, the numbers come later. The takeaway line: the lessons are in the trip, not just the destination.",
     col_w=[0.7, 3.2, 5.5], font=12)
 
@@ -408,7 +408,7 @@ bullets_slide("The single best tuning knob: kill the thinking tax",
      B("**~3x speedup from one env var.** Everything else I tuned for a week? Secondary.")],
     "1:30 | If they remember one config line from the whole talk, it's this one. Qwen3 is a reasoning model, it writes a hidden think trace before every answer. For chat that's great, for an agent doing lots of tiny tool calls it's pure overhead, an eighty-token edit was costing six hundred tokens. One environment variable turns it off and you get roughly a three-times real-world speedup. Audience beat: 'guess how much speedup all my fancy tuning, the quant sweeps, the cache settings, actually bought me. Now guess how much this one line bought me.' Everything else was a rounding error next to this.")
 
-section_slide("PART TWO", "Reality check & the $4,676 call",
+section_slide("PART TWO", "Reality check & the hardware call",
     notes="5 sec | Quick beat. Say: 'Part Two. I've got a working setup, now the uncomfortable part, how good can local actually get, and can you just buy your way to the top? Short answer, no.' Move.")
 
 _rc = table_slide("Reality check: you can't buy frontier parity",
@@ -437,12 +437,12 @@ bullets_slide("So the decision is about how close, not parity",
      B("So I bought a box to find out.")],
     "1:00 | The reframe, and keep it a question, do NOT answer it here. Once parity is off the table, the question changes from 'can I match it' to 'how close can I get for sensible money, and what do I do about the gap.' The discipline: you'll decide on your actual task mix, not on ideology and not on the sticker price. Hold the actual recommendation, the hybrid setup and the dollar figure, for Part Four, that's the payoff. Here you just land the reframe and the fact that I went and bought a box to answer it. Next slide is the buy.")
 
-_buy = bullets_slide("The buy: $4,676 for a used M3 Ultra 96GB",
+_buy = bullets_slide("The buy: a used M3 Ultra 96GB",
     [B("Apple-direct was 4 months backordered (M3 Ultra was EOL'd)"),
      B("Every reseller went dry within days, only the grey market left"),
-     B("Verified a sealed eBay unit (buyer protection, 99.3% seller); $4,299 + tax. Wiring $4,676 to a stranger is its own personality test."),
+     B("Verified a sealed eBay unit (buyer protection, 99.3% seller). Wiring four figures to a stranger on eBay is its own personality test."),
      B("**Lesson:** a just-discontinued machine vanishes from every channel at once. Buy current-gen before the refresh rumor.")],
-    "1:00 | Breather, tell it like a story. Right as I decided to buy, Apple discontinued the M3 Ultra, so Apple-direct was four months backordered and every reseller drained within days. I ended up on the grey market, a sealed unit on eBay, ninety-nine-point-three percent seller, strong buyer protection. Be honest about the feeling: wiring four thousand six hundred dollars to a stranger on eBay is its own little personality test. The transferable lesson: a just-discontinued Apple machine vanishes from every channel at once, so if you want a specific config, buy it before the refresh rumor hits. And gesture at the photo: that's the box, that's what's running the LLM.")
+    "1:00 | Breather, tell it like a story. Right as I decided to buy, Apple discontinued the M3 Ultra, so Apple-direct was four months backordered and every reseller drained within days. I ended up on the grey market, a sealed unit on eBay, ninety-nine-point-three percent seller, strong buyer protection. Be honest about the feeling: wiring four figures to a stranger on eBay is its own little personality test. The transferable lesson: a just-discontinued Apple machine vanishes from every channel at once, so if you want a specific config, buy it before the refresh rumor hits. And gesture at the photo: that's the box, that's what's running the LLM.")
 # narrow the bullets and drop the Mac Studio photo on the right (the box in question)
 _buy.placeholders[1].width = Inches(6.3)
 _mac = REPO / "viz" / ("mac-studio-ebay.jpg" if (REPO / "viz" / "mac-studio-ebay.jpg").exists() else "mac-studio.jpg")
@@ -555,18 +555,18 @@ section_slide("PART FOUR", "Economics & the call",
 
 bullets_slide("The economics",
     [B("Cloud: ~$200/mo, about $2,400/yr, indefinitely"),
-     B("Local: $4,676 once, then **$0/mo** after"),
+     B("Local: one up-front cost, then **$0/mo** after"),
      B("**Breakeven ~2 years**, then it's basically free real estate, for the work local handles well"),
      B("Privacy bonus: code never leaves the LAN"),
      B("The catch: it's a supplement, not a full replacement. Hard repo work still routes to cloud.")],
-    "1:00 | The money slide, this is what a decision-maker actually wants. Cloud is about two hundred a month forever, the box is four thousand six hundred once and then zero. Breakeven is roughly two years, and after that it's pure savings, but be honest, only for the slice of work local handles well, it shrinks the cloud bill, it doesn't zero it. The non-money win that often matters more: code never leaves your network, and for client or regulated work, privacy can justify the box on its own regardless of breakeven. Keep saying 'supplement, not replacement,' that honesty is exactly what keeps this from sounding like a sales pitch.")
+    "1:00 | The money slide, this is what a decision-maker actually wants. Cloud is about two hundred a month forever, the box is a one-time up-front cost and then zero. Breakeven is roughly two years, and after that it's pure savings, but be honest, only for the slice of work local handles well, it shrinks the cloud bill, it doesn't zero it. The non-money win that often matters more: code never leaves your network, and for client or regulated work, privacy can justify the box on its own regardless of breakeven. Keep saying 'supplement, not replacement,' that honesty is exactly what keeps this from sounding like a sales pitch.")
 
 bullets_slide("Recommendation",
     [B("**Hybrid, not either/or:**"),
      B1("`claude` routes to the local Studio (the 80%: daily coding, free, private, fast)"),
      B1("`claude-cloud` routes to Opus 4.8 (the 20%: hard cross-file repo work)"),
      B("One toggle, per task. Denominated in your real workload."),
-     B("**Single-dev sweet spot:** Mac Studio, 64-96GB, MoE coder model, ~$4-5K")],
+     B("**Single-dev sweet spot:** Mac Studio, 64-96GB, MoE coder model, a few thousand")],
     "1:00 | The actionable takeaway, what someone does Monday morning. The whole talk reduces to one architecture, hybrid. Two shell aliases, one routes to the local Studio, one routes to Opus, you pick per task, no lock-in, no ideology. The concrete buying advice: a single developer wants a Mac Studio, sixty-four to ninety-six gigs, an MoE coder model, about four to five thousand dollars. Not the eleven-and-a-half-thousand parity-chase box I debunked in Part Two, and not the sixteen-gig toy from Part One. If someone photographs one slide of this whole talk, it should be this one, so hold it an extra beat.")
 
 bullets_slide("Caveats that matter",

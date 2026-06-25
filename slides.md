@@ -61,7 +61,7 @@ section.center { text-align:center; }
 
 # Can a local LLM replace cloud Claude Code?
 
-<div class="sub">Three weeks, three machines: from a Raspberry Pi to a $4,676 Mac Studio.</div>
+<div class="sub">Three weeks, three machines: from a Raspberry Pi to a used Mac Studio.</div>
 
 <div class="tldrbox"><span class="tldrlab">TL;DR</span><div class="tldrcol">bounded coding<br><img src="viz/not-bad-slow.gif" /><br><span class="tldrcap">functionally equivalent, 10x slower</span></div><div class="tldrcol">Open-ended repos:<br><img src="viz/conceited.gif" /><br><span class="tldrcap">(not quite)</span></div></div>
 
@@ -74,7 +74,7 @@ Presenter view: open slides.html, press `P` (notes are the HTML comments).
 DS-branded: white content slides + purple ACT dividers, logo footer, gifs animate.
 -->
 <!--
-0:30 | Open cold, don't read the title. Say: 'Three weeks ago I asked a simple question, could I stop paying for cloud Claude Code and run the whole thing on hardware in my house. I spent $4,676 finding out.' Then point at the TL;DR box: the answer is a qualified yes, and the qualification is the entire talk. For bounded coding, local ties the frontier and it's free. For open-ended repo work, you still want cloud. Everything after this slide is me earning that one sentence with data. Set the tone: this is a measurement talk, not a vibes talk, every claim has a benchmark behind it.
+0:30 | Open cold, don't read the title. Say: 'Three weeks ago I asked a simple question, could I stop paying for cloud Claude Code and run the whole thing on hardware in my house. I spent the price of a used Mac Studio finding out.' Then point at the TL;DR box: the answer is a qualified yes, and the qualification is the entire talk. For bounded coding, local ties the frontier and it's free. For open-ended repo work, you still want cloud. Everything after this slide is me earning that one sentence with data. Set the tone: this is a measurement talk, not a vibes talk, every claim has a benchmark behind it.
 -->
 
 ---
@@ -82,7 +82,7 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 ## Agenda (~30m)
 
 1. **The route:** Raspberry Pi, Air, Studio
-2. **Reality check:** you can't buy parity, the $4,676 call
+2. **Reality check:** you can't buy parity, the hardware call
 3. **The measured verdict:** one-shot, agent loop, the build test
 4. **Economics, recommendation, caveats**
 
@@ -115,7 +115,7 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 # The route: three machines
 
 <!--
-5 sec | Quick beat, don't linger on dividers. Say: 'Part One, the route. How I got from a thirty-five-dollar Raspberry Pi to a forty-six-hundred-dollar Mac Studio, and what each machine taught me.' Then move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
+5 sec | Quick beat, don't linger on dividers. Say: 'Part One, the route. How I got from a thirty-five-dollar Raspberry Pi to a used Mac Studio, and what each machine taught me.' Then move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
 -->
 
 ---
@@ -215,7 +215,7 @@ Two genuinely different jobs, measured by two different benchmarks. **So which s
 | 2 | MacBook Air M2 16GB ('Maral') | Did the grunt work (~5 hrs). qwen3:14b ~10 tok/s, kinda slow |
 | 3 | The tuning wall | think:false = ~3x; quant sweep; prompt slim |
 | 4 | Reality check | Can you just buy your way to the top? *(Part 2)* |
-| 5 | Mac Studio M3 Ultra 96GB ($4,676) | The machine that finally earned its keep *(Part 3)* |
+| 5 | Mac Studio M3 Ultra 96GB | The machine that finally earned its keep *(Part 3)* |
 
 <!--
 1:30 | This is the map, don't read every cell, walk it. Stop one, the Raspberry Pi, total dead end, I'll explain why in two slides. Stop two, a spare MacBook Air I call Maral, that's where I learned everything even though it only ran a few hours. Stop three, I hit a tuning wall and found the single best speedup of the whole project. Stop four, the reality check, which asks whether you can simply buy your way to the top, that's Part Two. Stop five, the Mac Studio, the machine that finally earned its keep, the verdict is Part Three. Tease, don't spoil, the numbers come later. The takeaway line: the lessons are in the trip, not just the destination.
@@ -295,7 +295,7 @@ Two genuinely different jobs, measured by two different benchmarks. **So which s
 <!-- _class: section -->
 <div class="kicker">PART TWO</div>
 
-# Reality check & the $4,676 call
+# Reality check & the hardware call
 
 <!--
 5 sec | Quick beat. Say: 'Part Two. I've got a working setup, now the uncomfortable part, how good can local actually get, and can you just buy your way to the top? Short answer, no.' Move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
@@ -334,14 +334,14 @@ The best open-weight model won't even fit the biggest Mac Apple will sell you, a
 
 ---
 
-## The buy: $4,676 for a used M3 Ultra 96GB
+## The buy: a used M3 Ultra 96GB
 
 <div class="cols">
 <div class="txt">
 
 - Apple-direct was 4 months backordered (M3 Ultra was EOL'd)
 - Every reseller went dry within days, only the grey market left
-- Verified a sealed eBay unit (99.3% seller); $4,299 + tax. Wiring $4,676 to a stranger is its own personality test.
+- Verified a sealed eBay unit (99.3% seller). Wiring four figures to a stranger on eBay is its own personality test.
 - **Lesson:** a just-discontinued machine vanishes from every channel at once.
 
 </div>
@@ -354,7 +354,7 @@ The best open-weight model won't even fit the biggest Mac Apple will sell you, a
 </div>
 
 <!--
-1:00 | Breather, tell it like a story. Right as I decided to buy, Apple discontinued the M3 Ultra, so Apple-direct was four months backordered and every reseller drained within days. I ended up on the grey market, a sealed unit on eBay, ninety-nine-point-three percent seller, strong buyer protection. Be honest about the feeling: wiring four thousand six hundred dollars to a stranger on eBay is its own little personality test. The transferable lesson: a just-discontinued Apple machine vanishes from every channel at once, so if you want a specific config, buy it before the refresh rumor hits. And gesture at the photo: that's the box, that's what's running the LLM.
+1:00 | Breather, tell it like a story. Right as I decided to buy, Apple discontinued the M3 Ultra, so Apple-direct was four months backordered and every reseller drained within days. I ended up on the grey market, a sealed unit on eBay, ninety-nine-point-three percent seller, strong buyer protection. Be honest about the feeling: wiring four figures to a stranger on eBay is its own little personality test. The transferable lesson: a just-discontinued Apple machine vanishes from every channel at once, so if you want a specific config, buy it before the refresh rumor hits. And gesture at the photo: that's the box, that's what's running the LLM.
 -->
 
 ---
@@ -567,13 +567,13 @@ The 41-turn instability was a stale-model artifact; a current model is stable an
 ## The economics
 
 - Cloud: ~$200/mo, about $2,400/yr, indefinitely
-- Local: $4,676 once, then **$0/mo** after
+- Local: one up-front cost, then **$0/mo** after
 - **Breakeven ~2 years**, then it's basically free real estate, for the work local handles well
 - Privacy bonus: code never leaves the LAN
 - The catch: it's a supplement, not a full replacement. Hard repo work still routes to cloud.
 
 <!--
-1:00 | The money slide, this is what a decision-maker actually wants. Cloud is about two hundred a month forever, the box is four thousand six hundred once and then zero. Breakeven is roughly two years, and after that it's pure savings, but be honest, only for the slice of work local handles well, it shrinks the cloud bill, it doesn't zero it. The non-money win that often matters more: code never leaves your network, and for client or regulated work, privacy can justify the box on its own regardless of breakeven. Keep saying 'supplement, not replacement,' that honesty is exactly what keeps this from sounding like a sales pitch.
+1:00 | The money slide, this is what a decision-maker actually wants. Cloud is about two hundred a month forever, the box is a one-time up-front cost and then zero. Breakeven is roughly two years, and after that it's pure savings, but be honest, only for the slice of work local handles well, it shrinks the cloud bill, it doesn't zero it. The non-money win that often matters more: code never leaves your network, and for client or regulated work, privacy can justify the box on its own regardless of breakeven. Keep saying 'supplement, not replacement,' that honesty is exactly what keeps this from sounding like a sales pitch.
 -->
 
 ---
@@ -587,7 +587,7 @@ The 41-turn instability was a stale-model artifact; a current model is stable an
 
 One toggle, per task. Denominated in your real workload.
 
-**Single-dev sweet spot:** Mac Studio, **64-96GB**, MoE coder model, ~$4-5K.
+**Single-dev sweet spot:** Mac Studio, **64-96GB**, MoE coder model, a few thousand.
 
 <!--
 1:00 | The actionable takeaway, what someone does Monday morning. The whole talk reduces to one architecture, hybrid. Two shell aliases, one routes to the local Studio, one routes to Opus, you pick per task, no lock-in, no ideology. The concrete buying advice: a single developer wants a Mac Studio, sixty-four to ninety-six gigs, an MoE coder model, about four to five thousand dollars. Not the eleven-and-a-half-thousand parity-chase box I debunked in Part Two, and not the sixteen-gig toy from Part One. If someone photographs one slide of this whole talk, it should be this one, so hold it an extra beat.
