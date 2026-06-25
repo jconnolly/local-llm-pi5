@@ -359,15 +359,17 @@ CUE: Quick beat. SLIDO: glance at the feed, read any new question first.
 | **Cloud-scale only\*** | **DeepSeek-V4 (best open weight, 1.6T)** | **80.6%** | **−8 (still short!)** |
 | Cloud | **Opus 4.8** | **88.6%** | 0 |
 
+<div class="cap"><b>SWE-bench Verified:</b> 500 real GitHub issues; the score is the % whose generated patch makes the repo's hidden tests pass. Functional correctness, not speed.</div>
+
 The best open-weight model won't even fit the biggest Mac Apple will sell you, and it's still 8 points behind Opus in the cloud. **The only thing that gives you Opus quality is Opus.**\*\* ([SWE-bench Verified, llm-stats.com](https://llm-stats.com/benchmarks/swe-bench-verified); same 77.2 / 88.6 in [Local AI is not Opus](https://blog.alexellis.io/local-ai-is-not-opus/))
 
 <span class="fn">&ast; DeepSeek-V4 is a 1.6T-param MoE: it won't fit a 512GB Mac, and Apple pulled the 512GB config in March 2026 anyway. Even granting cloud-scale hardware, the best open weight is still −8.<br>&ast;&ast; Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are.</span>
 
 <!--
 [2:00]
-SAY: "Myth-buster: just buy a big enough Mac and you'll match Opus. False. The model I run on the 96-gig box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven behind Opus. The best open-weight model on earth, DeepSeek V4, only reaches eighty-point-six, still eight short, and it won't even fit the biggest Mac Apple sells. You cannot spend your way to parity. The only thing that gives you Opus quality is Opus."
+SAY: "First, what this benchmark even is. SWE-bench Verified is five hundred real GitHub issues from popular open-source projects, and the score is the percentage where the model's patch actually makes the project's hidden test suite pass. So it's pure functional correctness, did it fix the bug, there's no points for speed or elegance. Now the myth-buster: just buy a big enough Mac and you'll match Opus, false. The model I run, Qwen 3.6 27B, resolves seventy-seven percent, eleven behind Opus's eighty-nine. The best open weight on earth, DeepSeek V4, only reaches eighty-point-six, and it won't even fit the biggest Mac Apple sells. You can't spend your way to parity."
 
-CUE: This is SWE-bench Verified, the hard open-ended-repo axis, exactly where local loses. Footnote: I'm not a shill, I'm trying to fire my own bill.
+CUE: Define SWE-bench before the numbers land, or the %s mean nothing. Key point: this is CAPABILITY (can it fix it), separate from the wall-clock numbers later. This is the open-ended-repo axis, exactly where local loses. Footnote: not a shill, trying to fire my own bill.
 -->
 
 ---
@@ -718,16 +720,16 @@ CUE: Q&A insurance, pre-answer the hostile questions by naming the weaknesses yo
 
 ## What's next (this is being measured)
 
-- Cut my agents fully over to local
-- Measure local vs Opus 4.8 on real tasks: token usage, latency, TTFT (time to first token), success
-- Add verification-loop scaffolding: guardrails took an 8B from 53% to 99% on agentic workflows ([Forge, Show HN](https://news.ycombinator.com/item?id=48192383))
-- The instability may be a software problem, not a model-size one. The fix might be code, not a $10k box.
+- **Auto-router on the Pi:** classify each prompt, send bounded work to the Studio + hard repo work to cloud, per-prompt. The dead-end Pi finally earns its keep.
+- Cut my agents fully over to local; measure on real tasks (tokens, latency, TTFT, success)
+- Verification-loop scaffolding: guardrails took an 8B from 53% to 99% ([Forge, Show HN](https://news.ycombinator.com/item?id=48192383))
+- Instability may be software, not model-size. The fix might be code, not a $10k box.
 
 <!--
 [1:00]
-SAY: "This is live research, not a post-mortem. Three threads: cut my real agents fully over to local, keep the measurement rig running on real daily tasks, and the exciting one, add verification-loop scaffolding. Published results show guardrails took an eight-billion-parameter model from fifty-three percent to ninety-nine percent on agentic workflows. So the instability we measured might be a software problem, not a model-size one, the fix could be code, not a ten-thousand-dollar box."
+SAY: "This is live research, not a post-mortem. The one I'm most excited about: an auto-router running on the Pi, the same Pi that was a dead end in Part One, classifying each prompt and sending bounded work to the local Studio, hard repo work to cloud, automatically, prompt by prompt. Beyond that, cut my agents fully over to local, and add verification-loop scaffolding. Published results show guardrails took an eight-billion model from fifty-three to ninety-nine percent. So the instability might be a software problem, the fix could be code, not a ten-thousand-dollar box."
 
-CUE: End on momentum. That last reframe turns the weakness into something solvable, leaves the room optimistic.
+CUE: End on momentum. The router is the callback, the dead-end Pi gets redeemed. The last reframe turns the weakness into something solvable.
 -->
 
 ---
