@@ -50,6 +50,12 @@ section.section h1 { color:#fff; font-size:50px; }
 .cols .txt { flex:1.2; } .cols .pic { flex:1; text-align:center; }
 .cap { color:var(--dk2); font-style:italic; font-size:17px; }
 .fn { font-size:11px !important; color:var(--dk2); font-style:italic; line-height:1.6; display:block; }
+.tldrbox { display:inline-flex !important; align-items:center; gap:30px;
+  background:#f1ecf7; border-radius:16px; padding:16px 28px; }
+.tldrlab { color:var(--red); font-weight:700; font-size:22px; }
+.tldrcol { text-align:center; font-size:18px; color:var(--purple); }
+.tldrcol img { height:80px; border-radius:8px; margin:5px auto; display:block; }
+.tldrcap { font-size:14px; color:var(--dk2); font-style:italic; }
 section.center { text-align:center; }
 </style>
 
@@ -57,11 +63,7 @@ section.center { text-align:center; }
 
 <div class="sub">Three weeks, three machines: from a Raspberry Pi to a $4,676 Mac Studio.</div>
 
-<div class="tldr" style="display:inline-flex; align-items:center; gap:28px">
-<span class="lab">TL;DR</span>
-<div style="text-align:center; font-size:18px; color:#251144">bounded coding<br><img src="viz/not-bad.gif" style="height:80px; border-radius:8px; margin:5px 0" /><br><span style="font-size:15px; color:#412B71; font-style:italic">(ties the frontier, free)</span></div>
-<div style="text-align:center; font-size:18px; color:#251144">Open-ended repos:<br><img src="viz/conceited.gif" style="height:80px; border-radius:8px; margin:5px 0" /><br><span style="font-size:15px; color:#412B71; font-style:italic">(not quite)</span></div>
-</div>
+<div class="tldrbox"><span class="tldrlab">TL;DR</span><div class="tldrcol">bounded coding<br><img src="viz/not-bad-slow.gif" /><br><span class="tldrcap">functionally equivalent, 10x slower</span></div><div class="tldrcol">Open-ended repos:<br><img src="viz/conceited.gif" /><br><span class="tldrcap">(not quite)</span></div></div>
 
 <div class="byline">John Connolly, Lead Product Engineer &amp; tinkerer<br>June 2026</div>
 

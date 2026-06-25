@@ -161,9 +161,9 @@ def _tldr_two_gif(s):
     tb("TL;DR", 1.0, 4.55, 1.0, 19, RED, bold=True)
     # column 1: bounded coding -> "not bad"
     tb("bounded coding", 2.1, 3.98, 2.4, 14, DK)
-    g1 = s.shapes.add_picture(str(REPO / "viz" / "not-bad.gif"), 0, 0, height=Inches(0.82))
+    g1 = s.shapes.add_picture(str(REPO / "viz" / "not-bad-slow.gif"), 0, 0, height=Inches(0.82))
     g1.left = int(Inches(3.3) - g1.width // 2); g1.top = int(Inches(4.3))
-    tb("(ties the frontier, free)", 2.1, 5.18, 2.4, 12, DK2, italic=True)
+    tb("functionally equivalent, 10x slower", 1.9, 5.18, 2.8, 11, DK2, italic=True)
     # column 2: open-ended repos -> conceited
     tb("Open-ended repos:", 4.6, 3.98, 2.4, 14, DK)
     g2 = s.shapes.add_picture(str(REPO / "viz" / "conceited.gif"), 0, 0, height=Inches(0.82))
