@@ -309,7 +309,7 @@ section_slide("PART ONE", "The route: three machines",
 
 bullets_slide("The question: how capable could a home LLM get?",
     [B("\"I want to run an LLM at home. How capable could it actually be?\""),
-     B("The bar I set: good enough to be my Claude Code backend, so I can stop paying for cloud."),
+     B("Shoot for the moon! Good enough to be my Claude Code backend, so I can stop paying for cloud."),
      B("Two things to find out:"),
      B1("Is it possible, and at what hardware/cost?"),
      B1("Is it good enough? Measured, not vibes.")],

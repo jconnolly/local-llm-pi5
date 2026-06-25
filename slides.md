@@ -124,7 +124,7 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 
 **"I want to run an LLM at home. How capable could it actually be?"**
 
-- The bar I set: good enough to be my Claude Code backend, so I can stop paying for cloud.
+- Shoot for the moon! Good enough to be my Claude Code backend, so I can stop paying for cloud.
 - Two things to find out:
   - Is it possible, and at what hardware / cost?
   - Is it good enough? Measured, not vibes.
