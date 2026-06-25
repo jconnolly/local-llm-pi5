@@ -211,7 +211,7 @@ Two genuinely different jobs, measured by two different benchmarks. **So which s
 
 | Stop | Hardware | What this stop taught me |
 |---|---|---|
-| 1 | Raspberry Pi 5 + AI HAT+ 2 (Hailo-10H) | Dead end: Hailo runs vision; LLMs fall to the Pi CPU at ~5 tok/s (measured) |
+| 1 | Raspberry Pi 5 + AI HAT+ 2 (Hailo-10H) | Dead end: only tiny 1-3B LLMs fit, ~7 tok/s (measured). Too small + slow for a coding agent |
 | 2 | MacBook Air M2 16GB ('Maral') | Did the grunt work (~5 hrs). qwen3:14b ~10 tok/s, kinda slow |
 | 3 | The tuning wall | think:false = ~3x; quant sweep; prompt slim |
 | 4 | Reality check | Can you just buy your way to the top? *(Part 2)* |
@@ -225,15 +225,17 @@ Two genuinely different jobs, measured by two different benchmarks. **So which s
 
 ## Dead end #1: tilting at windmills
 
-- Verified on the actual board (I SSH'd in): Pi 5 + Hailo-10H, 40-TOPS (tera-operations per second) INT4 NPU (neural processing unit), 8GB on-board, HailoRT 5.1.1. A real gen-AI accelerator.
-- But every model compiled to the Hailo is **vision** (YOLO, ResNet). Using it for LLMs needs Hailo's own build pipeline (`simple_llm_chat`), not a drop-in OpenAI/Ollama endpoint.
-- The connectable path is **ollama on the Pi 5 CPU** (port 11434, qwen2.5-coder 3b/7b). Claude Code can point at it, but it's the slow CPU, not the accelerator.
-- **Measured on the box: qwen2.5-coder:3b = 5 tok/s on the Pi CPU.** Too slow, and 3-8B / small context is too small for a 64k-context coding agent.
-- **Lesson:** the accelerator is real, but there's no fast, drop-in LLM endpoint, the easy path is the slow CPU. Right edge box, wrong job for a coding agent.
+- Verified on the actual board (I SSH'd in): Pi 5 + Hailo-10H, 40-TOPS (tera-operations per second) INT4 NPU, 8GB on-board, HailoRT. A real gen-AI accelerator.
+- It *does* run LLMs: Hailo ships a GenAI model zoo plus Hailo-Ollama, an Ollama/OpenAI-compatible runtime,<sup>1,2</sup> so Claude Code can point at the accelerator.
+- But the whole LLM zoo is **1-3B** (Llama-3.2-1B, Qwen2.5-1.5B, DeepSeek-R1-1.5B),<sup>3</sup> too small for a 64k-context coding agent.
+- And it's **slow**: I measured ~7 tok/s on the accelerator; independent reviewers find the Pi CPU often matches it<sup>4,5</sup> (Hailo markets 30-50 tok/s,<sup>1</sup> not what I, or they, saw).
+- **Lesson:** not a connection problem, a capability one. The models that fit are too small, the speed isn't there. Right edge box, wrong job for a coding agent.
+
+<div class="fn">1. Hailo, "Bringing on-device GenAI to the Pi" (hailo.ai/blog) &nbsp; 2. Hailo GenAI Model Zoo (github.com/hailo-ai/hailo_model_zoo_genai) &nbsp; 3. raspberry.tips, "AI HAT+ 2 / Hailo-10H local LLMs" &nbsp; 4. CNX Software, AI HAT+ 2 review &nbsp; 5. hardware-corner.net, "Local LLMs on the Pi AI HAT+ 2"</div>
 
 <!-- Hardware: Adafruit #6451, Raspberry Pi AI HAT+ 2, Hailo-10H, 40 TOPS INT4, 8GB on-board. NOT the original AI HAT+ (Hailo-8/8L). -->
 <!--
-1:00 | The cautionary tale, and I verified it on the actual hardware. The board is genuinely capable, a Hailo-10H, forty INT4 TOPS, eight gigs of its own memory, a real edge gen-AI accelerator. So why a dead end? Two things I confirmed by SSHing into the box. One, every model actually compiled onto the Hailo is a vision model, YOLO and ResNet, using it for language models needs Hailo's own build pipeline, not a drop-in endpoint. Two, the path that IS drop-in, ollama on the Pi, runs on the CPU not the accelerator, and I measured it at about five tokens a second on a three-billion coder model. Five tokens a second, small model, small context. Fine for a chatbot demo, unusable as a coding agent. So it's not that you can't connect, it's that the connectable path is the slow CPU and the fast path only runs vision. Right edge box, wrong job.
+1:00 | The cautionary tale, verified on the actual hardware and corrected since I first built this. The board is genuinely capable, a Hailo-10H, forty INT4 TOPS, eight gigs of its own memory. And to be fair to it, it DOES run language models: Hailo ships a generative-AI model zoo and an Ollama-compatible runtime called Hailo-Ollama, so you CAN point Claude Code at the accelerator. So why a dead end? Two reasons, both capability not connection. One, every LLM in that zoo is one-to-three billion parameters, Llama-3.2-1B, Qwen-2.5-1.5B, DeepSeek-R1-1.5B, far too small to drive a sixty-four-thousand-token coding agent. Two, it's slow, I measured about seven tokens a second on the accelerator and independent reviewers find the plain Pi CPU often matches it. Hailo markets thirty to fifty, but that's not what I saw or what the reviewers saw. Honest lesson: not a connection problem, a capability problem. Right edge box, wrong job for a coding agent.
 -->
 
 ---
