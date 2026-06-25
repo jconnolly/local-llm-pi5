@@ -428,7 +428,7 @@ bullets_slide("The single best tuning knob: kill the thinking tax",
     "[1:30]\nSAY: \"If you remember one config line, it's this. Qwen3 is a reasoning model, it writes a hidden think-trace before every answer. Great for chat, pure overhead for an agent doing lots of tiny tool calls, an eighty-token edit was costing six hundred. One environment variable turns it off, and you get about a three-times real-world speedup.\"\n\nCUE: Audience beat, 'guess how much all my fancy tuning bought me, versus this one line.' Everything else was a rounding error.")
 
 section_slide("PART TWO", "Reality check & the hardware call",
-    notes="5 sec | Quick beat. Say: 'Part Two. I've got a working setup, now the uncomfortable part, how good can local actually get, and can you just buy your way to the top? Short answer, no.' Move.")
+    notes="[0:05]\nSAY: \"Part two. I've got a working setup, now the uncomfortable part: how good can local actually get, and can you just buy your way to the top? Short answer, no.\"\n\nCUE: Quick beat. SLIDO: glance at the feed, read any new question first.")
 
 _rc = table_slide("Reality check: you can't buy frontier parity",
     ["Tier", "Best open weight", "SWE-bench Verified", "Gap to Opus 4.8"],
@@ -436,7 +436,7 @@ _rc = table_slide("Reality check: you can't buy frontier parity",
      ["**Cloud-scale only***", "**DeepSeek-V4 (best open weight, 1.6T)**", "**80.6%**", "**−8 (still short!)**"],
      ["Cloud", "**Opus 4.8**", "**88.6%**", "0"]],
     "The best open-weight model won't even fit the biggest Mac Apple will sell you, and it's still 8 points behind Opus in the cloud. **The only thing that gives you Opus quality is Opus.** (SWE-bench Verified, llm-stats.com; same 77.2 / 88.6 in 'Local AI is not Opus', blog.alexellis.io)",
-    "2:00 | The hinge, now with verified numbers I actually looked up. Myth-buster: 'just buy a big enough Mac and you'll match Opus' is false, twice over. The model I run on the 96GB box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven points behind Opus. And the best open-weight model on earth, DeepSeek V4, only reaches eighty-point-six, still eight short, AND it's a 1.6-trillion-parameter model that won't even fit a 512-gig Mac, which Apple stopped selling in March anyway. So you can't buy the hardware, and even cloud-scale open weights lose. The only thing that gives you Opus quality is Opus. Note this is SWE-bench Verified, the hard open-ended-repo axis, exactly where local loses, consistent with the rest of the talk where local ties on bounded work.",
+    "[2:00]\nSAY: \"Myth-buster: just buy a big enough Mac and you'll match Opus. False. The model I run on the 96-gig box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven behind Opus. The best open-weight model on earth, DeepSeek V4, only reaches eighty-point-six, still eight short, and it won't even fit the biggest Mac Apple sells. You cannot spend your way to parity. The only thing that gives you Opus quality is Opus.\"\n\nCUE: This is SWE-bench Verified, the hard open-ended-repo axis, exactly where local loses. Footnote: I'm not a shill, I'm trying to fire my own bill.",
     col_w=[1.7, 3.4, 2.1, 2.3], font=13)
 _rcf = _rc.shapes.add_textbox(Inches(0.6), Inches(6.12), SW - Inches(1.2), Inches(0.8))
 _no_autofit(_rcf.text_frame)
@@ -454,14 +454,14 @@ bullets_slide("So the decision is about how close, not parity",
      B("The real question becomes: **how close can I get for sensible money, and what do I do about the gap?**"),
      B("Answer that with your actual task mix, not dollars or ideology."),
      B("So I bought a box to find out.")],
-    "1:00 | The reframe, and keep it a question, do NOT answer it here. Once parity is off the table, the question changes from 'can I match it' to 'how close can I get for sensible money, and what do I do about the gap.' The discipline: you'll decide on your actual task mix, not on ideology and not on the sticker price. Hold the actual recommendation, the hybrid setup and the dollar figure, for Part Four, that's the payoff. Here you just land the reframe and the fact that I went and bought a box to answer it. Next slide is the buy.")
+    "[1:00]\nSAY: \"Once parity's off the table, the question changes from 'can I match it' to 'how close can I get for sensible money, and what do I do about the gap?' You answer that with your actual task mix, not ideology and not the sticker price. So I went and bought a box to find out.\"\n\nCUE: Keep it a QUESTION, do NOT answer it here. Hold the hybrid recommendation and the dollar figure for Part Four, that's the payoff.")
 
 _buy = bullets_slide("The buy: a used M3 Ultra 96GB",
     [B("Apple-direct was 4 months backordered (M3 Ultra was EOL'd)"),
      B("Every reseller went dry within days, only the grey market left"),
      B("Verified a sealed eBay unit (buyer protection, 99.3% seller). Wiring four figures to a stranger on eBay is its own personality test."),
      B("**Takeaway:** a just-discontinued machine vanishes from every channel at once. Buy current-gen before the refresh rumor.")],
-    "1:00 | Breather, tell it like a story. Right as I decided to buy, Apple discontinued the M3 Ultra, so Apple-direct was four months backordered and every reseller drained within days. I ended up on the grey market, a sealed unit on eBay, ninety-nine-point-three percent seller, strong buyer protection. Be honest about the feeling: wiring four figures to a stranger on eBay is its own little personality test. The transferable lesson: a just-discontinued Apple machine vanishes from every channel at once, so if you want a specific config, buy it before the refresh rumor hits. And gesture at the photo: that's the box, that's what's running the LLM.")
+    "[1:00]\nSAY: \"Right as I decided to buy, Apple discontinued the M3 Ultra, so Apple-direct was four months backordered and every reseller drained within days. I ended up on the grey market, a sealed unit on eBay, and I'll be honest, wiring four figures to a stranger on eBay is its own little personality test.\"\n\nCUE: Breather, tell it like a story. Gesture at the photo, that's the box running the LLM. Takeaway: a just-discontinued machine vanishes from every channel at once.")
 # narrow the bullets and drop the Mac Studio photo on the right (the box in question)
 _buy.placeholders[1].width = Inches(6.3)
 _mac = REPO / "viz" / ("mac-studio-ebay.jpg" if (REPO / "viz" / "mac-studio-ebay.jpg").exists() else "mac-studio.jpg")

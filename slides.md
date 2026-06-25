@@ -343,7 +343,10 @@ CUE: Audience beat, "guess how much all my fancy tuning bought me, versus this o
 # Reality check & the hardware call
 
 <!--
-5 sec | Quick beat. Say: 'Part Two. I've got a working setup, now the uncomfortable part, how good can local actually get, and can you just buy your way to the top? Short answer, no.' Move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
+[0:05]
+SAY: "Part two. I've got a working setup, now the uncomfortable part: how good can local actually get, and can you just buy your way to the top? Short answer, no."
+
+CUE: Quick beat. SLIDO: glance at the feed, read any new question first.
 -->
 
 ---
@@ -361,7 +364,10 @@ The best open-weight model won't even fit the biggest Mac Apple will sell you, a
 <span class="fn">&ast; DeepSeek-V4 is a 1.6T-param MoE: it won't fit a 512GB Mac, and Apple pulled the 512GB config in March 2026 anyway. Even granting cloud-scale hardware, the best open weight is still −8.<br>&ast;&ast; Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are.</span>
 
 <!--
-2:00 | The hinge, now with verified numbers I actually looked up. Myth-buster: 'just buy a big enough Mac and you'll match Opus' is false. The model I run on the 96GB box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven behind Opus. Max out to a 512GB box and the best open-weight model on earth, DeepSeek V4, gets you to eighty-point-six, still eight short. You cannot spend your way to parity. The only thing that gives you Opus quality is Opus. Note this is SWE-bench Verified, the hard open-ended-repo axis, exactly where local loses, consistent with the rest of the talk where local ties on bounded work.
+[2:00]
+SAY: "Myth-buster: just buy a big enough Mac and you'll match Opus. False. The model I run on the 96-gig box, Qwen 3.6 27B, scores seventy-seven on SWE-bench Verified, eleven behind Opus. The best open-weight model on earth, DeepSeek V4, only reaches eighty-point-six, still eight short, and it won't even fit the biggest Mac Apple sells. You cannot spend your way to parity. The only thing that gives you Opus quality is Opus."
+
+CUE: This is SWE-bench Verified, the hard open-ended-repo axis, exactly where local loses. Footnote: I'm not a shill, I'm trying to fire my own bill.
 -->
 
 ---
@@ -374,7 +380,10 @@ The best open-weight model won't even fit the biggest Mac Apple will sell you, a
 - So I bought a box to find out.
 
 <!--
-1:00 | The reframe, and keep it a question, do NOT answer it here. Once parity is off the table, the question changes from 'can I match it' to 'how close can I get for sensible money, and what do I do about the gap.' The discipline: you'll decide on your actual task mix, not on ideology and not on the sticker price. Hold the actual recommendation, the hybrid setup and the dollar figure, for Part Four, that's the payoff. Here you just land the reframe and the fact that I went and bought a box to answer it. Next slide is the buy.
+[1:00]
+SAY: "Once parity's off the table, the question changes from 'can I match it' to 'how close can I get for sensible money, and what do I do about the gap?' You answer that with your actual task mix, not ideology and not the sticker price. So I went and bought a box to find out."
+
+CUE: Keep it a QUESTION, do NOT answer it here. Hold the hybrid recommendation and the dollar figure for Part Four, that's the payoff.
 -->
 
 ---
@@ -399,7 +408,10 @@ The best open-weight model won't even fit the biggest Mac Apple will sell you, a
 </div>
 
 <!--
-1:00 | Breather, tell it like a story. Right as I decided to buy, Apple discontinued the M3 Ultra, so Apple-direct was four months backordered and every reseller drained within days. I ended up on the grey market, a sealed unit on eBay, ninety-nine-point-three percent seller, strong buyer protection. Be honest about the feeling: wiring four figures to a stranger on eBay is its own little personality test. The transferable lesson: a just-discontinued Apple machine vanishes from every channel at once, so if you want a specific config, buy it before the refresh rumor hits. And gesture at the photo: that's the box, that's what's running the LLM.
+[1:00]
+SAY: "Right as I decided to buy, Apple discontinued the M3 Ultra, so Apple-direct was four months backordered and every reseller drained within days. I ended up on the grey market, a sealed unit on eBay, and I'll be honest, wiring four figures to a stranger on eBay is its own little personality test."
+
+CUE: Breather, tell it like a story. Gesture at the photo, that's the box running the LLM. Takeaway: a just-discontinued machine vanishes from every channel at once.
 -->
 
 ---
