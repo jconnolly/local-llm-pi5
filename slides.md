@@ -79,17 +79,15 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 
 ---
 
-## Agenda (~29 min)
+## Agenda (~30m)
 
-| Act | Topic | ~min |
-|---|---|---|
-| **1** | The route: Raspberry Pi, Air, Studio | 7 |
-| **2** | Reality check: you can't buy parity. The $4,676 call | 5 |
-| **3** | The measured verdict: one-shot, agent loop, the build test | 12 |
-| **4** | Economics, recommendation, caveats | 5 |
+1. **The route:** Raspberry Pi, Air, Studio
+2. **Reality check:** you can't buy parity, the $4,676 call
+3. **The measured verdict:** one-shot, agent loop, the build test
+4. **Economics, recommendation, caveats**
 
 <!--
-0:30 | Don't dwell. Four acts. Act 1 is the journey across three machines, that's the story. Act 2 is the uncomfortable truth that you can't buy your way to parity. Act 3 is the heart, the actual benchmarks, and it's where the surprise lives, so flag it now: 'Act 3 is the part that changed my mind.' Act 4 is the money and the recommendation. Tell them you'll leave time for Q&A. If you're running long, Act 1 is the part to compress.
+0:30 | Don't dwell. Four parts. Part 1 is the journey across three machines, that's the story. Part 2 is the uncomfortable truth that you can't buy your way to parity. Part 3 is the heart, the actual benchmarks, and it's where the surprise lives, so flag it now: 'Part 3 is the part that changed my mind.' Part 4 is the money and the recommendation. Tell them you'll leave time for Q&A. If you're running long, Part 1 is the part to compress.
 -->
 
 ---
@@ -103,21 +101,36 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 </div>
 
 <div class="sub" style="text-align:center; margin-top:10px">Scan to ask anything, upvote, or drop feedback in real time</div>
-<div class="cap" style="text-align:center">app.sli.do/event/9YznQ5rvRQcGAqDi2v8jaW &nbsp;·&nbsp; I'll check it at every act break</div>
+<div class="cap" style="text-align:center">app.sli.do/event/9YznQ5rvRQcGAqDi2v8jaW &nbsp;·&nbsp; I'll check it at every part break</div>
 
 <!--
-0:40 | Before Act One, while people settle. QR up: 'This talk is about measuring, not vibing, so hold me to it. Scan this Slido, ask questions, drop feedback, upvote what you want answered, any time, don't wait for the end.' Say you'll check at each act break and read the top question aloud. Leave it up a beat for the back row to scan.
+0:40 | Before Part One, while people settle. QR up: 'This talk is about measuring, not vibing, so hold me to it. Scan this Slido, ask questions, drop feedback, upvote what you want answered, any time, don't wait for the end.' Say you'll check at each part break and read the top question aloud. Leave it up a beat for the back row to scan.
 -->
 
 ---
 
 <!-- _class: section -->
-<div class="kicker">ACT ONE</div>
+<div class="kicker">PART ONE</div>
 
 # The route: three machines
 
 <!--
-5 sec | Quick beat, don't linger on dividers. Say: 'Act One, the route. How I got from a thirty-five-dollar Raspberry Pi to a forty-six-hundred-dollar Mac Studio, and what each machine taught me.' Then move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
+5 sec | Quick beat, don't linger on dividers. Say: 'Part One, the route. How I got from a thirty-five-dollar Raspberry Pi to a forty-six-hundred-dollar Mac Studio, and what each machine taught me.' Then move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
+-->
+
+---
+
+## The question: how capable could a home LLM get?
+
+**"I want to run an LLM at home. How capable could it actually be?"**
+
+- The bar I set: good enough to be my Claude Code backend, so I can stop paying for cloud.
+- Two things to find out:
+  - Is it possible, and at what hardware / cost?
+  - Is it good enough? Measured, not vibes.
+
+<!--
+1:00 | Lead with the honest motivation, not a spec sheet. The real question was simple and a little greedy: I want to run an LLM at home, how capable could it actually get? The bar I set was concrete, good enough to be my Claude Code backend so I can stop paying for cloud. That splits in two: is it even possible, and at what hardware and cost; and is it good enough, measured, not vibes. Plant the seed that 'good enough' will itself split later, bounded versus open-ended, and those give opposite answers. Last bullet is the north star: every number you'll see came from a script, not a feeling.
 -->
 
 ---
@@ -142,19 +155,6 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 
 <!--
 1:00 | The human hook, and it matters because it stops the Raspberry Pi from looking naive. I learn by jumping in, not reading a spec sheet. The origin is mundane: I had a Raspberry Pi from tinkering projects with my daughter, and wondered if it could run a little LLM for the house. It did, so I got greedy and asked the real question, could it handle my actual dev workload. That escalating curiosity is the whole talk. So when the Pi is a dead end, that isn't naive, it was intentionally myopic, I wanted to see the limits with my own eyes, not predict them from a datasheet.
--->
-
----
-
-## The question
-
-- Can I run a 'SOTA' local LLM at home, usable as my Claude Code backend, and stop paying for cloud?
-- Two things to find out:
-  - Is it possible, and at what hardware/cost?
-  - Is it good enough, measured, not vibes?
-
-<!--
-1:00 | Two real questions here. 'Possible' turned out to be the easy one, spoiler, yes, it works on modest hardware. The hard one is 'good enough,' and the whole talk hinges on the fact that good-enough splits in two: good enough for a single bounded task, versus good enough for a long multi-turn agent loop. Those give opposite answers. Plant the seed: 'hold onto the idea that good enough depends on which good.' And the last bullet is the north star, measured, not vibes. Every number you'll see came from a script, not a feeling.
 -->
 
 ---
@@ -214,11 +214,11 @@ Two genuinely different jobs, measured by two different benchmarks. **So which s
 | 1 | Raspberry Pi 5 + AI HAT+ 2 (Hailo-10H) | Dead end: Hailo runs vision; LLMs fall to the Pi CPU at ~5 tok/s (measured) |
 | 2 | MacBook Air M2 16GB ('Maral') | Did the grunt work (~5 hrs). qwen3:14b ~10 tok/s, kinda slow |
 | 3 | The tuning wall | think:false = ~3x; quant sweep; prompt slim |
-| 4 | Reality check | Can you just buy your way to the top? *(Act 2)* |
-| 5 | Mac Studio M3 Ultra 96GB ($4,676) | The machine that finally earned its keep *(Act 3)* |
+| 4 | Reality check | Can you just buy your way to the top? *(Part 2)* |
+| 5 | Mac Studio M3 Ultra 96GB ($4,676) | The machine that finally earned its keep *(Part 3)* |
 
 <!--
-1:30 | This is the map, don't read every cell, walk it. Stop one, the Raspberry Pi, total dead end, I'll explain why in two slides. Stop two, a spare MacBook Air I call Maral, that's where I learned everything even though it only ran a few hours. Stop three, I hit a tuning wall and found the single best speedup of the whole project. Stop four, the reality check, which asks whether you can simply buy your way to the top, that's Act Two. Stop five, the Mac Studio, the machine that finally earned its keep, the verdict is Act Three. Tease, don't spoil, the numbers come later. The takeaway line: the lessons are in the trip, not just the destination.
+1:30 | This is the map, don't read every cell, walk it. Stop one, the Raspberry Pi, total dead end, I'll explain why in two slides. Stop two, a spare MacBook Air I call Maral, that's where I learned everything even though it only ran a few hours. Stop three, I hit a tuning wall and found the single best speedup of the whole project. Stop four, the reality check, which asks whether you can simply buy your way to the top, that's Part Two. Stop five, the Mac Studio, the machine that finally earned its keep, the verdict is Part Three. Tease, don't spoil, the numbers come later. The takeaway line: the lessons are in the trip, not just the destination.
 -->
 
 ---
@@ -274,7 +274,7 @@ Two genuinely different jobs, measured by two different benchmarks. **So which s
 - 16GB is the floor, not a platform. Ran on vibes and about 5 hours of uptime.
 
 <!--
-1:30 | The workhorse chapter, keep it light. A spare sixteen-gig MacBook Air, I call it Maral, carried the whole proof of concept, and honestly it only ran about five hours total. Two surprises worth landing. ONE, tool-use, and this is worth unpacking because it was my single biggest fear. Claude Code is not a chatbot, it works by calling tools, Read a file, Edit a file, run a Bash command, Grep the codebase, and it does that through a strict function-calling protocol: the model has to emit well-formed JSON, pick the right tool, fill in the right arguments, then read the tool result and decide the next call. My worry was that a small open model would faceplant on the mechanics, malformed JSON, hallucinated tool names, wrong arguments, basically unable to drive the loop at all. It didn't. Qwen3 on the Air, wired in through Ollama's Anthropic-compatible endpoint, produced clean valid tool calls, picked the right tool, formatted the arguments correctly, and consumed the results, at parity with cloud out of the box. But be precise about what parity means here: it nailed the MECHANICS of tool-calling, which is different from reliably driving a long multi-turn loop all the way to the finish, the convergence problem I hit later and measure in Act Three. The protocol was never the bottleneck. TWO, the real pain was never the model's intelligence, it was the memory bus being slow and the WiFi driver literally crashing under memory pressure. The lesson: sixteen gigs is the floor where you can prove the idea, but it is not a platform you can live on, it ran on vibes. That sets up the obvious question: okay, what do I actually buy?
+1:30 | The workhorse chapter, keep it light. A spare sixteen-gig MacBook Air, I call it Maral, carried the whole proof of concept, and honestly it only ran about five hours total. Two surprises worth landing. ONE, tool-use, and this is worth unpacking because it was my single biggest fear. Claude Code is not a chatbot, it works by calling tools, Read a file, Edit a file, run a Bash command, Grep the codebase, and it does that through a strict function-calling protocol: the model has to emit well-formed JSON, pick the right tool, fill in the right arguments, then read the tool result and decide the next call. My worry was that a small open model would faceplant on the mechanics, malformed JSON, hallucinated tool names, wrong arguments, basically unable to drive the loop at all. It didn't. Qwen3 on the Air, wired in through Ollama's Anthropic-compatible endpoint, produced clean valid tool calls, picked the right tool, formatted the arguments correctly, and consumed the results, at parity with cloud out of the box. But be precise about what parity means here: it nailed the MECHANICS of tool-calling, which is different from reliably driving a long multi-turn loop all the way to the finish, the convergence problem I hit later and measure in Part Three. The protocol was never the bottleneck. TWO, the real pain was never the model's intelligence, it was the memory bus being slow and the WiFi driver literally crashing under memory pressure. The lesson: sixteen gigs is the floor where you can prove the idea, but it is not a platform you can live on, it ran on vibes. That sets up the obvious question: okay, what do I actually buy?
 -->
 
 ---
@@ -293,12 +293,12 @@ Two genuinely different jobs, measured by two different benchmarks. **So which s
 ---
 
 <!-- _class: section -->
-<div class="kicker">ACT TWO</div>
+<div class="kicker">PART TWO</div>
 
 # Reality check & the $4,676 call
 
 <!--
-5 sec | Quick beat. Say: 'Act Two. I've got a working setup, now the uncomfortable part, how good can local actually get, and can you just buy your way to the top? Short answer, no.' Move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
+5 sec | Quick beat. Say: 'Part Two. I've got a working setup, now the uncomfortable part, how good can local actually get, and can you just buy your way to the top? Short answer, no.' Move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
 -->
 
 ---
@@ -329,7 +329,7 @@ The best open-weight model won't even fit the biggest Mac Apple will sell you, a
 - So I bought a box to find out.
 
 <!--
-1:00 | The reframe, and keep it a question, do NOT answer it here. Once parity is off the table, the question changes from 'can I match it' to 'how close can I get for sensible money, and what do I do about the gap.' The discipline: you'll decide on your actual task mix, not on ideology and not on the sticker price. Hold the actual recommendation, the hybrid setup and the dollar figure, for Act Four, that's the payoff. Here you just land the reframe and the fact that I went and bought a box to answer it. Next slide is the buy.
+1:00 | The reframe, and keep it a question, do NOT answer it here. Once parity is off the table, the question changes from 'can I match it' to 'how close can I get for sensible money, and what do I do about the gap.' The discipline: you'll decide on your actual task mix, not on ideology and not on the sticker price. Hold the actual recommendation, the hybrid setup and the dollar figure, for Part Four, that's the payoff. Here you just land the reframe and the fact that I went and bought a box to answer it. Next slide is the buy.
 -->
 
 ---
@@ -360,12 +360,12 @@ The best open-weight model won't even fit the biggest Mac Apple will sell you, a
 ---
 
 <!-- _class: section -->
-<div class="kicker">ACT THREE</div>
+<div class="kicker">PART THREE</div>
 
 # The measured verdict
 
 <!--
-5 sec | Quick beat, but build energy here, this is the best part. Say: 'Act Three. Enough story, enough vibes. Here are the actual benchmarks, and this is where it surprised me.' Move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
+5 sec | Quick beat, but build energy here, this is the best part. Say: 'Part Three. Enough story, enough vibes. Here are the actual benchmarks, and this is where it surprised me.' Move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
 -->
 
 ---
@@ -381,7 +381,7 @@ The best open-weight model won't even fit the biggest Mac Apple will sell you, a
 Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest scoring. Local understood the assignment: tied Opus on every one.
 
 <!--
-1:30 | Open Act Three on the win, this is the 'yes' half of the answer. Stress the rigor before the result: twenty-four coding problems, easy up to LeetCode-hard, scored deterministically with pytest, no model judging itself. The result, the local thirty-billion coder tied Opus on every single problem, at sixty-eight tokens a second, for free. But plant the honesty that's coming: this bench saturated, my local model couldn't lose on it, and a benchmark your best model can't lose on has stopped measuring anything. That's exactly why I had to build harder tests, which is the rest of this act. Don't oversell, the next two slides deliberately complicate this win.
+1:30 | Open Part Three on the win, this is the 'yes' half of the answer. Stress the rigor before the result: twenty-four coding problems, easy up to LeetCode-hard, scored deterministically with pytest, no model judging itself. The result, the local thirty-billion coder tied Opus on every single problem, at sixty-eight tokens a second, for free. But plant the honesty that's coming: this bench saturated, my local model couldn't lose on it, and a benchmark your best model can't lose on has stopped measuring anything. That's exactly why I had to build harder tests, which is the rest of this part. Don't oversell, the next two slides deliberately complicate this win.
 -->
 
 ---
@@ -391,10 +391,10 @@ Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest
 - coder-30b **and** Opus both went 24/24 — the bench saturated.
 - A benchmark your best model can't lose on has stopped telling you anything.
 - What it can't see is the axis that matters day to day: long, multi-file, agentic work.
-- So I built harder tests. The rest of this act is what they found.
+- So I built harder tests. The rest of this part is what they found.
 
 <!--
-1:30 | The bridge, NOT the verdict, resist stating who-wins-what here. The point is narrow and honest: my local model couldn't lose on this bench, both it and Opus went twenty-four for twenty-four, so the bench has stopped measuring anything. A benchmark your best model can't lose on is dead weight. What it can't see is the axis that actually bites day to day, long multi-file agentic work in a big unfamiliar repo. So I built harder tests, and the rest of this act is what they turned up. Keep them in suspense, the reconciliation at the end of the act is where the verdict lands.
+1:30 | The bridge, NOT the verdict, resist stating who-wins-what here. The point is narrow and honest: my local model couldn't lose on this bench, both it and Opus went twenty-four for twenty-four, so the bench has stopped measuring anything. A benchmark your best model can't lose on is dead weight. What it can't see is the axis that actually bites day to day, long multi-file agentic work in a big unfamiliar repo. So I built harder tests, and the rest of this part is what they turned up. Keep them in suspense, the reconciliation at the end of the act is where the verdict lands.
 -->
 
 ---
@@ -411,7 +411,7 @@ Same model, 4x faster, purely the memory bus. **MoE (mixture of experts) beats d
 <div class="cap">Bandwidth: M3 Ultra [819 GB/s (Apple spec)](https://www.apple.com/mac-studio/specs/); Pi 5 LPDDR4X ~17 GB/s. Same idea, ~48x the bus.</div>
 
 <!--
-1:30 | The one genuinely technical slide, and a callback to the napkin math from Act One. Same model, same quant, eight times the memory bandwidth gives you about four times the tokens per second. The Mac Studio's eight-hundred-gigabyte-a-second memory bus is the entire story, it is not about raw compute. Then the mixture-of-experts punchline: a thirty-billion MoE model that only activates three billion parameters per token beats a dense thirty-two-billion model, faster AND higher-scoring, because only the active experts have to be streamed from memory each token. Practical advice for anyone buying: optimize for memory bandwidth and run MoE models, don't chase GPU teraflops.
+1:30 | The one genuinely technical slide, and a callback to the napkin math from Part One. Same model, same quant, eight times the memory bandwidth gives you about four times the tokens per second. The Mac Studio's eight-hundred-gigabyte-a-second memory bus is the entire story, it is not about raw compute. Then the mixture-of-experts punchline: a thirty-billion MoE model that only activates three billion parameters per token beats a dense thirty-two-billion model, faster AND higher-scoring, because only the active experts have to be streamed from memory each token. Practical advice for anyone buying: optimize for memory bandwidth and run MoE models, don't chase GPU teraflops.
 -->
 
 ---
@@ -548,18 +548,18 @@ Local got the **right answer on all three** (same capability), but you **wait ~7
 The 41-turn instability was a stale-model artifact; a current model is stable and 5/5. What's left is wall-clock (~5x on debug) and big-context repo work. **Measure the agent loop, keep your model current, route by task.**
 
 <!--
-1:00 | The act-end synthesis, everything Act Three measured in one honest table, so land it slowly. One-shot bounded, ties Opus, fast and free. Multi-turn debug loops, current models are stable and five-for-five, gpt-oss lands within about one-and-a-half times cloud. Open-ended building from scratch, the local eighty-billion ties cloud at twice the wall-clock and zero dollars. Open-ended repo work across big unfamiliar context, cloud still wins on raw capability. The spine of the talk: local is genuinely capable on most of what I do, AND cloud still earns its keep on the hardest open-ended repo work, both true at once. This is the verdict the whole act built to, so let it sit a beat, then move to the money.
+1:00 | The part-end synthesis, everything Part Three measured in one honest table, so land it slowly. One-shot bounded, ties Opus, fast and free. Multi-turn debug loops, current models are stable and five-for-five, gpt-oss lands within about one-and-a-half times cloud. Open-ended building from scratch, the local eighty-billion ties cloud at twice the wall-clock and zero dollars. Open-ended repo work across big unfamiliar context, cloud still wins on raw capability. The spine of the talk: local is genuinely capable on most of what I do, AND cloud still earns its keep on the hardest open-ended repo work, both true at once. This is the verdict the whole part built to, so let it sit a beat, then move to the money.
 -->
 
 ---
 
 <!-- _class: section -->
-<div class="kicker">ACT FOUR</div>
+<div class="kicker">PART FOUR</div>
 
 # Economics & the call
 
 <!--
-5 sec | Quick beat. Say: 'Act Four. So what does this actually cost, and what should you do on Monday morning?' Move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
+5 sec | Quick beat. Say: 'Part Four. So what does this actually cost, and what should you do on Monday morning?' Move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
 -->
 
 ---
@@ -590,7 +590,7 @@ One toggle, per task. Denominated in your real workload.
 **Single-dev sweet spot:** Mac Studio, **64-96GB**, MoE coder model, ~$4-5K.
 
 <!--
-1:00 | The actionable takeaway, what someone does Monday morning. The whole talk reduces to one architecture, hybrid. Two shell aliases, one routes to the local Studio, one routes to Opus, you pick per task, no lock-in, no ideology. The concrete buying advice: a single developer wants a Mac Studio, sixty-four to ninety-six gigs, an MoE coder model, about four to five thousand dollars. Not the eleven-and-a-half-thousand parity-chase box I debunked in Act Two, and not the sixteen-gig toy from Act One. If someone photographs one slide of this whole talk, it should be this one, so hold it an extra beat.
+1:00 | The actionable takeaway, what someone does Monday morning. The whole talk reduces to one architecture, hybrid. Two shell aliases, one routes to the local Studio, one routes to Opus, you pick per task, no lock-in, no ideology. The concrete buying advice: a single developer wants a Mac Studio, sixty-four to ninety-six gigs, an MoE coder model, about four to five thousand dollars. Not the eleven-and-a-half-thousand parity-chase box I debunked in Part Two, and not the sixteen-gig toy from Part One. If someone photographs one slide of this whole talk, it should be this one, so hold it an extra beat.
 -->
 
 ---
@@ -647,7 +647,7 @@ One toggle, per task. Denominated in your real workload.
 <div class="dim" style="color:#FFED4C">Benchmarks: minibench · repobench · appbench</div>
 
 <!--
-0:30 | Close on the one-line thesis, and say it slowly: the win is real, and the caveat is real too. Point them at the repo, everything is reproducible, the benchmarks are real code they can clone and run. Then open the floor. The questions to be ready for: why not vLLM or MLX for more speed, what about just always running the eighty-billion, would guardrails really fix the instability, and what's the ROI if I'm already paying for cloud anyway. The answers all live in Acts Three and Four, point back to the relevant slide. Time check: if you hit this slide around twenty-nine minutes, you nailed the pacing.
+0:30 | Close on the one-line thesis, and say it slowly: the win is real, and the caveat is real too. Point them at the repo, everything is reproducible, the benchmarks are real code they can clone and run. Then open the floor. The questions to be ready for: why not vLLM or MLX for more speed, what about just always running the eighty-billion, would guardrails really fix the instability, and what's the ROI if I'm already paying for cloud anyway. The answers all live in Parts Three and Four, point back to the relevant slide. Time check: if you hit this slide around thirty minutes, you nailed the pacing.
 -->
 
 ---
