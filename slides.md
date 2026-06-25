@@ -655,7 +655,10 @@ CUE: The part-end synthesis, land it slowly. This is the verdict the whole part 
 # Economics & the call
 
 <!--
-5 sec | Quick beat. Say: 'Part Four. So what does this actually cost, and what should you do on Monday morning?' Move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
+[0:05]
+SAY: "Part four. So what does this actually cost, and what should you do on Monday morning?"
+
+CUE: Quick beat. SLIDO: glance at the feed, read any new question first.
 -->
 
 ---
@@ -669,7 +672,10 @@ CUE: The part-end synthesis, land it slowly. This is the verdict the whole part 
 - The catch: it's a supplement, not a full replacement. Hard repo work still routes to cloud.
 
 <!--
-1:00 | The money slide, this is what a decision-maker actually wants. Cloud is about two hundred a month forever, the box is a one-time up-front cost and then zero. Breakeven is roughly two years, and after that it's pure savings, but be honest, only for the slice of work local handles well, it shrinks the cloud bill, it doesn't zero it. The non-money win that often matters more: code never leaves your network, and for client or regulated work, privacy can justify the box on its own regardless of breakeven. Keep saying 'supplement, not replacement,' that honesty is exactly what keeps this from sounding like a sales pitch.
+[1:00]
+SAY: "Cloud is about two hundred a month, forever. The box is a one-time cost, then zero. Breakeven is roughly two years, and after that it's pure savings, but be honest, only for the slice of work local handles well. It shrinks the cloud bill, it doesn't zero it. The non-money win that often matters more: code never leaves your network, and for client or regulated work that can justify the box on its own."
+
+CUE: The money slide, what a decision-maker wants. Keep saying "supplement, not replacement," that's what keeps it from sounding like a sales pitch.
 -->
 
 ---
@@ -686,7 +692,10 @@ One toggle, per task. Denominated in your real workload.
 **Single-dev sweet spot:** Mac Studio, **64-96GB**, MoE coder model, a few thousand.
 
 <!--
-1:00 | The actionable takeaway, what someone does Monday morning. The whole talk reduces to one architecture, hybrid. Two shell aliases, one routes to the local Studio, one routes to Opus, you pick per task, no lock-in, no ideology. The concrete buying advice: a single developer wants a Mac Studio, sixty-four to ninety-six gigs, an MoE coder model, about four to five thousand dollars. Not the eleven-and-a-half-thousand parity-chase box I debunked in Part Two, and not the sixteen-gig toy from Part One. If someone photographs one slide of this whole talk, it should be this one, so hold it an extra beat.
+[1:00]
+SAY: "The whole talk reduces to one architecture: hybrid. Two shell aliases, one routes to the local Studio, one routes to Opus, you pick per task, no lock-in. The buying advice: a single developer wants a Mac Studio, sixty-four to ninety-six gigs, an MoE coder model, a few thousand dollars. Not the parity-chase box I debunked in Part Two, not the sixteen-gig toy from Part One."
+
+CUE: The actionable takeaway, Monday morning. If someone photographs one slide, it's this one, hold it an extra beat.
 -->
 
 ---
@@ -699,7 +708,10 @@ One toggle, per task. Denominated in your real workload.
 - Benchmarks saturate, measure your task mix, not a leaderboard
 
 <!--
-1:00 | This is Q&A insurance, name your own weaknesses first so you control the framing. 'Local SOTA at home' is a true headline only if you append 'narrowly, on bounded coding,' anyone selling it without that asterisk is overselling. The sizing guidance kills two bad instincts at once: sixteen gigs is too small to live on, and more than ninety-six is overkill for one person, the sweet spot is narrow and I've bracketed it. And the recurring theme one last time: benchmarks saturate, the only benchmark that matters is your own task mix. By saying all this before they can, you've pre-answered the hostile questions.
+[1:00]
+SAY: "Let me name my own weaknesses first. 'Local SOTA at home' is true only if you append 'narrowly, on bounded coding.' On open-ended engineering it's not, and no honest setup pretends otherwise. Sixteen gigs is too small to live on, more than ninety-six is overkill for one person. And benchmarks saturate, the only one that matters is your own task mix."
+
+CUE: Q&A insurance, pre-answer the hostile questions by naming the weaknesses yourself.
 -->
 
 ---
@@ -712,7 +724,10 @@ One toggle, per task. Denominated in your real workload.
 - The instability may be a software problem, not a model-size one. The fix might be code, not a $10k box.
 
 <!--
-1:00 | End on momentum, this is live research, not a post-mortem. Three threads: cut my real agents fully over to local and live on it, keep the measurement rig running on real daily tasks not synthetic benches, and the exciting one, add verification-loop scaffolding. Land this hard: published results show guardrails took an eight-billion-parameter model from fifty-three percent to ninety-nine percent on agentic workflows. So the instability we measured a few slides ago might be a software problem, not a model-size problem, the fix could be code, not a ten-thousand-dollar box. That single reframe turns the whole weakness into something solvable, and it leaves the room optimistic instead of resigned.
+[1:00]
+SAY: "This is live research, not a post-mortem. Three threads: cut my real agents fully over to local, keep the measurement rig running on real daily tasks, and the exciting one, add verification-loop scaffolding. Published results show guardrails took an eight-billion-parameter model from fifty-three percent to ninety-nine percent on agentic workflows. So the instability we measured might be a software problem, not a model-size one, the fix could be code, not a ten-thousand-dollar box."
+
+CUE: End on momentum. That last reframe turns the weakness into something solvable, leaves the room optimistic.
 -->
 
 ---
@@ -731,7 +746,10 @@ One toggle, per task. Denominated in your real workload.
 </div>
 
 <!--
-1:00 | The practical warnings, the stuff that bit me, so anyone who tries this skips the pain. The one that gets everybody: swap the model mid-conversation in Claude Code and you get an instant 400, because CC replays the entire stored history, tool calls, cache, system prompt, and it no longer matches the new backend. Fix is dumb-simple: clear or restart the session when you change models. Low quant quietly degrades tool-calling, so the agent gets worse at USING tools even when answers look fine; run q6 not q4. Forgetting think:false is a silent multiple-x tax. The instability was a stale model, re-bench monthly. A pile of Ollama operational traps. And 16GB is a demo, not a platform. None are dealbreakers, they're the potholes, now you know where they are.
+[1:00]
+SAY: "The potholes, so you skip the pain. The one that gets everybody: swap the model mid-conversation in Claude Code and you get an instant 400, because it replays the whole stored history and it no longer matches the new backend. Fix is dumb-simple, clear the session. Low quant quietly degrades tool-calling, run q6 not q4. Forgetting think-false is a silent tax. A stale model was the instability, re-bench monthly. And sixteen gigs is a demo, not a platform."
+
+CUE: None are dealbreakers, they're potholes, now you know where they are.
 -->
 
 ---
@@ -743,21 +761,27 @@ One toggle, per task. Denominated in your real workload.
 <div class="dim" style="color:#FFED4C">Benchmarks: minibench · repobench · appbench</div>
 
 <!--
-0:30 | Close on the one-line thesis, and say it slowly: the win is real, and the caveat is real too. Point them at the repo, everything is reproducible, the benchmarks are real code they can clone and run. Then open the floor. The questions to be ready for: why not vLLM or MLX for more speed, what about just always running the eighty-billion, would guardrails really fix the instability, and what's the ROI if I'm already paying for cloud anyway. The answers all live in Parts Three and Four, point back to the relevant slide. Time check: if you hit this slide around thirty minutes, you nailed the pacing.
+[0:30]
+SAY: "The win is real, and the caveat is real too. Everything's in the repo, reproducible, the benchmarks are real code you can clone and run. Let's open it up."
+
+CUE: Say the thesis slowly. Q&A to expect: why not vLLM/MLX for speed, why not always run the 80B, would guardrails fix it, ROI if already paying cloud. Answers are in Parts Three and Four. ~30 min here = nailed the pacing.
 -->
 
 ---
 ## PS: the field moved while I built this deck
 
-- Mid-build, Vicki Boykis published *Running local models is good now* (Jun 15), and Hacker News piled on with a 1,589-point discussion of it.
-- They corroborate the core finding: context is the wall, ~30B MoE is the sweet spot, agentic local is real but model-dependent.
-- But my models are already last-gen, the community moved to **Qwen 3.6** (27b / 35b-a3b) and **Gemma 4**; my coder-30b is a step behind.
-- **Already tested:** re-ran the agent loop across Qwen 3.6, gpt-oss, and Gemma 4 (same box). All 5/5, all stable, no spirals. **gpt-oss 20b landed within ~1.5x of cloud.** The instability was the stale model.
-- **Still open:** the quant angle (q6 vs q4 on the 80B), and living on it daily. The verdict holds; the models won't, this moves weekly.
-- Sources: [blog](https://vickiboykis.com/2026/06/15/running-local-models-is-good-now/) + HN [discussion](https://news.ycombinator.com/item?id=48555993) and a [same-question thread](https://news.ycombinator.com/item?id=48542100)
+- Mid-build, **Vicki Boykis** published *Running local models is good now* (Jun 15) + a 1,589-pt HN thread.
+- Corroborates the core finding: context is the wall, ~30B MoE is the sweet spot, agentic local is model-dependent.
+- My models are already last-gen — community's on **Qwen 3.6** and **Gemma 4**.
+- **Already tested:** re-ran the loop on Qwen 3.6 / gpt-oss / Gemma 4 — all 5/5, stable. **gpt-oss within ~1.5x of cloud.**
+- **Still open:** quant (q6 vs q4 on the 80B), living on it daily. The verdict holds; the models won't.
+- Sources: [Boykis blog](https://vickiboykis.com/2026/06/15/running-local-models-is-good-now/) · HN [discussion](https://news.ycombinator.com/item?id=48555993) · [thread](https://news.ycombinator.com/item?id=48542100)
 
 <!--
-0:30 | The honest closer-after-the-closer. While I was literally building this deck, Vicki Boykis published almost exactly this argument, and HN spent fifteen hundred points debating it the same week. It corroborates the structure, context is the wall, thirty-billion MoE is the sweet spot, that's not just me. The humbling part: my specific models are already a step behind, the community is on Qwen three-six and Gemma four now, and people flagged that low quantization weakens tool-calling, which might be the real cause of the instability I measured. So the verdict holds but the numbers have a one-week shelf life, and I'm already re-running with newer models at higher quant.
+[0:30]
+SAY: "One honest footnote. While I was literally building this deck, Vicki Boykis published almost exactly this argument, and Hacker News spent fifteen hundred points debating it the same week. It corroborates the structure, that's not just me. The humbling part: my specific models are already a step behind, the community's on Qwen three-six and Gemma four now. So the verdict holds, but the numbers have a one-week shelf life."
+
+CUE: The closer-after-the-closer, only if time allows. People flagged low quant weakens tool-calling, possibly the real instability cause.
 -->
 
 ---
@@ -774,7 +798,10 @@ One toggle, per task. Denominated in your real workload.
 Not a replacement for [SWE-bench Verified](https://www.swebench.com/verified.html) (real GitHub issues across huge repos). Small, deterministic, reproducible probes to map the bounded-to-open-ended axis. minibench ≈ HumanEval/LiveCodeBench; agentbench + repobench ≈ a controlled mini-SWE-bench. Full code: [github.com/jconnolly/local-llm-pi5](https://github.com/jconnolly/local-llm-pi5/tree/main/benchmarks)
 
 <!--
-1:00 | Appendix for the methodology-curious and for Q&A. Four small benchmarks, all in the repo, all deterministic, no model grading a model. minibench = bounded/function-level (like HumanEval/LiveCodeBench); repobench + agentbench move toward open-ended/agentic (a controlled mini-SWE-bench); appbench = the long-horizon build. Honest caveat: not SWE-bench Verified (real GitHub issues on huge repos), mine are smaller/synthetic, but they're a reproducible probe on my own hardware and they agree with the public leaderboards.
+[1:00]
+SAY: "Four small benchmarks, all in the repo, all deterministic, no model grading a model. minibench is the bounded function-level axis, like HumanEval. repobench and agentbench move toward open-ended and agentic, a controlled mini-SWE-bench. appbench is the long-horizon build. The honest caveat: these aren't SWE-bench Verified, mine are smaller, but they're reproducible on my own hardware and they agree with the public leaderboards."
+
+CUE: Appendix, for the methodology-curious and Q&A.
 -->
 
 ---
@@ -792,5 +819,8 @@ Not a replacement for [SWE-bench Verified](https://www.swebench.com/verified.htm
 All scored deterministically with hidden pytest tests, no LLM judge. coder-30b and Opus both went 24/24. Full prompts + tests: [github.com/jconnolly/local-llm-pi5/.../minibench](https://github.com/jconnolly/local-llm-pi5/tree/main/benchmarks/minibench)
 
 <!--
-0:45 | The 24, grouped by my own easy-to-brutal tiers. Classic LeetCode-style: two-sum and valid-parens at the easy end, Dijkstra, word-ladder, a recursive-descent calculator at the brutal end. Scored by hidden pytest tests, deterministic, no model judging. Local coder and Opus both went 24/24, which is exactly why I needed harder open-ended tests; this bench saturated. Full list + tests in the repo.
+[0:45]
+SAY: "The twenty-four, grouped easy to brutal. Two-sum and valid-parens at the easy end, Dijkstra, word-ladder, a recursive-descent calculator at the brutal end. Hidden pytest, deterministic, no model judging. Local coder and Opus both went twenty-four for twenty-four, which is exactly why I needed harder open-ended tests, this bench saturated."
+
+CUE: Full list and tests in the repo.
 -->
