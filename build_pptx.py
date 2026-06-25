@@ -365,19 +365,31 @@ table_slide("The route: three machines, three verdicts",
     col_w=[0.7, 3.2, 5.5], font=12)
 
 _de1 = bullets_slide("Dead end #1: tilting at windmills",
-    [B("Verified on the actual board (I SSH'd in): Pi 5 + Hailo-10H, 40-TOPS INT4 NPU, 8GB on-board, HailoRT. A real gen-AI accelerator."),
+    [B("Verified on the actual board: Pi 5 + Hailo-10H, 40-TOPS INT4 NPU, 8GB on-board, HailoRT. A real gen-AI accelerator."),
      B("It does run LLMs: Hailo ships a GenAI model zoo plus Hailo-Ollama, an Ollama/OpenAI-compatible runtime,¹² so Claude Code can point at the accelerator."),
      B("But the whole LLM zoo is **1-3B** (Llama-3.2-1B, Qwen2.5-1.5B, DeepSeek-R1-1.5B)³, too small for a 64k-context coding agent."),
      B("And it's **slow**: I measured ~7 tok/s on the accelerator; independent reviewers find the Pi CPU often matches it⁴⁵ (Hailo markets 30-50 tok/s¹, not what I, or they, saw)."),
      B("**Lesson:** not a connection problem, a capability one. The models that fit are too small, the speed isn't there. Right edge box, wrong job for a coding agent.")],
     "1:00 | The cautionary tale, verified on the actual hardware and corrected since I first built this. The board is genuinely capable, a Hailo-10H, forty INT4 TOPS, eight gigs of its own memory. And to be fair to it, it DOES run language models: Hailo ships a generative-AI model zoo and an Ollama-compatible runtime called Hailo-Ollama, so you CAN point Claude Code at the accelerator. So why a dead end? Two reasons, both capability not connection. One, every LLM in that zoo is one-to-three billion parameters, Llama-3.2-1B, Qwen-2.5-1.5B, DeepSeek-R1-1.5B, far too small to drive a sixty-four-thousand-token coding agent. Two, it's slow, I measured about seven tokens a second on the accelerator and independent reviewers find the plain Pi CPU often matches it. Hailo markets thirty to fifty, but that's not what I saw or what the reviewers saw. Honest lesson: not a connection problem, a capability problem. Right edge box, wrong job for a coding agent.",
     font=15)
-_de1f = _de1.shapes.add_textbox(Inches(0.6), Inches(6.2), SW - Inches(1.2), Inches(0.7))
-_no_autofit(_de1f.text_frame)
-_de1r = _de1f.text_frame.paragraphs[0].add_run()
-_de1r.text = ("1. Hailo, 'Bringing on-device GenAI to the Pi' (hailo.ai/blog)    2. Hailo GenAI Model Zoo (github.com/hailo-ai/hailo_model_zoo_genai)    "
-              "3. raspberry.tips, 'AI HAT+ 2 / Hailo-10H local LLMs'    4. CNX Software, AI HAT+ 2 review    5. hardware-corner.net")
-_de1r.font.size = Pt(9); _de1r.font.italic = True; _de1r.font.color.rgb = DK2
+_de1f = _de1.shapes.add_textbox(Inches(0.6), Inches(6.18), SW - Inches(1.2), Inches(0.8))
+_no_autofit(_de1f.text_frame); _de1f.text_frame.word_wrap = True
+_de1p = _de1f.text_frame.paragraphs[0]
+_SRCS = [
+    ("1", "Hailo: On-device GenAI on the Pi AI HAT+ 2", "https://hailo.ai/blog/bringing-on-device-generative-ai-to-the-pi-when-and-why-youll-need-the-raspberry-pi-ai-hat-2/"),
+    ("2", "Hailo GenAI Model Zoo (GitHub)", "https://github.com/hailo-ai/hailo_model_zoo_genai"),
+    ("3", "raspberry.tips: AI HAT+ 2 local LLMs", "https://raspberry.tips/en/raspberrypi-tutorials/raspberry-pi-ai-hat-2-hailo-10h-40-tops-local-llms"),
+    ("4", "CNX Software: AI HAT+ 2 review", "https://www.cnx-software.com/2026/01/20/raspberry-pi-ai-hat-2-review-a-40-tops-ai-accelerator-tested-with-computer-vision-llm-and-vlm-workloads/"),
+    ("5", "hardware-corner.net: Local LLMs on the AI HAT+ 2", "https://www.hardware-corner.net/local-llms-raspberry-pi-ai-hat-plus-2/"),
+]
+for _i, (_n, _label, _url) in enumerate(_SRCS):
+    _nr = _de1p.add_run(); _nr.text = f"{_n} "
+    _nr.font.size = Pt(9); _nr.font.bold = True; _nr.font.color.rgb = DK2
+    _lr = _de1p.add_run(); _lr.text = _label
+    _lr.font.size = Pt(9); _lr.font.italic = True; _lr.font.color.rgb = PURPLE
+    _lr.hyperlink.address = _url
+    if _i < len(_SRCS) - 1:
+        _sp = _de1p.add_run(); _sp.text = "    "; _sp.font.size = Pt(9)
 
 _sw = bullets_slide("Showing the work: 2 slow 2 furious",
     [B("I SSH'd in and measured both paths myself. qwen2.5-coder:3b on the Pi 5 CPU (ollama): **5 tok/s**. Qwen2.5-1.5B on the Hailo accelerator itself: **7.3 tok/s** (downloaded the HEF, ran it)."),

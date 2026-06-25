@@ -225,13 +225,13 @@ Two genuinely different jobs, measured by two different benchmarks. **So which s
 
 ## Dead end #1: tilting at windmills
 
-- Verified on the actual board (I SSH'd in): Pi 5 + Hailo-10H, 40-TOPS (tera-operations per second) INT4 NPU, 8GB on-board, HailoRT. A real gen-AI accelerator.
+- Verified on the actual board: Pi 5 + Hailo-10H, 40-TOPS (tera-operations per second) INT4 NPU, 8GB on-board, HailoRT. A real gen-AI accelerator.
 - It *does* run LLMs: Hailo ships a GenAI model zoo plus Hailo-Ollama, an Ollama/OpenAI-compatible runtime,<sup>1,2</sup> so Claude Code can point at the accelerator.
 - But the whole LLM zoo is **1-3B** (Llama-3.2-1B, Qwen2.5-1.5B, DeepSeek-R1-1.5B),<sup>3</sup> too small for a 64k-context coding agent.
 - And it's **slow**: I measured ~7 tok/s on the accelerator; independent reviewers find the Pi CPU often matches it<sup>4,5</sup> (Hailo markets 30-50 tok/s,<sup>1</sup> not what I, or they, saw).
 - **Lesson:** not a connection problem, a capability one. The models that fit are too small, the speed isn't there. Right edge box, wrong job for a coding agent.
 
-<div class="fn">1. Hailo, "Bringing on-device GenAI to the Pi" (hailo.ai/blog) &nbsp; 2. Hailo GenAI Model Zoo (github.com/hailo-ai/hailo_model_zoo_genai) &nbsp; 3. raspberry.tips, "AI HAT+ 2 / Hailo-10H local LLMs" &nbsp; 4. CNX Software, AI HAT+ 2 review &nbsp; 5. hardware-corner.net, "Local LLMs on the Pi AI HAT+ 2"</div>
+<div class="fn"><sup>1</sup>&nbsp;<a href="https://hailo.ai/blog/bringing-on-device-generative-ai-to-the-pi-when-and-why-youll-need-the-raspberry-pi-ai-hat-2/">Hailo: On-device GenAI on the Pi AI HAT+ 2</a> &nbsp;&nbsp; <sup>2</sup>&nbsp;<a href="https://github.com/hailo-ai/hailo_model_zoo_genai">Hailo GenAI Model Zoo (GitHub)</a> &nbsp;&nbsp; <sup>3</sup>&nbsp;<a href="https://raspberry.tips/en/raspberrypi-tutorials/raspberry-pi-ai-hat-2-hailo-10h-40-tops-local-llms">raspberry.tips: AI HAT+ 2 local LLMs</a> &nbsp;&nbsp; <sup>4</sup>&nbsp;<a href="https://www.cnx-software.com/2026/01/20/raspberry-pi-ai-hat-2-review-a-40-tops-ai-accelerator-tested-with-computer-vision-llm-and-vlm-workloads/">CNX Software: AI HAT+ 2 review</a> &nbsp;&nbsp; <sup>5</sup>&nbsp;<a href="https://www.hardware-corner.net/local-llms-raspberry-pi-ai-hat-plus-2/">hardware-corner.net: Local LLMs on the AI HAT+ 2</a></div>
 
 <!-- Hardware: Adafruit #6451, Raspberry Pi AI HAT+ 2, Hailo-10H, 40 TOPS INT4, 8GB on-board. NOT the original AI HAT+ (Hailo-8/8L). -->
 <!--
