@@ -354,24 +354,24 @@ _up = _u.shapes.add_picture(str(REPO / "viz" / "usage.png"), 0, 0, height=Inches
 _up.left = int((SW - _up.width) // 2); _up.top = Inches(1.45)
 _notes(_u, "[1:30]\nSAY: \"The full audit, all 2,177 prompts, classified by project. Two headlines. One, it's almost exactly half DSG work, half personal projects outside work. Two, a huge chunk of the personal half is privacy-sensitive, my finances, my home network, my thermostat, and that's local's natural home, the data never leaves the house. And it's not a compromise, when a local model categorized my credit-card charges it was genuinely good, I didn't need the cloud.\"\n\nCUE: This is why local matters beyond coding, the private bounded-classification work is half my usage.")
 
-table_slide("The route: three machines, three verdicts",
-    ["Stop", "Hardware", "What this stop taught me"],
-    [["1", "Raspberry Pi 5 + AI HAT+ 2 (Hailo-10H)", "Dead end: only tiny 1-3B LLMs fit, ~7 tok/s (measured). Too small + slow for a coding agent"],
-     ["2", "MacBook Air M2 16GB ('Maral')", "Did the grunt work (~5 hrs). qwen3:14b ~10 tok/s, kinda slow"],
-     ["3", "The tuning wall", "think:false = ~3x; quant sweep; prompt slim"],
-     ["4", "Reality check", "Can you just buy your way to the top? (Part 2)"],
-     ["5", "Mac Studio M3 Ultra 96GB", "The machine that finally earned its keep (Part 3)"]],
-    notes="[1:30]\nSAY: \"This is the map. Stop one, the Raspberry Pi, a dead end, I'll show you why. Stop two, a spare MacBook Air I call Maral, where I learned everything. Stop three, a tuning wall, and the single best speedup of the project. Stop four, the reality check, can you just buy your way to the top, that's part two. Stop five, the Mac Studio, the machine that finally earned its keep, the verdict's in part three.\"\n\nCUE: Walk it, don't read every cell. Tease, don't spoil, numbers come later. The lessons are in the trip.",
-    col_w=[0.7, 3.2, 5.5], font=12)
-
-_de1 = bullets_slide("Dead end #1: tilting at windmills",
-    [B("Verified on the actual board: Pi 5 + Hailo-10H, 40-TOPS INT4 NPU, 8GB on-board, HailoRT. A real gen-AI accelerator."),
-     B("It does run LLMs: Hailo ships a GenAI model zoo plus Hailo-Ollama, an Ollama/OpenAI-compatible runtime,¹² so Claude Code can point at the accelerator."),
-     B("But the whole LLM zoo is **1-3B** (Llama-3.2-1B, Qwen2.5-1.5B, DeepSeek-R1-1.5B)³, too small for a 64k-context coding agent."),
-     B("And it's **slow**: I measured ~7 tok/s on the accelerator; independent reviewers find the Pi CPU often matches it⁴⁵ (Hailo markets 30-50 tok/s¹, not what I, or they, saw)."),
-     B("**Takeaway:** not a connection problem, a capability one. The models that fit are too small, the speed isn't there. Right edge box, wrong job for a coding agent.")],
-    "[1:00]\nSAY: \"I verified this on the actual board, and to be fair to it, the Hailo does run language models now: Hailo ships a generative-AI model zoo and an Ollama-compatible runtime, so you can point Claude Code at it. So why a dead end? Two reasons, both capability, not connection. One, every model in that LLM zoo is one to three billion parameters, far too small for a sixty-four-thousand-token coding agent. Two, it's slow, I measured about seven tokens a second, and reviewers find the plain CPU often matches it. Hailo markets thirty to fifty, but that's not what I, or they, saw.\"\n\nCUE: Corrected since I first built this, own that. Takeaway: a capability problem, not a connection one. Sources on the slide.",
-    font=15)
+_de1 = bullets_slide("Dead end #1: the Pi (tilting at windmills)",
+    [B("Pi 5 + Hailo-10H, 40-TOPS NPU. A real gen-AI accelerator."),
+     B("It does run LLMs, Hailo GenAI zoo + an Ollama/OpenAI-compatible runtime.¹²"),
+     B("But the zoo is **1-3B**, too small for a 64k-context coding agent.³"),
+     B("Measured **~7 tok/s**; reviewers find the **CPU often beats it**⁴⁵ (Hailo markets 30-50)."),
+     B("**Takeaway:** a capability problem, not a connection one. Wrong job for a coding agent.")],
+    "[1:30]\nSAY: \"I verified this on the actual board, and to be fair, the Hailo does run LLMs now, a generative-AI model zoo plus an Ollama-compatible runtime, so you can point Claude Code at it. So why a dead end? Two reasons, both capability, not connection. One, every model in that zoo is one to three billion parameters, far too small for a sixty-four-thousand-token coding agent. Two, it's slow, I measured about seven tokens a second, and reviewers find the plain CPU often beats it, one literally called it more like a decelerator than an accelerator. Great low-power chatbot, never a coding backend.\"\n\nCUE: Corrected since I first built this, own that. Let the gif play. Sources on the slide.",
+    font=16)
+_de1.placeholders[1].width = Inches(6.7)
+_dgif = _de1.shapes.add_picture(str(REPO / "viz" / "fast-furious.gif"), Inches(7.4), Inches(2.2), width=Inches(3.7))
+_dcap = _de1.shapes.add_textbox(Inches(7.4), Inches(2.2) + _dgif.height + Inches(0.06), Inches(3.8), Inches(0.8))
+_no_autofit(_dcap.text_frame)
+_dcp = _dcap.text_frame.paragraphs[0]; _dcp.alignment = PP_ALIGN.CENTER
+_dcr = _dcp.add_run(); _dcr.text = "“more like an AI decelerator than an AI accelerator”"
+_dcr.font.size = Pt(12); _dcr.font.italic = True; _dcr.font.color.rgb = DK2
+_dcp2 = _dcap.text_frame.add_paragraph(); _dcp2.alignment = PP_ALIGN.CENTER
+_dcr2 = _dcp2.add_run(); _dcr2.text = "— CNX Software, AI HAT+ 2 review"
+_dcr2.font.size = Pt(10); _dcr2.font.color.rgb = DK2
 _de1f = _de1.shapes.add_textbox(Inches(0.6), Inches(6.18), SW - Inches(1.2), Inches(0.8))
 _no_autofit(_de1f.text_frame); _de1f.text_frame.word_wrap = True
 _de1p = _de1f.text_frame.paragraphs[0]
@@ -390,26 +390,6 @@ for _i, (_n, _label, _url) in enumerate(_SRCS):
     _lr.hyperlink.address = _url
     if _i < len(_SRCS) - 1:
         _sp = _de1p.add_run(); _sp.text = "    "; _sp.font.size = Pt(9)
-
-_sw = bullets_slide("Showing the work: 2 slow 2 furious",
-    [B("Measured both paths: CPU (ollama) **5 tok/s** · Hailo accelerator **7.3 tok/s**"),
-     B("Reviewers: **CPU often beats the Hailo** (R1-1.5B 6.7 vs 9.0 · Coder-1.5B 8.1 vs 10.3 · Llama3.2-3B 2.6 vs 4.8)"),
-     B("Hailo's real win: low power, not speed"),
-     B("**Bottom line:** great low-power chatbot, never a coding agent (mine botched 'reverse a string')"),
-     B("Sources: CNX Software · hardware-corner.net, AI HAT+ 2 reviews")],
-    font=13,
-    notes="[1:30]\nSAY: \"I measured both paths myself. On the CPU, about five tokens a second on a 3B coder. On the Hailo accelerator, seven-point-three on a 1.5B. Those felt off, so I checked independent reviewers, and the plain CPU often beats the Hailo, one literally called it more like a decelerator than an accelerator. The whole lineup is one to three billion, and when I ran it, it got 'reverse a string' wrong.\"\n\nCUE: The fun one, let the gif play. The chip's real win is low power, not speed. Great chatbot, never a coding backend.")
-# narrow bullets + the Fast & Furious gif (right) with the 'decelerator' quote as its caption
-_sw.placeholders[1].width = Inches(6.9)
-_fg = _sw.shapes.add_picture(str(REPO / "viz" / "fast-furious.gif"), Inches(7.55), Inches(2.1), width=Inches(4.0))
-_fc = _sw.shapes.add_textbox(Inches(7.55), Inches(2.1) + _fg.height + Inches(0.06), Inches(4.0), Inches(1.0))
-_no_autofit(_fc.text_frame)
-_p = _fc.text_frame.paragraphs[0]; _p.alignment = PP_ALIGN.CENTER
-_r1 = _p.add_run(); _r1.text = "“more like an AI decelerator than an AI accelerator”"
-_r1.font.size = Pt(13); _r1.font.italic = True; _r1.font.color.rgb = DK2
-_p2 = _fc.text_frame.add_paragraph(); _p2.alignment = PP_ALIGN.CENTER
-_r2 = _p2.add_run(); _r2.text = "— CNX Software, AI HAT+ 2 review"
-_r2.font.size = Pt(11); _r2.font.color.rgb = DK2
 
 bullets_slide("Maral: a spare 16GB Air, punching above its weight",
     [B("qwen3:8b / :14b via Ollama's Anthropic endpoint, wired into Claude Code with one env block"),
@@ -449,13 +429,6 @@ _fn(_rcf.text_frame.paragraphs[0],
 _fn(_rcf.text_frame.add_paragraph(),
     "** Not an Anthropic shill, I'm trying to fire my own $200/mo Claude bill. The numbers are just what they are.")
 
-bullets_slide("So the decision is about how close, not parity",
-    [B("Parity's off the table, so stop chasing it."),
-     B("The real question becomes: **how close can I get for sensible money, and what do I do about the gap?**"),
-     B("Answer that with your actual task mix, not dollars or ideology."),
-     B("So I bought a box to find out.")],
-    "[1:00]\nSAY: \"Once parity's off the table, the question changes from 'can I match it' to 'how close can I get for sensible money, and what do I do about the gap?' You answer that with your actual task mix, not ideology and not the sticker price. So I went and bought a box to find out.\"\n\nCUE: Keep it a QUESTION, do NOT answer it here. Hold the hybrid recommendation and the dollar figure for Part Four, that's the payoff.")
-
 _buy = bullets_slide("The buy: a used M3 Ultra 96GB",
     [B("Apple-direct was 4 months backordered (M3 Ultra was EOL'd)"),
      B("Every reseller went dry within days, only the grey market left"),
@@ -478,16 +451,9 @@ table_slide("The verdict: local ties cloud on coding",
     [["**qwen3-coder:30b (local)**", "**24 / 24**", "**68 tok/s**"],
      ["Opus 4.8 (cloud)", "24 / 24", "-"],
      ["qwen3:32b dense", "16 / 18", "20 tok/s (skip)"]],
-    "Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest scoring. Local understood the assignment: tied Opus on every one.",
-    "[1:30]\nSAY: \"Twenty-four coding problems, easy up to LeetCode-hard, scored deterministically with pytest, no model judging itself. The local thirty-billion coder tied Opus on every single one, at sixty-eight tokens a second, for free.\"\n\nCUE: Stress the rigor before the result. Then plant the honesty coming: this bench saturated, my model couldn't lose on it. Don't oversell, the next slides complicate this.",
+    "Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest scoring. Local tied Opus on every one. **But both went 24/24 - a bench your best model can't lose has stopped measuring. So I built harder tests.**",
+    "[1:30]\nSAY: \"Twenty-four coding problems, easy up to LeetCode-hard, scored deterministically with pytest, no model judging itself. The local thirty-billion coder tied Opus on every single one, at sixty-eight tokens a second, for free. But here's the catch: both went twenty-four for twenty-four, so this bench has stopped measuring anything. A benchmark your best model can't lose on is dead weight. What it can't see is the axis that bites day to day, long multi-file agentic work. So I built harder tests.\"\n\nCUE: Stress the rigor, then pivot to the honesty: the bench saturated, so the rest of Part Three is the harder tests. Don't oversell the tie.",
     col_w=[4, 2, 2.5])
-
-bullets_slide("But a benchmark you can't lose isn't measuring",
-    [B("coder-30b **and** Opus both went 24/24, the bench saturated."),
-     B("A benchmark your best model can't lose on has stopped telling you anything."),
-     B("What it can't see is the axis that matters day to day: long, multi-file, agentic work."),
-     B("So I built harder tests. The rest of this part is what they found.")],
-    "[1:30]\nSAY: \"Here's the catch. Both my local model and Opus went twenty-four for twenty-four, so this bench has stopped measuring anything. A benchmark your best model can't lose on is dead weight. What it can't see is the axis that actually bites day to day, long multi-file agentic work in a big unfamiliar repo. So I built harder tests.\"\n\nCUE: The bridge, NOT the verdict. Keep them in suspense, the verdict lands at the reconciliation at the end of the part.")
 
 table_slide("Why the Studio is fast: bandwidth, not parameters",
     ["Box", "Memory bandwidth", "coder-30b speed"],
@@ -496,14 +462,6 @@ table_slide("Why the Studio is fast: bandwidth, not parameters",
     "Same model, 4x faster, purely the memory bus. **MoE (mixture of experts) beats dense:** the dense 32B was mediocre and slow; the 30B MoE activates only 3B params per token, so it streams far less from memory each step, running 3x faster than the dense 32B and scoring higher. (M3 Ultra 819 GB/s per Apple spec; Pi 5 ~17 GB/s.)",
     "[1:30]\nSAY: \"Same model, same quant, eight times the memory bandwidth gives you about four times the tokens per second. The Mac Studio's memory bus is the whole story, it's not about raw compute. And the mixture-of-experts punchline: a thirty-billion MoE that only activates three billion parameters per token beats a dense thirty-two-billion, faster and higher-scoring, because only the active experts stream from memory each token.\"\n\nCUE: The one technical slide. Buying advice: optimize for memory bandwidth, run MoE, don't chase GPU teraflops.",
     col_w=[3.2, 3, 3])
-
-bullets_slide("Bonus: one box = a full local AI server",
-    [B("With OLLAMA_MAX_LOADED_MODELS=3, all resident at once (~38GB, 50GB free):"),
-     B1("coder-30b, the coding agent"),
-     B1("qwen2.5-VL, vision / OCR"),
-     B1("nomic-embed, RAG (retrieval-augmented generation) embeddings"),
-     B("Plus qwen3-next:80b (80B, 64 tok/s, bigger brain, same speed)")],
-    "[1:00]\nSAY: \"Ninety-six gigs holds the coding agent, a vision model, and an embedding model for search, all resident at once, thirty-eight gigs used, fifty free. So one box is the coding, vision, and retrieval backend for the whole house. And the eighty-billion model runs at the same speed as the thirty-billion, because both activate only three billion parameters per token, a free quality upgrade with no speed penalty.\"\n\nCUE: Brisk, it's a value-add, not the core argument. Don't dwell.")
 
 table_slide("But the agent loop is where local gets cooked",
     ["", "pass", "avg wall-clock", "turns (range)"],
@@ -517,13 +475,6 @@ image_slide("Watch it: the agent loop side by side",
     REPO / "viz" / "agent-race.gif", width_in=10.2,
     sub="Recording of the real runs at 8x speed, left flails to 9 turns/110s, right is clean at 5 turns/17s.",
     notes="[1:00]\nSAY: \"Same one-line bug. The cloud agent, on the right, has been done for ninety seconds while the local one, on the left, is still grinding.\"\n\nCUE: Let it play silent the first few seconds. Point at the moment the right side freezes green. This is a recording of the real runs, sped up eight times, not a mockup.")
-
-bullets_slide("It's not caching, it's convergence",
-    [B("Ollama **does** prefix-cache; the big token counts are CC's accounting, not re-compute"),
-     B("Real cost = turn-count instability: the 30B swings 4-41 turns"),
-     B("Cloud converges in 5, every time"),
-     B("The '68 tok/s, ties Opus' number was single-turn. It hid all of this.")],
-    "[1:30]\nSAY: \"My first theory was, local has no prompt caching, so it re-computes everything. Wrong. Ollama does cache, about thirty thousand tokens cached, only two hundred fifty new per turn, the scary big numbers were just Claude Code's accounting display. The real culprit is convergence: the thirty-billion model can't reliably drive a tool-loop to the finish. And that headline sixty-eight-tokens-a-second, ties-Opus number was single-turn, it hid all of this.\"\n\nCUE: Use the honest \\\"I was wrong\\\" beat, it builds trust. Meta-point: single-turn benchmarks hide multi-turn instability. That's why you measure the loop.")
 
 table_slide("Tested it: the instability was the model",
     ["same agent loop, same box", "pass", "turns", "avg time"],
@@ -572,28 +523,23 @@ table_slide("The reconciliation",
 section_slide("PART FOUR", "Economics & the call",
     notes="[0:05]\nSAY: \"Part four. So what does this actually cost, and what should you do on Monday morning?\"\n\nCUE: Quick beat. SLIDO: glance at the feed, read any new question first.")
 
-bullets_slide("The economics",
-    [B("Cloud: ~$200/mo, about $2,400/yr, indefinitely"),
-     B("Local: one up-front cost, then **$0/mo** after"),
-     B("**Breakeven ~2 years**, then it's basically free real estate, for the work local handles well"),
-     B("Privacy bonus: code never leaves the LAN"),
-     B("The catch: it's a supplement, not a full replacement. Hard repo work still routes to cloud.")],
-    "[1:00]\nSAY: \"Cloud is about two hundred a month, forever. The box is a one-time cost, then zero. Breakeven is roughly two years, and after that it's pure savings, but be honest, only for the slice of work local handles well. It shrinks the cloud bill, it doesn't zero it. The non-money win that often matters more: code never leaves your network, and for client or regulated work that can justify the box on its own.\"\n\nCUE: The money slide, what a decision-maker wants. Keep saying 'supplement, not replacement,' that's what keeps it from sounding like a sales pitch.")
+bullets_slide("The call: economics + the setup",
+    [B("Cloud ~$200/mo forever; box = one-time, then **$0/mo**. **Breakeven ~2 years.**"),
+     B("Privacy: code never leaves the LAN."),
+     B("**Hybrid:** `claude` routes to the local Studio (the 80%, daily coding); `claude-cloud` to Opus (the hard 20%)."),
+     B("**Sweet spot:** Mac Studio, **64-96GB**, MoE coder model, a few thousand."),
+     B("Supplement, not replacement, hard repo work still routes to cloud.")],
+    "[1:30]\nSAY: \"The money, then the call. Cloud is two hundred a month forever; the box is a one-time cost, then zero, breakeven about two years. After that it's pure savings, but only for the slice local handles well, it shrinks the bill, it doesn't zero it. So the whole talk reduces to one architecture: hybrid. Two shell aliases, one routes to the local Studio for the eighty percent, one to Opus for the hard twenty, you pick per task. The buying advice: a single dev wants a Mac Studio, sixty-four to ninety-six gigs, an MoE coder, a few thousand dollars.\"\n\nCUE: The Monday-morning slide. If someone photographs one, it's this. Keep saying 'supplement, not replacement.'")
 
-bullets_slide("Recommendation",
-    [B("**Hybrid, not either/or:**"),
-     B1("`claude` routes to the local Studio (the 80%: daily coding, free, private, fast)"),
-     B1("`claude-cloud` routes to Opus 4.8 (the 20%: hard cross-file repo work)"),
-     B("One toggle, per task. Denominated in your real workload."),
-     B("**Single-dev sweet spot:** Mac Studio, 64-96GB, MoE coder model, a few thousand")],
-    "[1:00]\nSAY: \"The whole talk reduces to one architecture: hybrid. Two shell aliases, one routes to the local Studio, one routes to Opus, you pick per task, no lock-in. The buying advice: a single developer wants a Mac Studio, sixty-four to ninety-six gigs, an MoE coder model, a few thousand dollars. Not the parity-chase box I debunked in Part Two, not the sixteen-gig toy from Part One.\"\n\nCUE: The actionable takeaway, Monday morning. If someone photographs one slide, it's this one, hold it an extra beat.")
-
-bullets_slide("Caveats that matter",
-    [B("'Local SOTA at home' is real in 2026, narrowly, on bounded coding"),
-     B("On open-ended engineering it is not, and no honest setup pretends otherwise"),
-     B("16GB is too small; >96GB is overkill for one person"),
-     B("Benchmarks saturate, measure your task mix, not a leaderboard")],
-    "[1:00]\nSAY: \"Let me name my own weaknesses first. 'Local SOTA at home' is true only if you append 'narrowly, on bounded coding.' On open-ended engineering it's not, and no honest setup pretends otherwise. Sixteen gigs is too small to live on, more than ninety-six is overkill for one person. And benchmarks saturate, the only one that matters is your own task mix.\"\n\nCUE: Q&A insurance, pre-answer the hostile questions by naming the weaknesses yourself.")
+bullets_slide("Caveats & gotchas",
+    [B("'Local SOTA at home' is real, narrowly, bounded coding only. Open-ended engineering, no."),
+     B("16GB too small, 96GB+ overkill for one dev. Benchmarks saturate, measure your task mix."),
+     B("**Swapping models mid-session = instant `API Error: 400`**, /clear or a fresh session."),
+     B("**Low quant (q4) silently breaks tool-calling**, q6 is the agentic sweet spot."),
+     B("**Forgetting `think:false`** = a silent ~3-8x tax. **A stale model IS the instability**, re-bench monthly."),
+     B("Ollama traps: restart kills an in-flight `pull`; `ollama ps` shows empty (check `ps aux | grep llama-server`).")],
+    "[1:30]\nSAY: \"Let me name my own weaknesses first. 'Local SOTA at home' is true only if you append 'narrowly, bounded coding'; on open-ended engineering it's not. Sixteen gigs is too small to live on, ninety-six-plus is overkill for one person, and benchmarks saturate, the only one that matters is your task mix. Then the operational potholes: swap the model mid-conversation and you get an instant four-hundred error, just clear the session. Low quant quietly breaks tool-calling, run q6 not q4. Forgetting think-false is a silent tax. And a stale model was the instability, re-bench monthly.\"\n\nCUE: Q&A insurance plus the practical warnings in one. None are dealbreakers, they're potholes, now you know where they are.",
+    font=16)
 
 bullets_slide("What's next (this is being measured)",
     [B("**Auto-router on the Pi:** classify each prompt, send bounded work to the Studio + hard repo work to cloud, per-prompt. The dead-end Pi finally earns its keep."),
@@ -602,51 +548,11 @@ bullets_slide("What's next (this is being measured)",
      B("Instability may be software, not model-size. The fix might be code, not a $10k box.")],
     "[1:00]\nSAY: \"This is live research, not a post-mortem. The one I'm most excited about: an auto-router running on the Pi, the same Pi that was a dead end in Part One, classifying each prompt and sending bounded work to the local Studio, hard repo work to cloud, automatically, prompt by prompt. Beyond that, cut my agents fully over to local, and add verification-loop scaffolding. Published results show guardrails took an eight-billion model from fifty-three to ninety-nine percent. So the instability might be a software problem, the fix could be code, not a ten-thousand-dollar box.\"\n\nCUE: End on momentum. The router is the callback, the dead-end Pi gets redeemed. The last reframe turns the weakness into something solvable.")
 
-bullets_slide("Stumbling blocks (learned the hard way)",
-    [B("Swapping models mid-conversation = instant `API Error: 400`. Claude Code replays the whole stored history (tool blocks, cache, system prompt) and it doesn't match the new backend. Fix: /clear or a fresh session per swap."),
-     B("Low quant silently breaks tool-calling. q4 degrades the agent loop, not just the prose; q6 is the agentic sweet spot."),
-     B("Forgetting think:false = an invisible ~3-8x token + latency tax. One env var, easy to leave off."),
-     B("A stale model IS the instability. A last-gen coder spiraled to 41 turns on a 1-line fix; a current model did it in 7. Re-bench monthly, the field moves weekly."),
-     B("Ollama traps: restarting the service kills an in-flight `ollama pull`; `ollama ps` reads empty (0.30.7 display bug, check `ps aux | grep llama-server`); it needs the full Resources/ dir or it 500s."),
-     B("16GB is a demo, not a platform: the WiFi driver crashed under memory pressure, and the bus starves the model.")],
-    "[1:00]\nSAY: \"The potholes, so you skip the pain. The one that gets everybody: swap the model mid-conversation in Claude Code and you get an instant 400, because it replays the whole stored history and it no longer matches the new backend. Fix is dumb-simple, clear the session. Low quant quietly degrades tool-calling, run q6 not q4. Forgetting think-false is a silent tax. A stale model was the instability, re-bench monthly. And sixteen gigs is a demo, not a platform.\"\n\nCUE: None are dealbreakers, they're potholes, now you know where they are.",
-    font=15)
-
 title_slide("Thank you",
     "The win is real. So is the caveat.\n"
     "Repo + full write-up: github.com/jconnolly/local-llm-pi5\n"
     "Benchmarks: minibench, repobench, appbench",
     notes="[0:30]\nSAY: \"The win is real, and the caveat is real too. Everything's in the repo, reproducible, the benchmarks are real code you can clone and run. Let's open it up.\"\n\nCUE: Say the thesis slowly. Q&A to expect: why not vLLM/MLX, why not always run the 80B, would guardrails fix it, ROI if already paying cloud. Answers in Parts Three and Four. ~30 min here = nailed the pacing.")
-
-bullets_slide("PS: the field moved while I built this deck",
-    [B("Mid-build, **Vicki Boykis** published 'Running local models is good now' (Jun 15) + a 1,589-pt HN thread."),
-     B("Corroborates the core finding: context is the wall, ~30B MoE is the sweet spot, agentic local is model-dependent."),
-     B("My models are already last-gen, community's on **Qwen 3.6** and **Gemma 4**."),
-     B("**Already tested:** re-ran the loop on Qwen 3.6 / gpt-oss / Gemma 4, all 5/5, stable. **gpt-oss within ~1.5x of cloud.**"),
-     B("**Still open:** quant (q6 vs q4 on the 80B), living on it daily. The verdict holds; the models won't."),
-     B("Sources: vickiboykis.com/2026/06/15 + Hacker News (items 48555993, 48542100)")],
-    "[0:30]\nSAY: \"One honest footnote. While I was literally building this deck, Vicki Boykis published almost exactly this argument, and Hacker News spent fifteen hundred points debating it the same week. It corroborates the structure, that's not just me. The humbling part: my specific models are already a step behind, the community's on Qwen three-six and Gemma four now. So the verdict holds, but the numbers have a one-week shelf life.\"\n\nCUE: The closer-after-the-closer, only if time allows. People flagged low quant weakens tool-calling, possibly the real instability cause.")
-
-table_slide("Appendix: my 4 benchmarks (all reproducible, in the repo)",
-    ["Benchmark", "What it tests", "Scoring", "Axis"],
-    [["minibench", "24 algorithmic problems, easy to brutal (LeetCode-hard)", "hidden pytest, no LLM judge", "bounded (function-level)"],
-     ["repobench", "multi-file bugs, subtle off-by-ones (4 moderate + 5 hard)", "hidden pytest", "middle (multi-file)"],
-     ["appbench", "build a playable game in one index.html (Space Invaders)", "Playwright 7-check rubric", "bounded build, long-horizon"],
-     ["agentbench", "the real Claude Code agent loop on multi-file bug-fixes", "re-run tests + turns / time / cost", "agentic (multi-turn)"]],
-    "Not a replacement for SWE-bench Verified (real GitHub issues across huge repos). These are small, deterministic, reproducible probes I run on my own box to map the bounded-to-open-ended axis. minibench ~ HumanEval/LiveCodeBench; agentbench + repobench ~ a controlled mini-SWE-bench. Full code: github.com/jconnolly/local-llm-pi5/tree/main/benchmarks",
-    "[1:00]\nSAY: \"Four small benchmarks, all in the repo, all deterministic, no model grading a model. minibench is the bounded function-level axis, like HumanEval. repobench and agentbench move toward open-ended and agentic, a controlled mini-SWE-bench. appbench is the long-horizon build. The honest caveat: these aren't SWE-bench Verified, mine are smaller, but they're reproducible on my own hardware and they agree with the public leaderboards.\"\n\nCUE: Appendix, for the methodology-curious and Q&A.",
-    col_w=[1.3, 4.3, 2.6, 2.2], font=12)
-
-table_slide("Appendix: minibench's 24 problems",
-    ["Tier", "Problems"],
-    [["Easy (3)", "valid parentheses, two-sum, roman to integer"],
-     ["Medium (3)", "merge intervals, longest unique substring, spiral matrix"],
-     ["Hard (6)", "word break, coin change, LRU cache, edit distance, trapping rain water, median of two sorted arrays"],
-     ["Expert (6)", "regex matching, N-queens, basic calculator, longest increasing subsequence, min path sum, decode ways"],
-     ["Brutal (6)", "Dijkstra, calculator with parentheses, longest palindromic subsequence, buy/sell stock (k txns), word ladder, eval RPN"]],
-    "All scored deterministically with hidden pytest tests, no LLM judge. coder-30b and Opus both went 24/24. Full prompts + tests: github.com/jconnolly/local-llm-pi5/tree/main/benchmarks/minibench",
-    "[0:45]\nSAY: \"The twenty-four, grouped easy to brutal. Two-sum and valid-parens at the easy end, Dijkstra, word-ladder, a recursive-descent calculator at the brutal end. Hidden pytest, deterministic, no model judging. Local coder and Opus both went twenty-four for twenty-four, which is exactly why I needed harder open-ended tests, this bench saturated.\"\n\nCUE: Full list and tests in the repo.",
-    col_w=[1.4, 8.2], font=12)
 
 prs.save(str(OUT))
 print(f"saved {OUT}  ({len(prs.slides.__iter__.__self__._sldIdLst)} slides)")

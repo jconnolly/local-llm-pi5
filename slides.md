@@ -234,70 +234,34 @@ CUE: This is why local matters beyond coding, the private bounded-classification
 
 ---
 
-## The route: three machines, three verdicts
+## Dead end #1: the Pi (tilting at windmills)
 
-| Stop | Hardware | What this stop taught me |
-|---|---|---|
-| 1 | Raspberry Pi 5 + AI HAT+ 2 (Hailo-10H) | Dead end: only tiny 1-3B LLMs fit, ~7 tok/s (measured). Too small + slow for a coding agent |
-| 2 | MacBook Air M2 16GB ('Maral') | Did the grunt work (~5 hrs). qwen3:14b ~10 tok/s, kinda slow |
-| 3 | The tuning wall | think:false = ~3x; quant sweep; prompt slim |
-| 4 | Reality check | Can you just buy your way to the top? *(Part 2)* |
-| 5 | Mac Studio M3 Ultra 96GB | The machine that finally earned its keep *(Part 3)* |
+<div class="cols">
+<div class="txt" style="font-size:19px">
 
-<!--
-[1:30]
-SAY: "This is the map. Stop one, the Raspberry Pi, a dead end, I'll show you why. Stop two, a spare MacBook Air I call Maral, where I learned everything. Stop three, a tuning wall, and the single best speedup of the project. Stop four, the reality check, can you just buy your way to the top, that's part two. Stop five, the Mac Studio, the machine that finally earned its keep, the verdict's in part three."
+- Pi 5 + Hailo-10H, 40-TOPS NPU. A real gen-AI accelerator.
+- It *does* run LLMs — Hailo GenAI zoo + an Ollama/OpenAI-compatible runtime.<sup>1,2</sup>
+- But the zoo is **1-3B** — too small for a 64k-context coding agent.<sup>3</sup>
+- Measured **~7 tok/s**; reviewers find the **CPU often beats it**<sup>4,5</sup> (Hailo markets 30-50).
+- **Takeaway:** a capability problem, not a connection one. Wrong job for a coding agent.
 
-CUE: Walk it, don't read every cell. Tease, don't spoil, numbers come later. The lessons are in the trip.
--->
+</div>
+<div class="pic">
 
----
+![w:380](viz/fast-furious.gif)
+<div class="cap">"more like an AI decelerator than an AI accelerator"<br>— CNX Software, AI HAT+ 2 review</div>
 
-## Dead end #1: tilting at windmills
-
-- Verified on the actual board: Pi 5 + Hailo-10H, 40-TOPS (tera-operations per second) INT4 NPU, 8GB on-board, HailoRT. A real gen-AI accelerator.
-- It *does* run LLMs: Hailo ships a GenAI model zoo plus Hailo-Ollama, an Ollama/OpenAI-compatible runtime,<sup>1,2</sup> so Claude Code can point at the accelerator.
-- But the whole LLM zoo is **1-3B** (Llama-3.2-1B, Qwen2.5-1.5B, DeepSeek-R1-1.5B),<sup>3</sup> too small for a 64k-context coding agent.
-- And it's **slow**: I measured ~7 tok/s on the accelerator; independent reviewers find the Pi CPU often matches it<sup>4,5</sup> (Hailo markets 30-50 tok/s,<sup>1</sup> not what I, or they, saw).
-- **Takeaway:** not a connection problem, a capability one. The models that fit are too small, the speed isn't there. Right edge box, wrong job for a coding agent.
+</div>
+</div>
 
 <div class="fn"><sup>1</sup>&nbsp;<a href="https://hailo.ai/blog/bringing-on-device-generative-ai-to-the-pi-when-and-why-youll-need-the-raspberry-pi-ai-hat-2/">Hailo: On-device GenAI on the Pi AI HAT+ 2</a> &nbsp;&nbsp; <sup>2</sup>&nbsp;<a href="https://github.com/hailo-ai/hailo_model_zoo_genai">Hailo GenAI Model Zoo (GitHub)</a> &nbsp;&nbsp; <sup>3</sup>&nbsp;<a href="https://raspberry.tips/en/raspberrypi-tutorials/raspberry-pi-ai-hat-2-hailo-10h-40-tops-local-llms">raspberry.tips: AI HAT+ 2 local LLMs</a> &nbsp;&nbsp; <sup>4</sup>&nbsp;<a href="https://www.cnx-software.com/2026/01/20/raspberry-pi-ai-hat-2-review-a-40-tops-ai-accelerator-tested-with-computer-vision-llm-and-vlm-workloads/">CNX Software: AI HAT+ 2 review</a> &nbsp;&nbsp; <sup>5</sup>&nbsp;<a href="https://www.hardware-corner.net/local-llms-raspberry-pi-ai-hat-plus-2/">hardware-corner.net: Local LLMs on the AI HAT+ 2</a></div>
 
 <!-- Hardware: Adafruit #6451, Raspberry Pi AI HAT+ 2, Hailo-10H, 40 TOPS INT4, 8GB on-board. NOT the original AI HAT+ (Hailo-8/8L). -->
 <!--
 [1:00]
-SAY: "I verified this on the actual board, and to be fair to it, the Hailo does run language models now: Hailo ships a generative-AI model zoo and an Ollama-compatible runtime, so you can point Claude Code at it. So why a dead end? Two reasons, both capability, not connection. One, every model in that LLM zoo is one to three billion parameters, far too small for a sixty-four-thousand-token coding agent. Two, it's slow, I measured about seven tokens a second, and reviewers find the plain CPU often matches it. Hailo markets thirty to fifty, but that's not what I, or they, saw."
+SAY: "I verified this on the actual board, and to be fair, the Hailo does run LLMs now, a generative-AI model zoo plus an Ollama-compatible runtime, so you can point Claude Code at it. So why a dead end? Two reasons, both capability, not connection. One, every model in that zoo is one to three billion parameters, far too small for a sixty-four-thousand-token coding agent. Two, it's slow, I measured about seven tokens a second, and reviewers find the plain CPU often beats it, one literally called it more like a decelerator than an accelerator. Great low-power chatbot, never a coding backend."
 
-CUE: Corrected since I first built this, own that. Takeaway: a capability problem, not a connection one. Sources on the slide.
--->
-
----
-
-## Showing the work: 2 slow 2 furious
-
-<div class="cols">
-<div class="txt" style="font-size:19px">
-
-- Measured both paths: CPU (ollama) **5 tok/s** · Hailo accelerator **7.3 tok/s**
-- Reviewers: **CPU often beats the Hailo** (R1-1.5B 6.7 vs 9.0 · Coder-1.5B 8.1 vs 10.3 · Llama3.2-3B 2.6 vs 4.8)
-- Hailo's real win: low power, not speed
-- **Bottom line:** great low-power chatbot, never a coding agent (mine botched "reverse a string")
-- Sources: [CNX Software](https://www.cnx-software.com/2026/01/20/raspberry-pi-ai-hat-2-review-a-40-tops-ai-accelerator-tested-with-computer-vision-llm-and-vlm-workloads/) · [hardware-corner.net](https://www.hardware-corner.net/local-llms-raspberry-pi-ai-hat-plus-2/)
-
-</div>
-<div class="pic">
-
-![w:400](viz/fast-furious.gif)
-<div class="cap">"more like an AI decelerator than an AI accelerator"<br>— CNX Software, AI HAT+ 2 review</div>
-
-</div>
-</div>
-
-<!--
-[1:30]
-SAY: "I measured both paths myself. On the CPU, about five tokens a second on a 3B coder. On the Hailo accelerator, seven-point-three on a 1.5B. Those felt off, so I checked independent reviewers, and the plain CPU often beats the Hailo, one literally called it more like a decelerator than an accelerator. The whole lineup is one to three billion, and when I ran it, it got 'reverse a string' wrong."
-
-CUE: The fun one, let the gif play. The chip's real win is low power, not speed. Great chatbot, never a coding backend.
+CUE: Corrected since I first built this, own that. Let the gif play. Sources on the slide.
 -->
 
 ---
@@ -374,22 +338,6 @@ CUE: Define SWE-bench before the numbers land, or the %s mean nothing. Key point
 
 ---
 
-## So the decision is about how close, not parity
-
-- Parity's off the table, so stop chasing it.
-- The real question becomes: **how close can I get for sensible money, and what do I do about the gap?**
-- Answer that with your actual task mix, not dollars or ideology.
-- So I bought a box to find out.
-
-<!--
-[1:00]
-SAY: "Once parity's off the table, the question changes from 'can I match it' to 'how close can I get for sensible money, and what do I do about the gap?' You answer that with your actual task mix, not ideology and not the sticker price. So I went and bought a box to find out."
-
-CUE: Keep it a QUESTION, do NOT answer it here. Hold the hybrid recommendation and the dollar figure for Part Four, that's the payoff.
--->
-
----
-
 ## The buy: a used M3 Ultra 96GB
 
 <div class="cols">
@@ -440,29 +388,13 @@ CUE: Build energy here, this is the best part. SLIDO: glance at the feed, read a
 | Opus 4.8 (cloud) | 24 / 24 | — |
 | qwen3:32b dense | 16 / 18 | 20 tok/s (skip) |
 
-Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest scoring. Local understood the assignment: tied Opus on every one.
+Mini-bench: 24 algorithmic problems, easy to LeetCode-hard, deterministic pytest scoring. Local tied Opus on every one. **But both went 24/24 — a bench your best model can't lose has stopped measuring. So I built harder tests.**
 
 <!--
 [1:30]
-SAY: "Twenty-four coding problems, easy up to LeetCode-hard, scored deterministically with pytest, no model judging itself. The local thirty-billion coder tied Opus on every single one, at sixty-eight tokens a second, for free."
+SAY: "Twenty-four coding problems, easy up to LeetCode-hard, scored deterministically with pytest, no model judging itself. The local thirty-billion coder tied Opus on every single one, at sixty-eight tokens a second, for free. But here's the catch: both went twenty-four for twenty-four, so this bench has stopped measuring anything. A benchmark your best model can't lose on is dead weight. What it can't see is the axis that bites day to day, long multi-file agentic work. So I built harder tests."
 
-CUE: Stress the rigor before the result. Then plant the honesty coming: this bench saturated, my model couldn't lose on it. Don't oversell, the next slides complicate this.
--->
-
----
-
-## But a benchmark you can't lose isn't measuring
-
-- coder-30b **and** Opus both went 24/24 — the bench saturated.
-- A benchmark your best model can't lose on has stopped telling you anything.
-- What it can't see is the axis that matters day to day: long, multi-file, agentic work.
-- So I built harder tests. The rest of this part is what they found.
-
-<!--
-[1:30]
-SAY: "Here's the catch. Both my local model and Opus went twenty-four for twenty-four, so this bench has stopped measuring anything. A benchmark your best model can't lose on is dead weight. What it can't see is the axis that actually bites day to day, long multi-file agentic work in a big unfamiliar repo. So I built harder tests."
-
-CUE: The bridge, NOT the verdict. Keep them in suspense, the verdict lands at the reconciliation at the end of the part.
+CUE: Stress the rigor, then pivot to the honesty: the bench saturated, so the rest of Part Three is the harder tests. Don't oversell the tie.
 -->
 
 ---
@@ -483,25 +415,6 @@ Same model, 4x faster, purely the memory bus. **MoE (mixture of experts) beats d
 SAY: "Same model, same quant, eight times the memory bandwidth gives you about four times the tokens per second. The Mac Studio's memory bus is the whole story, it's not about raw compute. And the mixture-of-experts punchline: a thirty-billion MoE that only activates three billion parameters per token beats a dense thirty-two-billion, faster and higher-scoring, because only the active experts stream from memory each token."
 
 CUE: The one technical slide. Buying advice: optimize for memory bandwidth, run MoE, don't chase GPU teraflops.
--->
-
----
-
-## Bonus: one box = a full local AI server
-
-With `OLLAMA_MAX_LOADED_MODELS=3`, all resident at once (~38GB, 50GB free):
-
-- coder-30b, the coding agent
-- qwen2.5-VL, vision / OCR
-- nomic-embed, RAG (retrieval-augmented generation) embeddings
-
-Plus qwen3-next:80b (80B, 64 tok/s, bigger brain, same speed).
-
-<!--
-[1:00]
-SAY: "Ninety-six gigs holds the coding agent, a vision model, and an embedding model for search, all resident at once, thirty-eight gigs used, fifty free. So one box is the coding, vision, and retrieval backend for the whole house. And the eighty-billion model runs at the same speed as the thirty-billion, because both activate only three billion parameters per token, a free quality upgrade with no speed penalty."
-
-CUE: Brisk, it's a value-add, not the core argument. Don't dwell.
 -->
 
 ---
@@ -535,22 +448,6 @@ CUE: THE turning point, give it room. Pause after the 41-turn line, let it hang.
 SAY: "Same one-line bug. The cloud agent, on the right, has been done for ninety seconds while the local one, on the left, is still grinding."
 
 CUE: Let it play silent the first few seconds. Point at the moment the right side freezes green. This is a recording of the real runs, sped up eight times, not a mockup.
--->
-
----
-
-## It's not caching, it's convergence
-
-- Ollama **does** prefix-cache; the big token counts are CC's accounting, not re-compute
-- Real cost = turn-count instability: the 30B swings 4-41 turns
-- Cloud converges in 5, every time
-- The "68 tok/s, ties Opus" number was single-turn. It hid all of this.
-
-<!--
-[1:30]
-SAY: "My first theory was, local has no prompt caching, so it re-computes everything. Wrong. Ollama does cache, about thirty thousand tokens cached, only two hundred fifty new per turn, the scary big numbers were just Claude Code's accounting display. The real culprit is convergence: the thirty-billion model can't reliably drive a tool-loop to the finish. And that headline sixty-eight-tokens-a-second, ties-Opus number was single-turn, it hid all of this."
-
-CUE: Use the honest "I was wrong" beat, it builds trust. Meta-point: single-turn benchmarks hide multi-turn instability. That's why you measure the loop.
 -->
 
 ---
@@ -665,55 +562,41 @@ CUE: Quick beat. SLIDO: glance at the feed, read any new question first.
 
 ---
 
-## The economics
+## The call: economics + the setup
 
-- Cloud: ~$200/mo, about $2,400/yr, indefinitely
-- Local: one up-front cost, then **$0/mo** after
-- **Breakeven ~2 years**, then it's basically free real estate, for the work local handles well
-- Privacy bonus: code never leaves the LAN
-- The catch: it's a supplement, not a full replacement. Hard repo work still routes to cloud.
+- Cloud ~$200/mo forever; box = one-time, then **$0/mo**. **Breakeven ~2 years.**
+- Privacy: code never leaves the LAN.
+- **Hybrid:** `claude` → local Studio (the 80%, daily coding); `claude-cloud` → Opus (the hard 20%).
+- **Sweet spot:** Mac Studio, **64-96GB**, MoE coder model, a few thousand.
+- Supplement, not replacement — hard repo work still routes to cloud.
 
 <!--
-[1:00]
-SAY: "Cloud is about two hundred a month, forever. The box is a one-time cost, then zero. Breakeven is roughly two years, and after that it's pure savings, but be honest, only for the slice of work local handles well. It shrinks the cloud bill, it doesn't zero it. The non-money win that often matters more: code never leaves your network, and for client or regulated work that can justify the box on its own."
+[1:30]
+SAY: "The money, then the call. Cloud is two hundred a month forever; the box is a one-time cost, then zero, breakeven about two years. After that it's pure savings, but only for the slice local handles well, it shrinks the bill, it doesn't zero it. So the whole talk reduces to one architecture: hybrid. Two shell aliases, one routes to the local Studio for the eighty percent, one to Opus for the hard twenty, you pick per task. The buying advice: a single dev wants a Mac Studio, sixty-four to ninety-six gigs, an MoE coder, a few thousand dollars."
 
-CUE: The money slide, what a decision-maker wants. Keep saying "supplement, not replacement," that's what keeps it from sounding like a sales pitch.
+CUE: The Monday-morning slide. If someone photographs one, it's this. Keep saying "supplement, not replacement."
 -->
 
 ---
 
-## Recommendation
+## Caveats & gotchas
 
-**Hybrid, not either/or:**
+<div style="font-size:19px">
 
-- `claude` routes to the local Studio (the 80%: daily coding, free, private, fast)
-- `claude-cloud` routes to Opus 4.8 (the 20%: hard cross-file repo work)
+- 'Local SOTA at home' is real, narrowly — bounded coding only. Open-ended engineering, no.
+- 16GB too small, 96GB+ overkill for one dev. Benchmarks saturate — measure your task mix.
+- **Swapping models mid-session = instant `API Error: 400`** — `/clear` or a fresh session.
+- **Low quant (q4) silently breaks tool-calling** — q6 is the agentic sweet spot.
+- **Forgetting `think:false`** = a silent ~3-8x tax. **A stale model IS the instability** — re-bench monthly.
+- Ollama traps: restart kills an in-flight `pull`; `ollama ps` shows empty (check `ps aux | grep llama-server`).
 
-One toggle, per task. Denominated in your real workload.
-
-**Single-dev sweet spot:** Mac Studio, **64-96GB**, MoE coder model, a few thousand.
-
-<!--
-[1:00]
-SAY: "The whole talk reduces to one architecture: hybrid. Two shell aliases, one routes to the local Studio, one routes to Opus, you pick per task, no lock-in. The buying advice: a single developer wants a Mac Studio, sixty-four to ninety-six gigs, an MoE coder model, a few thousand dollars. Not the parity-chase box I debunked in Part Two, not the sixteen-gig toy from Part One."
-
-CUE: The actionable takeaway, Monday morning. If someone photographs one slide, it's this one, hold it an extra beat.
--->
-
----
-
-## Caveats that matter
-
-- 'Local SOTA at home' is real in 2026, narrowly, on bounded coding
-- On open-ended engineering it is not, and no honest setup pretends otherwise
-- 16GB is too small; 96GB+ is overkill for one person
-- Benchmarks saturate, measure your task mix, not a leaderboard
+</div>
 
 <!--
-[1:00]
-SAY: "Let me name my own weaknesses first. 'Local SOTA at home' is true only if you append 'narrowly, on bounded coding.' On open-ended engineering it's not, and no honest setup pretends otherwise. Sixteen gigs is too small to live on, more than ninety-six is overkill for one person. And benchmarks saturate, the only one that matters is your own task mix."
+[1:30]
+SAY: "Let me name my own weaknesses first. 'Local SOTA at home' is true only if you append 'narrowly, bounded coding'; on open-ended engineering it's not. Sixteen gigs is too small to live on, ninety-six-plus is overkill for one person, and benchmarks saturate, the only one that matters is your task mix. Then the operational potholes: swap the model mid-conversation and you get an instant four-hundred error, just clear the session. Low quant quietly breaks tool-calling, run q6 not q4. Forgetting think-false is a silent tax. And a stale model was the instability, re-bench monthly."
 
-CUE: Q&A insurance, pre-answer the hostile questions by naming the weaknesses yourself.
+CUE: Q&A insurance plus the practical warnings in one. None are dealbreakers, they're potholes, now you know where they are.
 -->
 
 ---
@@ -734,28 +617,6 @@ CUE: End on momentum. The router is the callback, the dead-end Pi gets redeemed.
 
 ---
 
-## Stumbling blocks (learned the hard way)
-
-<div style="font-size:18px">
-
-- **Swapping models mid-conversation = instant `API Error: 400`.** Claude Code replays the whole stored history (tool blocks, cache, system prompt); it no longer matches the new backend. Fix: `/clear` or a fresh session per swap.
-- **Low quant silently breaks tool-calling.** q4 degrades the agent loop, not just the prose; q6 is the agentic sweet spot.
-- **Forgetting `think:false`** = an invisible ~3-8x token + latency tax. One env var, easy to leave off.
-- **A stale model IS the instability.** A last-gen coder spiraled to 41 turns on a 1-line fix; a current model did it in 7. Re-bench monthly, the field moves weekly.
-- **Ollama traps:** restarting the service kills an in-flight `ollama pull`; `ollama ps` reads empty (0.30.7 display bug, check `ps aux | grep llama-server`); needs the full `Resources/` dir or it 500s.
-- **16GB is a demo, not a platform:** the WiFi driver crashed under memory pressure, and the bus starves the model.
-
-</div>
-
-<!--
-[1:00]
-SAY: "The potholes, so you skip the pain. The one that gets everybody: swap the model mid-conversation in Claude Code and you get an instant 400, because it replays the whole stored history and it no longer matches the new backend. Fix is dumb-simple, clear the session. Low quant quietly degrades tool-calling, run q6 not q4. Forgetting think-false is a silent tax. A stale model was the instability, re-bench monthly. And sixteen gigs is a demo, not a platform."
-
-CUE: None are dealbreakers, they're potholes, now you know where they are.
--->
-
----
-
 <!-- _class: section center -->
 # The win is real. So is the caveat.
 
@@ -766,63 +627,5 @@ CUE: None are dealbreakers, they're potholes, now you know where they are.
 [0:30]
 SAY: "The win is real, and the caveat is real too. Everything's in the repo, reproducible, the benchmarks are real code you can clone and run. Let's open it up."
 
-CUE: Say the thesis slowly. Q&A to expect: why not vLLM/MLX for speed, why not always run the 80B, would guardrails fix it, ROI if already paying cloud. Answers are in Parts Three and Four. ~30 min here = nailed the pacing.
--->
-
----
-## PS: the field moved while I built this deck
-
-- Mid-build, **Vicki Boykis** published *Running local models is good now* (Jun 15) + a 1,589-pt HN thread.
-- Corroborates the core finding: context is the wall, ~30B MoE is the sweet spot, agentic local is model-dependent.
-- My models are already last-gen — community's on **Qwen 3.6** and **Gemma 4**.
-- **Already tested:** re-ran the loop on Qwen 3.6 / gpt-oss / Gemma 4 — all 5/5, stable. **gpt-oss within ~1.5x of cloud.**
-- **Still open:** quant (q6 vs q4 on the 80B), living on it daily. The verdict holds; the models won't.
-- Sources: [Boykis blog](https://vickiboykis.com/2026/06/15/running-local-models-is-good-now/) · HN [discussion](https://news.ycombinator.com/item?id=48555993) · [thread](https://news.ycombinator.com/item?id=48542100)
-
-<!--
-[0:30]
-SAY: "One honest footnote. While I was literally building this deck, Vicki Boykis published almost exactly this argument, and Hacker News spent fifteen hundred points debating it the same week. It corroborates the structure, that's not just me. The humbling part: my specific models are already a step behind, the community's on Qwen three-six and Gemma four now. So the verdict holds, but the numbers have a one-week shelf life."
-
-CUE: The closer-after-the-closer, only if time allows. People flagged low quant weakens tool-calling, possibly the real instability cause.
--->
-
----
-
-## Appendix: my 4 benchmarks (all reproducible, in the repo)
-
-| Benchmark | What it tests | Scoring | Axis |
-|---|---|---|---|
-| minibench | 24 algorithmic problems, easy to brutal (LeetCode-hard) | hidden pytest, no LLM judge | bounded (function-level) |
-| repobench | multi-file bugs, subtle off-by-ones (4 moderate + 5 hard) | hidden pytest | middle (multi-file) |
-| appbench | build a playable game in one index.html (Space Invaders) | Playwright 7-check rubric | bounded build, long-horizon |
-| agentbench | the real Claude Code agent loop on multi-file bug-fixes | re-run tests + turns / time / cost | agentic (multi-turn) |
-
-Not a replacement for [SWE-bench Verified](https://www.swebench.com/verified.html) (real GitHub issues across huge repos). Small, deterministic, reproducible probes to map the bounded-to-open-ended axis. minibench ≈ HumanEval/LiveCodeBench; agentbench + repobench ≈ a controlled mini-SWE-bench. Full code: [github.com/jconnolly/local-llm-pi5](https://github.com/jconnolly/local-llm-pi5/tree/main/benchmarks)
-
-<!--
-[1:00]
-SAY: "Four small benchmarks, all in the repo, all deterministic, no model grading a model. minibench is the bounded function-level axis, like HumanEval. repobench and agentbench move toward open-ended and agentic, a controlled mini-SWE-bench. appbench is the long-horizon build. The honest caveat: these aren't SWE-bench Verified, mine are smaller, but they're reproducible on my own hardware and they agree with the public leaderboards."
-
-CUE: Appendix, for the methodology-curious and Q&A.
--->
-
----
-
-## Appendix: minibench's 24 problems
-
-| Tier | Problems |
-|---|---|
-| Easy (3) | valid parentheses, two-sum, roman to integer |
-| Medium (3) | merge intervals, longest unique substring, spiral matrix |
-| Hard (6) | word break, coin change, LRU cache, edit distance, trapping rain water, median of two sorted arrays |
-| Expert (6) | regex matching, N-queens, basic calculator, longest increasing subsequence, min path sum, decode ways |
-| Brutal (6) | Dijkstra, calculator with parentheses, longest palindromic subsequence, buy/sell stock (k txns), word ladder, eval RPN |
-
-All scored deterministically with hidden pytest tests, no LLM judge. coder-30b and Opus both went 24/24. Full prompts + tests: [github.com/jconnolly/local-llm-pi5/.../minibench](https://github.com/jconnolly/local-llm-pi5/tree/main/benchmarks/minibench)
-
-<!--
-[0:45]
-SAY: "The twenty-four, grouped easy to brutal. Two-sum and valid-parens at the easy end, Dijkstra, word-ladder, a recursive-descent calculator at the brutal end. Hidden pytest, deterministic, no model judging. Local coder and Opus both went twenty-four for twenty-four, which is exactly why I needed harder open-ended tests, this bench saturated."
-
-CUE: Full list and tests in the repo.
+CUE: Say the thesis slowly. Q&A to expect: why not vLLM/MLX, why not always run the 80B, would guardrails fix it, ROI if already paying cloud. ~30 min here = nailed the pacing.
 -->
