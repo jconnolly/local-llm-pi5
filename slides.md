@@ -140,9 +140,9 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 <div class="cols">
 <div class="txt">
 
-- I learn by jumping in and getting my hands on the thing.
-- I already had a Raspberry Pi from tinkering projects with my daughter.
-- Could it run a little LLM for the house? It did, so I got greedy: could it handle my actual dev workload?
+- Learn by doing, not reading spec sheets
+- Already had a Pi (projects with my daughter)
+- Ran a small LLM at home. Could it do real dev work?
 
 </div>
 <div class="pic">
@@ -169,7 +169,7 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 | Examples | a parser, a failing unit test, a data structure, a CLI tool, LeetCode | refactor across the repo, a feature touching 12 files, real SWE-bench |
 | Benchmark | **HumanEval, LiveCodeBench** (function-level) | **SWE-bench Verified** (repository-level) |
 
-Two genuinely different jobs, measured by two different benchmarks. **So which side does local actually win, and where does cloud stay ahead?** That's the question the rest of the talk measures.
+**Which side does local actually win? Where does cloud stay ahead?**
 
 <!--
 1:00 | The definition slide; the whole talk hinges on this distinction. Bounded coding = a self-contained problem you hold in your head and converge on in a few turns: a parser, a failing test, a small CLI tool. Open-ended = a vague task across a big unfamiliar codebase where the model must discover structure, juggle 64k+ context, grind through many turns: a repo-wide refactor, a real SWE-bench task. Two genuinely different jobs, with two different benchmarks. Do NOT tell them who wins each yet, that is the entire payoff of the talk. Just plant the two-axis framing and the open question, and let the suspense carry.

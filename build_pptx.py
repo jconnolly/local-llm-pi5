@@ -316,9 +316,9 @@ bullets_slide("The question: how capable could a home LLM get?",
     "1:00 | Lead with the honest motivation, not a spec sheet. The real question was simple and a little greedy: I want to run an LLM at home, how capable could it actually get? The bar I set was concrete, good enough to be my Claude Code backend so I can stop paying for cloud. That splits in two: is it even possible, and at what hardware and cost; and is it good enough, measured, not vibes. Plant the seed that 'good enough' will itself split later, bounded versus open-ended, and those give opposite answers. Last bullet is the north star: every number you'll see came from a script, not a feeling.")
 
 _pi5 = bullets_slide("Why start on a Raspberry Pi? Why not?",
-    [B("I learn by jumping in and getting my hands on the thing."),
-     B("I already had a Raspberry Pi from tinkering projects with my daughter."),
-     B("Could it run a little LLM for the house? It did, so I got greedy: could it handle my actual dev workload?")],
+    [B("Learn by doing, not reading spec sheets"),
+     B("Already had a Pi (projects with my daughter)"),
+     B("Ran a small LLM at home. Could it do real dev work?")],
     "1:00 | The human hook, and it matters because it stops the Raspberry Pi from looking naive. Be honest about how I work: I learn by jumping in and getting my hands on the thing, not by reading a spec sheet first. The origin is genuinely mundane, I had a Raspberry Pi lying around from tinkering projects with my daughter, and I wondered if it could run a little LLM for the house. It did, well enough that I got greedy and asked the real question, could it handle my actual dev workload? That escalating curiosity is the whole talk. So when the Pi turns out to be a dead end, that isn't me being dumb, it was intentionally myopic, I wanted to see the limits with my own eyes and feel them with my own hands, not predict them from a datasheet.")
 _pi5.placeholders[1].width = Inches(6.3)
 _pi5p = _pi5.shapes.add_picture(str(REPO / "viz" / "pi5-aihat.png"), Inches(7.0), Inches(2.45), width=Inches(3.45))
@@ -335,7 +335,7 @@ table_slide("Bounded coding vs open-ended repos",
      ["Agent loop", "few turns, converges fast", "many turns, sustained reasoning"],
      ["Examples", "a parser, a failing unit test, a data structure, a CLI tool, LeetCode", "refactor across the repo, a feature touching 12 files, real SWE-bench"],
      ["Benchmark", "**HumanEval, LiveCodeBench** (function-level)", "**SWE-bench Verified** (repository-level)"]],
-    "Two genuinely different jobs, measured by two different benchmarks. So which side does local actually win, and where does cloud stay ahead? That's the question the rest of the talk measures.",
+    "**Which side does local actually win? Where does cloud stay ahead?**",
     "1:00 | The definition slide; the whole talk hinges on this distinction. Bounded coding is a self-contained problem you hold in your head and converge on in a few turns, a parser, a failing test, a small CLI tool, measured by HumanEval and LiveCodeBench. Open-ended is a vague bug or feature across a big unfamiliar codebase, discover structure, juggle 64k-plus context, many turns, measured by SWE-bench Verified. Two genuinely different jobs. Do NOT tell them who wins each yet, that is the entire payoff of the talk, just plant the two-axis framing and the open question, and let the suspense carry.",
     col_w=[1.2, 4.0, 4.4], font=12)
 
