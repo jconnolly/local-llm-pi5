@@ -289,7 +289,7 @@ _title = title_slide(
     "Can a local LLM replace cloud Claude Code?",
     "Three weeks, three machines: from a Raspberry Pi to a gray-market used Mac Studio.",
     byline="John Connolly, Lead Product Engineer & tinkerer\nJune 2026",
-    notes="0:30 | Open cold, don't read the title. Say: 'Three weeks ago I asked a simple question, could I stop paying for cloud Claude Code and run the whole thing on hardware in my house. I spent the price of a used Mac Studio finding out.' Then point at the TL;DR box: bounded coding ties the frontier and it's free, the not-bad nod; open-ended repo work, not quite, you still want cloud, the skeptical face. Everything after this slide is me earning that one sentence with data. Set the tone: this is a measurement talk, not a vibes talk, every claim has a benchmark behind it.")
+    notes="[0:30]\nSAY: \"Three weeks ago I asked a simple question: could I stop paying for cloud Claude Code and run the whole thing on hardware in my house? I spent the price of a used Mac Studio finding out. The short answer is a qualified yes, and the qualification is the whole talk: for bounded coding, local ties the frontier, and it's free; for open-ended repo work, you still want cloud.\"\n\nCUE: Open cold, don't read the title. Point at the TL;DR box on 'bounded' then 'open-ended.' A measurement talk, not a vibes talk.")
 _tldr_two_gif(_title)
 
 bullets_slide("Agenda, where we're going (~30m)",
@@ -297,15 +297,15 @@ bullets_slide("Agenda, where we're going (~30m)",
      B("**Reality check:** you can't buy parity, the hardware call"),
      B("**The measured verdict:** one-shot, agent loop, the build test"),
      B("**Economics, recommendation, honest caveats**")],
-    "0:30 | Don't dwell. Four parts. Part 1 is the journey across three machines, that's the story. Part 2 is the uncomfortable truth that you can't buy your way to parity. Part 3 is the heart, the actual benchmarks, and it's where the surprise lives, so flag it now: 'Part 3 is the part that changed my mind.' Part 4 is the money and the recommendation. Tell them you'll leave time for Q&A. If you're running long, Part 1 is the part to compress.")
+    "[0:30]\nSAY: \"Four parts. Part one is the route across three machines. Part two, the uncomfortable truth that you can't buy your way to parity. Part three is the heart, the benchmarks, and it's the part that changed my mind. Part four, the money and the recommendation. I'll leave time for questions.\"\n\nCUE: Don't dwell. If running long, Part 1 is the part to compress.")
 
 _sl = image_slide("Got a question? Tell me live.",
     REPO / "viz" / "slido-qr.png", width_in=3.4,
     sub="**Scan** to ask anything, upvote, or drop feedback in real time   ·   app.sli.do/event/9YznQ5rvRQcGAqDi2v8jaW",
-    notes="0:40 | Do this before Part One, while everyone's still settling. Put the QR up and say: 'This whole talk is about measuring instead of vibing, so hold me to it. Scan this, it's a Slido, ask questions, drop feedback, upvote whatever you want answered, any time, you don't have to wait for the end.' Tell them you'll check it at every part break and read the top question aloud. Leave it up for a beat so the back row can scan. Lowers the bar for the quiet folks and gives you a live read on what's landing.")
+    notes="[0:40]\nSAY: \"This whole talk is about measuring instead of vibing, so hold me to it. Scan this, it's a Slido, ask questions, drop feedback, upvote whatever you want answered, any time, you don't have to wait for the end. I'll check it at every part break and read the top one aloud.\"\n\nCUE: Before Part One, while people settle. Leave the QR up a beat for the back row.")
 
 section_slide("PART ONE", "The route: three machines",
-    notes="5 sec | Quick beat, don't linger on dividers. Say: 'Part One, the route. How I got from a thirty-five-dollar Raspberry Pi to a used Mac Studio, and what each machine taught me.' Then move.")
+    notes="[0:05]\nSAY: \"Part one, the route. How I got from a thirty-five-dollar Raspberry Pi to a gray-market Mac Studio, and what each machine taught me.\"\n\nCUE: Quick beat, don't linger. SLIDO: glance at the feed, read any new question first.")
 
 bullets_slide("The question: how capable could a home LLM get?",
     [B("\"I want to run an LLM at home. How capable could it actually be?\""),
@@ -313,13 +313,13 @@ bullets_slide("The question: how capable could a home LLM get?",
      B("Two things to find out:"),
      B1("Is it possible, and at what hardware/cost?"),
      B1("Is it good enough? Measured, not vibes.")],
-    "1:00 | Lead with the honest motivation, not a spec sheet. The real question was simple and a little greedy: I want to run an LLM at home, how capable could it actually get? The bar I set was concrete, good enough to be my Claude Code backend so I can stop paying for cloud. That splits in two: is it even possible, and at what hardware and cost; and is it good enough, measured, not vibes. Plant the seed that 'good enough' will itself split later, bounded versus open-ended, and those give opposite answers. Last bullet is the north star: every number you'll see came from a script, not a feeling.")
+    "[1:00]\nSAY: \"The real question was simple, and a little greedy: I want to run an LLM at home, how capable could it actually get? The bar: good enough to be my Claude Code backend, so I can stop paying for cloud. That splits in two, is it possible, and at what hardware and cost, and is it good enough, measured, not vibes.\"\n\nCUE: Lead with motivation, not a spec sheet. Plant that 'good enough' itself splits later (bounded vs open-ended) with opposite answers. Last bullet is the north star.")
 
 _pi5 = bullets_slide("Why start on a Raspberry Pi? Why not?",
     [B("Learn by doing, not reading spec sheets"),
      B("Already had a Pi (projects with my daughter)"),
      B("Ran a small LLM at home. Could it do real dev work?")],
-    "1:00 | The human hook, and it matters because it stops the Raspberry Pi from looking naive. Be honest about how I work: I learn by jumping in and getting my hands on the thing, not by reading a spec sheet first. The origin is genuinely mundane, I had a Raspberry Pi lying around from tinkering projects with my daughter, and I wondered if it could run a little LLM for the house. It did, well enough that I got greedy and asked the real question, could it handle my actual dev workload? That escalating curiosity is the whole talk. So when the Pi turns out to be a dead end, that isn't me being dumb, it was intentionally myopic, I wanted to see the limits with my own eyes and feel them with my own hands, not predict them from a datasheet.")
+    "[1:00]\nSAY: \"I learn by jumping in, not reading a spec sheet. The origin's mundane: I had a Raspberry Pi from tinkering projects with my daughter, and wondered if it could run a little LLM for the house. It did, so I got greedy and asked the real question, could it handle my actual dev workload?\"\n\nCUE: The human hook, keeps the Pi from looking naive. When it turns out a dead end, that was intentional, I wanted to feel the limits, not predict them.")
 _pi5.placeholders[1].width = Inches(6.3)
 _pi5p = _pi5.shapes.add_picture(str(REPO / "viz" / "pi5-aihat.png"), Inches(7.0), Inches(2.45), width=Inches(3.45))
 _pi5c = _pi5.shapes.add_textbox(Inches(6.85), _pi5p.top + _pi5p.height + Inches(0.12), Inches(3.75), Inches(0.6))
@@ -336,7 +336,7 @@ table_slide("Bounded coding vs open-ended repos",
      ["Examples", "a parser, a failing unit test, a data structure, a CLI tool, LeetCode", "refactor across the repo, a feature touching 12 files, real SWE-bench"],
      ["Benchmark", "**HumanEval, LiveCodeBench** (function-level)", "**SWE-bench Verified** (repository-level)"]],
     "**Which side does local actually win? Where does cloud stay ahead?**",
-    "1:00 | The definition slide; the whole talk hinges on this distinction. Bounded coding is a self-contained problem you hold in your head and converge on in a few turns, a parser, a failing test, a small CLI tool, measured by HumanEval and LiveCodeBench. Open-ended is a vague bug or feature across a big unfamiliar codebase, discover structure, juggle 64k-plus context, many turns, measured by SWE-bench Verified. Two genuinely different jobs. Do NOT tell them who wins each yet, that is the entire payoff of the talk, just plant the two-axis framing and the open question, and let the suspense carry.",
+    "[1:00]\nSAY: \"Two genuinely different jobs. Bounded coding is a self-contained problem you hold in your head and finish in a few turns, a parser, a failing test, a small CLI tool, measured by HumanEval and LiveCodeBench. Open-ended is a vague task across a big unfamiliar codebase, sixty-thousand-plus tokens, many turns, measured by SWE-bench Verified. So which side does local actually win, and where does cloud stay ahead?\"\n\nCUE: The whole talk hinges on this. Do NOT answer who-wins yet, that's the payoff. Plant the two-axis framing and let the question hang.",
     col_w=[1.2, 4.0, 4.4], font=12)
 
 _q = _title_only("Where does the line fall? (the map we'll test)")
@@ -347,12 +347,12 @@ _no_autofit(_qcap.text_frame); _qcp = _qcap.text_frame.paragraphs[0]; _qcp.align
 _qcr = _qcp.add_run()
 _qcr.text = "Teal circle = my coding tasks, manually classified: they lean open-ended (~40% local / ~60% cloud). Most of my Claude Code use isn't coding at all (ops, Jira/Slack, infra, personal projects) - full 2,177-prompt breakdown next."
 _qcr.font.size = Pt(12); _qcr.font.color.rgb = DK2
-_notes(_q, "1:30 | The honest gut-check. I built this whole chart, then went and looked at my actual Claude Code history, 2,177 prompts across 68 projects. Two findings. One, the teal circle: my coding tasks, manually classified, straddle the line and lean to the cloud side, about sixty percent open-ended, exactly where local is weakest, so for me the hybrid case is even stronger. Two, the bigger surprise, most of what I use Claude Code for isn't even coding, it's ops, Jira and Slack coordination, infrastructure debugging, a personal finance app, even building this deck. The teal split is a manual estimate; the full project breakdown is the next slide. The shape is clear: my Claude Code is more of a general agent than a code generator, and the coding I do leans open-ended.")
+_notes(_q, "[1:30]\nSAY: \"I built this chart, then looked at my actual history, 2,177 prompts across 68 projects. The teal circle is my coding tasks: they straddle the line and lean cloud, about sixty percent open-ended, exactly where local is weakest. The bigger surprise, most of what I use Claude Code for isn't even coding, it's ops, Jira and Slack, infra, a finance app, building this deck.\"\n\nCUE: The teal split is a manual estimate; the full breakdown is next slide. Land it: my Claude Code is more general agent than code generator.")
 
 _u = _title_only("Half work, half personal (outside work)")
 _up = _u.shapes.add_picture(str(REPO / "viz" / "usage.png"), 0, 0, height=Inches(4.95))
 _up.left = int((SW - _up.width) // 2); _up.top = Inches(1.45)
-_notes(_u, "1:30 | The full audit, all 2,177 prompts, classified by which project they came from, far more reliable than guessing from the text. Two headlines. One, it's almost exactly half DSG work, half personal projects I do outside work, plus a sliver of scratch. The biggest single thing is the internal gateway POC for work; right behind it, my home network, a personal finance app, and yes, building this very deck. Two, and this changes the local story: a huge chunk of the personal half is privacy-sensitive, my finances, my home network, my thermostat. That is local's natural home, the data never leaves the house. And it's not a compromise: when I had a local model categorize my credit-card charges, it was genuinely good, I didn't need the cloud. So local isn't just for bounded coding, it's the obvious choice for the private, personal, bounded-classification work that's half of what I do.")
+_notes(_u, "[1:30]\nSAY: \"The full audit, all 2,177 prompts, classified by project. Two headlines. One, it's almost exactly half DSG work, half personal projects outside work. Two, a huge chunk of the personal half is privacy-sensitive, my finances, my home network, my thermostat, and that's local's natural home, the data never leaves the house. And it's not a compromise, when a local model categorized my credit-card charges it was genuinely good, I didn't need the cloud.\"\n\nCUE: This is why local matters beyond coding, the private bounded-classification work is half my usage.")
 
 table_slide("The route: three machines, three verdicts",
     ["Stop", "Hardware", "What this stop taught me"],
@@ -361,7 +361,7 @@ table_slide("The route: three machines, three verdicts",
      ["3", "The tuning wall", "think:false = ~3x; quant sweep; prompt slim"],
      ["4", "Reality check", "Can you just buy your way to the top? (Part 2)"],
      ["5", "Mac Studio M3 Ultra 96GB", "The machine that finally earned its keep (Part 3)"]],
-    notes="1:30 | This is the map, don't read every cell, walk it. Stop one, the Raspberry Pi, total dead end, I'll explain why in two slides. Stop two, a spare MacBook Air I call Maral, that's where I learned everything even though it only ran a few hours. Stop three, I hit a tuning wall and found the single best speedup of the whole project. Stop four, the reality check, which asks whether you can simply buy your way to the top, that's Part Two. Stop five, the Mac Studio, the machine that finally earned its keep, the verdict is Part Three. Tease, don't spoil, the numbers come later. The takeaway line: the lessons are in the trip, not just the destination.",
+    notes="[1:30]\nSAY: \"This is the map. Stop one, the Raspberry Pi, a dead end, I'll show you why. Stop two, a spare MacBook Air I call Maral, where I learned everything. Stop three, a tuning wall, and the single best speedup of the project. Stop four, the reality check, can you just buy your way to the top, that's part two. Stop five, the Mac Studio, the machine that finally earned its keep, the verdict's in part three.\"\n\nCUE: Walk it, don't read every cell. Tease, don't spoil, numbers come later. The lessons are in the trip.",
     col_w=[0.7, 3.2, 5.5], font=12)
 
 _de1 = bullets_slide("Dead end #1: tilting at windmills",
@@ -370,7 +370,7 @@ _de1 = bullets_slide("Dead end #1: tilting at windmills",
      B("But the whole LLM zoo is **1-3B** (Llama-3.2-1B, Qwen2.5-1.5B, DeepSeek-R1-1.5B)³, too small for a 64k-context coding agent."),
      B("And it's **slow**: I measured ~7 tok/s on the accelerator; independent reviewers find the Pi CPU often matches it⁴⁵ (Hailo markets 30-50 tok/s¹, not what I, or they, saw)."),
      B("**Takeaway:** not a connection problem, a capability one. The models that fit are too small, the speed isn't there. Right edge box, wrong job for a coding agent.")],
-    "1:00 | The cautionary tale, verified on the actual hardware and corrected since I first built this. The board is genuinely capable, a Hailo-10H, forty INT4 TOPS, eight gigs of its own memory. And to be fair to it, it DOES run language models: Hailo ships a generative-AI model zoo and an Ollama-compatible runtime called Hailo-Ollama, so you CAN point Claude Code at the accelerator. So why a dead end? Two reasons, both capability not connection. One, every LLM in that zoo is one-to-three billion parameters, Llama-3.2-1B, Qwen-2.5-1.5B, DeepSeek-R1-1.5B, far too small to drive a sixty-four-thousand-token coding agent. Two, it's slow, I measured about seven tokens a second on the accelerator and independent reviewers find the plain Pi CPU often matches it. Hailo markets thirty to fifty, but that's not what I saw or what the reviewers saw. Honest lesson: not a connection problem, a capability problem. Right edge box, wrong job for a coding agent.",
+    "[1:00]\nSAY: \"I verified this on the actual board, and to be fair to it, the Hailo does run language models now: Hailo ships a generative-AI model zoo and an Ollama-compatible runtime, so you can point Claude Code at it. So why a dead end? Two reasons, both capability, not connection. One, every model in that LLM zoo is one to three billion parameters, far too small for a sixty-four-thousand-token coding agent. Two, it's slow, I measured about seven tokens a second, and reviewers find the plain CPU often matches it. Hailo markets thirty to fifty, but that's not what I, or they, saw.\"\n\nCUE: Corrected since I first built this, own that. Takeaway: a capability problem, not a connection one. Sources on the slide.",
     font=15)
 _de1f = _de1.shapes.add_textbox(Inches(0.6), Inches(6.18), SW - Inches(1.2), Inches(0.8))
 _no_autofit(_de1f.text_frame); _de1f.text_frame.word_wrap = True
@@ -392,14 +392,13 @@ for _i, (_n, _label, _url) in enumerate(_SRCS):
         _sp = _de1p.add_run(); _sp.text = "    "; _sp.font.size = Pt(9)
 
 _sw = bullets_slide("Showing the work: 2 slow 2 furious",
-    [B("I SSH'd in and measured both paths myself. qwen2.5-coder:3b on the Pi 5 CPU (ollama): **5 tok/s**. Qwen2.5-1.5B on the Hailo accelerator itself: **7.3 tok/s** (downloaded the HEF, ran it)."),
-     B("The numbers felt sus, so I checked independent reviewers, and **the plain CPU often beats the Hailo on LLMs:**"),
-     B1("DeepSeek-R1 1.5B: 6.7 (Hailo) vs 9.0 (CPU). Qwen2.5-Coder 1.5B: 8.1 vs 10.3. Llama3.2 3B: 2.6 vs 4.8."),
-     B("Its real win is offloading the CPU and sipping power, not speed."),
-     B("**Bottom line:** the whole Hailo LLM zoo is 1-3B (yes, a 1.5B coder), and the accelerator can't beat the CPU. (Mine even botched 'reverse a string'.) Great low-power chatbot, never a coding agent."),
-     B("Sources: CNX Software + hardware-corner.net, AI HAT+ 2 reviews.")],
+    [B("Measured both paths: CPU (ollama) **5 tok/s** · Hailo accelerator **7.3 tok/s**"),
+     B("Reviewers: **CPU often beats the Hailo** (R1-1.5B 6.7 vs 9.0 · Coder-1.5B 8.1 vs 10.3 · Llama3.2-3B 2.6 vs 4.8)"),
+     B("Hailo's real win: low power, not speed"),
+     B("**Bottom line:** great low-power chatbot, never a coding agent (mine botched 'reverse a string')"),
+     B("Sources: CNX Software · hardware-corner.net, AI HAT+ 2 reviews")],
     font=13,
-    notes="1:30 | The fun one, fully verified. I SSHed into the actual Pi and measured both paths myself. The easy path, ollama on the CPU, about five tokens a second on a 3B coder. The fancy path, I downloaded the model onto the Hailo accelerator and ran it, seven-point-three tokens a second on a 1.5B. Then, because those numbers felt sus, I checked independent reviewers, and the plain Pi CPU often BEATS the Hailo on language models. One literally called it more like an AI decelerator than an accelerator. The chip's real benefit is offloading the CPU and low power, not speed. So the whole LLM lineup is one-to-three-billion, there's even a 1.5B coder, the accelerator can't beat the CPU, and when I ran it the model confidently got 'reverse a string' wrong. Two slow, two furious. Great low-power chatbot, never a coding backend. Sources are on the slide.")
+    notes="[1:30]\nSAY: \"I measured both paths myself. On the CPU, about five tokens a second on a 3B coder. On the Hailo accelerator, seven-point-three on a 1.5B. Those felt off, so I checked independent reviewers, and the plain CPU often beats the Hailo, one literally called it more like a decelerator than an accelerator. The whole lineup is one to three billion, and when I ran it, it got 'reverse a string' wrong.\"\n\nCUE: The fun one, let the gif play. The chip's real win is low power, not speed. Great chatbot, never a coding backend.")
 # narrow bullets + the Fast & Furious gif (right) with the 'decelerator' quote as its caption
 _sw.placeholders[1].width = Inches(6.9)
 _fg = _sw.shapes.add_picture(str(REPO / "viz" / "fast-furious.gif"), Inches(7.55), Inches(2.1), width=Inches(4.0))
@@ -419,14 +418,14 @@ bullets_slide("Maral: a spare 16GB Air, punching above its weight",
      B1("Real pain wasn't the model, it was memory bandwidth and the WiFi driver crashing under load (rude)"),
      B("16GB is the floor, not a platform. Ran on vibes and about 5 hours of uptime."),
      B("**Takeaway:** the model was never the weak link, the hardware was. 16GB is enough to prove the idea, not to live on it.")],
-    "1:30 | The workhorse chapter, keep it light. A spare sixteen-gig MacBook Air, I call it Maral, carried the whole proof of concept, and honestly it only ran about five hours total. Two surprises worth landing. ONE, tool-use, and this is worth unpacking because it was my single biggest fear. Claude Code is not a chatbot, it works by calling tools, Read a file, Edit a file, run a Bash command, Grep the codebase, and it does that through a strict function-calling protocol: the model has to emit well-formed JSON, pick the right tool, fill in the right arguments, then read the tool result and decide the next call. My worry was that a small open model would faceplant on the mechanics, malformed JSON, hallucinated tool names, wrong arguments, basically unable to drive the loop at all. It didn't. Qwen3 on the Air, wired in through Ollama's Anthropic-compatible endpoint, produced clean valid tool calls, picked the right tool, formatted the arguments correctly, and consumed the results, at parity with cloud out of the box. But be precise about what parity means here: it nailed the MECHANICS of tool-calling, which is different from reliably driving a long multi-turn loop all the way to the finish, the convergence problem I hit later and measure in Part Three. The protocol was never the bottleneck. TWO, the real pain was never the model's intelligence, it was the memory bus being slow and the WiFi driver literally crashing under memory pressure. The lesson: sixteen gigs is the floor where you can prove the idea, but it is not a platform you can live on, it ran on vibes. That sets up the obvious question: okay, what do I actually buy?")
+    "[1:30]\nSAY: \"A spare sixteen-gig MacBook Air carried the whole proof of concept, and it only ran about five hours total. The big surprise: tool-use just worked. Claude Code isn't a chatbot, it drives tools through strict function-calling, and my fear was that a small model would faceplant on the mechanics, malformed JSON, the wrong tool. It didn't, it was at parity with cloud out of the box. The real pain was never the model, it was slow memory and the WiFi driver crashing under pressure.\"\n\nCUE: Be precise, it nailed the MECHANICS of tool-calling, separate from driving a long loop to the finish, that convergence problem is Part Three. Takeaway: sixteen gigs proves the idea, can't host it. Sets up 'what do I buy?'")
 
 bullets_slide("The single best tuning knob: kill the thinking tax",
     [B("Qwen3 emits a <think> trace before every answer."),
      B("A coding answer needing 80 tokens cost 600, 8x the work."),
      B("`CLAUDE_CODE_DISABLE_THINKING=1`   (or {\"think\": false})"),
      B("**~3x speedup from one env var.** Everything else I tuned for a week? Secondary.")],
-    "1:30 | If they remember one config line from the whole talk, it's this one. Qwen3 is a reasoning model, it writes a hidden think trace before every answer. For chat that's great, for an agent doing lots of tiny tool calls it's pure overhead, an eighty-token edit was costing six hundred tokens. One environment variable turns it off and you get roughly a three-times real-world speedup. Audience beat: 'guess how much speedup all my fancy tuning, the quant sweeps, the cache settings, actually bought me. Now guess how much this one line bought me.' Everything else was a rounding error next to this.")
+    "[1:30]\nSAY: \"If you remember one config line, it's this. Qwen3 is a reasoning model, it writes a hidden think-trace before every answer. Great for chat, pure overhead for an agent doing lots of tiny tool calls, an eighty-token edit was costing six hundred. One environment variable turns it off, and you get about a three-times real-world speedup.\"\n\nCUE: Audience beat, 'guess how much all my fancy tuning bought me, versus this one line.' Everything else was a rounding error.")
 
 section_slide("PART TWO", "Reality check & the hardware call",
     notes="5 sec | Quick beat. Say: 'Part Two. I've got a working setup, now the uncomfortable part, how good can local actually get, and can you just buy your way to the top? Short answer, no.' Move.")

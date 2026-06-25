@@ -74,7 +74,10 @@ Presenter view: open slides.html, press `P` (notes are the HTML comments).
 DS-branded: white content slides + purple ACT dividers, logo footer, gifs animate.
 -->
 <!--
-0:30 | Open cold, don't read the title. Say: 'Three weeks ago I asked a simple question, could I stop paying for cloud Claude Code and run the whole thing on hardware in my house. I spent the price of a used Mac Studio finding out.' Then point at the TL;DR box: the answer is a qualified yes, and the qualification is the entire talk. For bounded coding, local ties the frontier and it's free. For open-ended repo work, you still want cloud. Everything after this slide is me earning that one sentence with data. Set the tone: this is a measurement talk, not a vibes talk, every claim has a benchmark behind it.
+[0:30]
+SAY: "Three weeks ago I asked a simple question: could I stop paying for cloud Claude Code and run the whole thing on hardware in my house? I spent the price of a used Mac Studio finding out. The short answer is a qualified yes, and the qualification is the whole talk: for bounded coding, local ties the frontier, and it's free; for open-ended repo work, you still want cloud."
+
+CUE: Open cold, don't read the title. Point at the TL;DR box on "bounded" then "open-ended." Set the tone: a measurement talk, not a vibes talk.
 -->
 
 ---
@@ -87,7 +90,10 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 4. **Economics, recommendation, caveats**
 
 <!--
-0:30 | Don't dwell. Four parts. Part 1 is the journey across three machines, that's the story. Part 2 is the uncomfortable truth that you can't buy your way to parity. Part 3 is the heart, the actual benchmarks, and it's where the surprise lives, so flag it now: 'Part 3 is the part that changed my mind.' Part 4 is the money and the recommendation. Tell them you'll leave time for Q&A. If you're running long, Part 1 is the part to compress.
+[0:30]
+SAY: "Four parts. Part one is the route across three machines. Part two, the uncomfortable truth that you can't buy your way to parity. Part three is the heart, the benchmarks, and it's the part that changed my mind. Part four, the money and the recommendation. I'll leave time for questions."
+
+CUE: Don't dwell. If you're running long, Part 1 is the part to compress.
 -->
 
 ---
@@ -104,7 +110,10 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 <div class="cap" style="text-align:center">app.sli.do/event/9YznQ5rvRQcGAqDi2v8jaW &nbsp;·&nbsp; I'll check it at every part break</div>
 
 <!--
-0:40 | Before Part One, while people settle. QR up: 'This talk is about measuring, not vibing, so hold me to it. Scan this Slido, ask questions, drop feedback, upvote what you want answered, any time, don't wait for the end.' Say you'll check at each part break and read the top question aloud. Leave it up a beat for the back row to scan.
+[0:40]
+SAY: "This whole talk is about measuring instead of vibing, so hold me to it. Scan this, it's a Slido, ask questions, drop feedback, upvote whatever you want answered, any time, you don't have to wait for the end. I'll check it at every part break and read the top one aloud."
+
+CUE: Before Part One, while people settle. Leave the QR up a beat for the back row.
 -->
 
 ---
@@ -115,7 +124,10 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 # The route: three machines
 
 <!--
-5 sec | Quick beat, don't linger on dividers. Say: 'Part One, the route. How I got from a thirty-five-dollar Raspberry Pi to a used Mac Studio, and what each machine taught me.' Then move. || SLIDO CHECK: glance at the live feed, read any new question aloud before you dive in.
+[0:05]
+SAY: "Part one, the route. How I got from a thirty-five-dollar Raspberry Pi to a gray-market Mac Studio, and what each machine taught me."
+
+CUE: Quick beat, don't linger. SLIDO: glance at the feed, read any new question first.
 -->
 
 ---
@@ -130,7 +142,10 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
   - Is it good enough? Measured, not vibes.
 
 <!--
-1:00 | Lead with the honest motivation, not a spec sheet. The real question was simple and a little greedy: I want to run an LLM at home, how capable could it actually get? The bar I set was concrete, good enough to be my Claude Code backend so I can stop paying for cloud. That splits in two: is it even possible, and at what hardware and cost; and is it good enough, measured, not vibes. Plant the seed that 'good enough' will itself split later, bounded versus open-ended, and those give opposite answers. Last bullet is the north star: every number you'll see came from a script, not a feeling.
+[1:00]
+SAY: "The real question was simple, and a little greedy: I want to run an LLM at home, how capable could it actually get? The bar: good enough to be my Claude Code backend, so I can stop paying for cloud. That splits in two, is it possible, and at what hardware and cost, and is it good enough, measured, not vibes."
+
+CUE: Lead with motivation, not a spec sheet. Plant that "good enough" itself splits later (bounded vs open-ended) with opposite answers. Last bullet is the north star: every number came from a script.
 -->
 
 ---
@@ -154,7 +169,10 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 </div>
 
 <!--
-1:00 | The human hook, and it matters because it stops the Raspberry Pi from looking naive. I learn by jumping in, not reading a spec sheet. The origin is mundane: I had a Raspberry Pi from tinkering projects with my daughter, and wondered if it could run a little LLM for the house. It did, so I got greedy and asked the real question, could it handle my actual dev workload. That escalating curiosity is the whole talk. So when the Pi is a dead end, that isn't naive, it was intentionally myopic, I wanted to see the limits with my own eyes, not predict them from a datasheet.
+[1:00]
+SAY: "I learn by jumping in, not reading a spec sheet. The origin's mundane: I had a Raspberry Pi from tinkering projects with my daughter, and wondered if it could run a little LLM for the house. It did, so I got greedy and asked the real question, could it handle my actual dev workload?"
+
+CUE: The human hook, keeps the Pi from looking naive. When it turns out a dead end, that was intentional, I wanted to feel the limits, not predict them.
 -->
 
 ---
@@ -172,7 +190,10 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 **Which side does local actually win? Where does cloud stay ahead?**
 
 <!--
-1:00 | The definition slide; the whole talk hinges on this distinction. Bounded coding = a self-contained problem you hold in your head and converge on in a few turns: a parser, a failing test, a small CLI tool. Open-ended = a vague task across a big unfamiliar codebase where the model must discover structure, juggle 64k+ context, grind through many turns: a repo-wide refactor, a real SWE-bench task. Two genuinely different jobs, with two different benchmarks. Do NOT tell them who wins each yet, that is the entire payoff of the talk. Just plant the two-axis framing and the open question, and let the suspense carry.
+[1:00]
+SAY: "Two genuinely different jobs. Bounded coding is a self-contained problem you hold in your head and finish in a few turns, a parser, a failing test, a small CLI tool, measured by HumanEval and LiveCodeBench. Open-ended is a vague task across a big unfamiliar codebase, sixty-thousand-plus tokens, many turns, measured by SWE-bench Verified. So which side does local actually win, and where does cloud stay ahead?"
+
+CUE: The whole talk hinges on this. Do NOT answer who-wins yet, that's the payoff. Plant the two-axis framing and let the question hang.
 -->
 
 ---
@@ -188,7 +209,10 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 <div class="cap" style="text-align:center">Teal circle = my coding tasks, manually classified: they lean open-ended (~40% local / ~60% cloud). Most of my Claude Code use isn't coding at all (ops, Jira/Slack, infra, personal projects) — full 2,177-prompt breakdown next.</div>
 
 <!--
-1:30 | The honest gut-check. I built this chart, then looked at my actual CC history, 2,177 prompts across 68 projects. Teal circle = my coding tasks, manually classified: they straddle the line and lean cloud, about sixty percent open-ended, exactly where local is weakest, so for me the hybrid case is even stronger. Bigger surprise: most of my CC use isn't even coding, it's ops, Jira and Slack, infra debugging, a personal finance app, building this deck. The teal split is a manual estimate; the full project breakdown is the next slide. The shape is clear: my Claude Code is more general agent than code generator.
+[1:30]
+SAY: "I built this chart, then looked at my actual history, 2,177 prompts across 68 projects. The teal circle is my coding tasks: they straddle the line and lean cloud, about sixty percent open-ended, exactly where local is weakest. The bigger surprise, most of what I use Claude Code for isn't even coding, it's ops, Jira and Slack, infra, a finance app, building this deck."
+
+CUE: The teal split is a manual estimate; the full breakdown is next slide. Land it: my Claude Code is more general agent than code generator.
 -->
 
 ---
@@ -202,7 +226,10 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 </div>
 
 <!--
-1:30 | Full audit, all 2,177 prompts, classified by project (more reliable than guessing from text). Two headlines. One: almost exactly half DSG work, half personal projects outside work. Biggest is the internal gateway POC; then my home network, a personal finance app, and building this deck. Two: a huge chunk of the personal half is privacy-sensitive (finances, home network, thermostat) = local's natural home, data never leaves the house. And not a compromise: my local credit-card categorizer was genuinely good, didn't need cloud. So local isn't just bounded coding, it's the obvious pick for the private, personal, bounded-classification work that's half my usage.
+[1:30]
+SAY: "The full audit, all 2,177 prompts, classified by project. Two headlines. One, it's almost exactly half DSG work, half personal projects outside work. Two, a huge chunk of the personal half is privacy-sensitive, my finances, my home network, my thermostat, and that's local's natural home, the data never leaves the house. And it's not a compromise, when a local model categorized my credit-card charges it was genuinely good, I didn't need the cloud."
+
+CUE: This is why local matters beyond coding, the private bounded-classification work is half my usage.
 -->
 
 ---
@@ -218,7 +245,10 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 | 5 | Mac Studio M3 Ultra 96GB | The machine that finally earned its keep *(Part 3)* |
 
 <!--
-1:30 | This is the map, don't read every cell, walk it. Stop one, the Raspberry Pi, total dead end, I'll explain why in two slides. Stop two, a spare MacBook Air I call Maral, that's where I learned everything even though it only ran a few hours. Stop three, I hit a tuning wall and found the single best speedup of the whole project. Stop four, the reality check, which asks whether you can simply buy your way to the top, that's Part Two. Stop five, the Mac Studio, the machine that finally earned its keep, the verdict is Part Three. Tease, don't spoil, the numbers come later. The takeaway line: the lessons are in the trip, not just the destination.
+[1:30]
+SAY: "This is the map. Stop one, the Raspberry Pi, a dead end, I'll show you why. Stop two, a spare MacBook Air I call Maral, where I learned everything. Stop three, a tuning wall, and the single best speedup of the project. Stop four, the reality check, can you just buy your way to the top, that's part two. Stop five, the Mac Studio, the machine that finally earned its keep, the verdict's in part three."
+
+CUE: Walk it, don't read every cell. Tease, don't spoil, numbers come later. The lessons are in the trip.
 -->
 
 ---
@@ -235,7 +265,10 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 
 <!-- Hardware: Adafruit #6451, Raspberry Pi AI HAT+ 2, Hailo-10H, 40 TOPS INT4, 8GB on-board. NOT the original AI HAT+ (Hailo-8/8L). -->
 <!--
-1:00 | The cautionary tale, verified on the actual hardware and corrected since I first built this. The board is genuinely capable, a Hailo-10H, forty INT4 TOPS, eight gigs of its own memory. And to be fair to it, it DOES run language models: Hailo ships a generative-AI model zoo and an Ollama-compatible runtime called Hailo-Ollama, so you CAN point Claude Code at the accelerator. So why a dead end? Two reasons, both capability not connection. One, every LLM in that zoo is one-to-three billion parameters, Llama-3.2-1B, Qwen-2.5-1.5B, DeepSeek-R1-1.5B, far too small to drive a sixty-four-thousand-token coding agent. Two, it's slow, I measured about seven tokens a second on the accelerator and independent reviewers find the plain Pi CPU often matches it. Hailo markets thirty to fifty, but that's not what I saw or what the reviewers saw. Honest lesson: not a connection problem, a capability problem. Right edge box, wrong job for a coding agent.
+[1:00]
+SAY: "I verified this on the actual board, and to be fair to it, the Hailo does run language models now: Hailo ships a generative-AI model zoo and an Ollama-compatible runtime, so you can point Claude Code at it. So why a dead end? Two reasons, both capability, not connection. One, every model in that LLM zoo is one to three billion parameters, far too small for a sixty-four-thousand-token coding agent. Two, it's slow, I measured about seven tokens a second, and reviewers find the plain CPU often matches it. Hailo markets thirty to fifty, but that's not what I, or they, saw."
+
+CUE: Corrected since I first built this, own that. Takeaway: a capability problem, not a connection one. Sources on the slide.
 -->
 
 ---
@@ -245,12 +278,11 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 <div class="cols">
 <div class="txt" style="font-size:19px">
 
-- I SSH'd in and measured both paths myself. qwen2.5-coder:3b on the Pi 5 CPU (ollama): **5 tok/s**. Qwen2.5-1.5B on the Hailo accelerator itself: **7.3 tok/s** (downloaded the HEF, ran it).
-- The numbers felt sus, so I checked independent reviewers, and **the plain CPU often beats the Hailo on LLMs:**
-  - DeepSeek-R1 1.5B: 6.7 (Hailo) vs 9.0 (CPU). Qwen2.5-Coder 1.5B: 8.1 vs 10.3. Llama3.2 3B: 2.6 vs 4.8.
-- Its real win is offloading the CPU and sipping power, not speed.
-- **Bottom line:** the whole Hailo LLM zoo is 1-3B (yes, a 1.5B coder), and the accelerator can't beat the CPU. (Mine even botched "reverse a string".) Great low-power chatbot, never a coding agent.
-- Sources: [CNX Software](https://www.cnx-software.com/2026/01/20/raspberry-pi-ai-hat-2-review-a-40-tops-ai-accelerator-tested-with-computer-vision-llm-and-vlm-workloads/) + [hardware-corner.net](https://www.hardware-corner.net/local-llms-raspberry-pi-ai-hat-plus-2/)
+- Measured both paths: CPU (ollama) **5 tok/s** · Hailo accelerator **7.3 tok/s**
+- Reviewers: **CPU often beats the Hailo** (R1-1.5B 6.7 vs 9.0 · Coder-1.5B 8.1 vs 10.3 · Llama3.2-3B 2.6 vs 4.8)
+- Hailo's real win: low power, not speed
+- **Bottom line:** great low-power chatbot, never a coding agent (mine botched "reverse a string")
+- Sources: [CNX Software](https://www.cnx-software.com/2026/01/20/raspberry-pi-ai-hat-2-review-a-40-tops-ai-accelerator-tested-with-computer-vision-llm-and-vlm-workloads/) · [hardware-corner.net](https://www.hardware-corner.net/local-llms-raspberry-pi-ai-hat-plus-2/)
 
 </div>
 <div class="pic">
@@ -262,7 +294,10 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 </div>
 
 <!--
-1:30 | The fun one, fully verified. I SSHed into the actual Pi and measured both paths myself. The easy path, ollama on the CPU, about five tokens a second on a 3B coder. The fancy path, I downloaded the model onto the Hailo accelerator and ran it, seven-point-three tokens a second on a 1.5B. Then, because those numbers felt sus, I checked independent reviewers, and the plain Pi CPU often beats the Hailo on language models. One literally called it more like an AI decelerator than an accelerator. The chip's real benefit is offloading the CPU and low power, not speed. So the whole lineup is one-to-three-billion, there's even a 1.5B coder, the accelerator can't beat the CPU, and when I ran it the model got 'reverse a string' wrong. Two slow, two furious. Great low-power chatbot, never a coding backend. Sources on the slide.
+[1:30]
+SAY: "I measured both paths myself. On the CPU, about five tokens a second on a 3B coder. On the Hailo accelerator, seven-point-three on a 1.5B. Those felt off, so I checked independent reviewers, and the plain CPU often beats the Hailo, one literally called it more like a decelerator than an accelerator. The whole lineup is one to three billion, and when I ran it, it got 'reverse a string' wrong."
+
+CUE: The fun one, let the gif play. The chip's real win is low power, not speed. Great chatbot, never a coding backend.
 -->
 
 ---
@@ -278,7 +313,10 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 **Takeaway:** the model was never the weak link, the hardware was. 16GB is enough to prove the idea, not to live on it.
 
 <!--
-1:30 | The workhorse chapter, keep it light. A spare sixteen-gig MacBook Air, I call it Maral, carried the whole proof of concept, and honestly it only ran about five hours total. Two surprises worth landing. ONE, tool-use, and this is worth unpacking because it was my single biggest fear. Claude Code is not a chatbot, it works by calling tools, Read a file, Edit a file, run a Bash command, Grep the codebase, and it does that through a strict function-calling protocol: the model has to emit well-formed JSON, pick the right tool, fill in the right arguments, then read the tool result and decide the next call. My worry was that a small open model would faceplant on the mechanics, malformed JSON, hallucinated tool names, wrong arguments, basically unable to drive the loop at all. It didn't. Qwen3 on the Air, wired in through Ollama's Anthropic-compatible endpoint, produced clean valid tool calls, picked the right tool, formatted the arguments correctly, and consumed the results, at parity with cloud out of the box. But be precise about what parity means here: it nailed the MECHANICS of tool-calling, which is different from reliably driving a long multi-turn loop all the way to the finish, the convergence problem I hit later and measure in Part Three. The protocol was never the bottleneck. TWO, the real pain was never the model's intelligence, it was the memory bus being slow and the WiFi driver literally crashing under memory pressure. The lesson: sixteen gigs is the floor where you can prove the idea, but it is not a platform you can live on, it ran on vibes. That sets up the obvious question: okay, what do I actually buy?
+[1:30]
+SAY: "A spare sixteen-gig MacBook Air carried the whole proof of concept, and it only ran about five hours total. The big surprise: tool-use just worked. Claude Code isn't a chatbot, it drives tools through strict function-calling, and my fear was that a small model would faceplant on the mechanics, malformed JSON, the wrong tool. It didn't, it was at parity with cloud out of the box. The real pain was never the model, it was slow memory and the WiFi driver crashing under pressure."
+
+CUE: Be precise, it nailed the MECHANICS of tool-calling, separate from driving a long loop to the finish, that convergence problem is Part Three. Takeaway: sixteen gigs proves the idea, can't host it. Sets up "what do I buy?"
 -->
 
 ---
@@ -291,7 +329,10 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 - **~3x speedup from one env var.** Everything else I tuned for a week? Secondary.
 
 <!--
-1:30 | If they remember one config line from the whole talk, it's this one. Qwen3 is a reasoning model, it writes a hidden think trace before every answer. For chat that's great, for an agent doing lots of tiny tool calls it's pure overhead, an eighty-token edit was costing six hundred tokens. One environment variable turns it off and you get roughly a three-times real-world speedup. Audience beat: 'guess how much speedup all my fancy tuning, the quant sweeps, the cache settings, actually bought me. Now guess how much this one line bought me.' Everything else was a rounding error next to this.
+[1:30]
+SAY: "If you remember one config line, it's this. Qwen3 is a reasoning model, it writes a hidden think-trace before every answer. Great for chat, pure overhead for an agent doing lots of tiny tool calls, an eighty-token edit was costing six hundred. One environment variable turns it off, and you get about a three-times real-world speedup."
+
+CUE: Audience beat, "guess how much all my fancy tuning bought me, versus this one line." Everything else was a rounding error.
 -->
 
 ---
