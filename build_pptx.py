@@ -310,13 +310,13 @@ _notes(_seriously, "[0:40]\nSAY: \"Okay. Seriously. Here's the honest one-slide 
 
 _who = bullets_slide("whoami",
     [B("**Lead Product Engineer @ Data Society**, since Jan 2025"),
-     B("Day-to-day: rapid prototypes, enabling engineering across the org, plugging the gaps (internal CMS & co.)"),
+     B("Day-to-day: rapid prototypes, enabling engineering across the org, plugging the gaps across the org"),
      B("CS degree; member of Stony Brook's **Group for Logic & Formal Semantics**; contributed to a paper in MIT's *Artificial Life* journal"),
      B("Shipping software since **2007**. Learn by doing, not reading spec sheets (which is how this talk happened)"),
      B("My personal projects include: OpenWRT home network, home automation, a personal-finance app, Raspberry Pi projects with my daughter"),
      B("Not-programming: sourdough from scratch, surfing when the swell allows, and a ~10-acre subsistence farm someday (Adirondacks / Catskills / coastal Maine)"),
      B("Recently moved my own coding from **Cursor to Claude Code** (receipts below)")],
-    "[0:40]\nSAY: \"Quick bit about me. Lead Product Engineer at Data Society, started January of last year. Day to day I build prototypes, enable engineering across the org, and plug gaps wherever they show up, a lot of that on internal CMS. CS degree, did time in Stony Brook's logic and formal semantics group, even have a paper in MIT's Artificial Life journal from way back. Shipping software since 2007, I learn by getting my hands on things, which is how this talk happened. Off the clock it's home networking, home automation, sourdough, surfing, and someday a little subsistence farm. And I recently moved my own coding from Cursor to Claude Code, part of why I wanted to know if I could run it at home. That heatmap at the bottom is my last year of dev activity, three sources stacked. It's incomplete but directionally honest.\"\n\nCUE: 40 seconds, don't over-share. Point at the heatmap on 'incomplete but directionally honest.' Sets up the whole talk.",
+    "[0:40]\nSAY: \"Quick bit about me. Lead Product Engineer at Data Society, started January of last year. Day to day I build prototypes, enable engineering across the org, and plug gaps wherever they show up, a lot of it across the org. CS degree, did time in Stony Brook's logic and formal semantics group, even have a paper in MIT's Artificial Life journal from way back. Shipping software since 2007, I learn by getting my hands on things, which is how this talk happened. Off the clock it's home networking, home automation, sourdough, surfing, and someday a little subsistence farm. And I recently moved my own coding from Cursor to Claude Code, part of why I wanted to know if I could run it at home. That heatmap at the bottom is my last year of dev activity, three sources stacked. It's incomplete but directionally honest.\"\n\nCUE: 40 seconds, don't over-share. Point at the heatmap on 'incomplete but directionally honest.' Sets up the whole talk.",
     font=14)
 _wp = _who.shapes.add_picture(str(REPO / "viz" / "activity.png"), 0, 0, width=Inches(7.4))
 _wp.left = int((SW - _wp.width) // 2); _wp.top = Inches(4.95)
@@ -555,7 +555,7 @@ image_slide("Same task, three models: all run, only one looks right",
     notes="[1:00]\nSAY: \"These are the actual games the three agents built, played by a script. Let me be honest about 'playable.' All three run, you move, shoot, nothing crashes, that's the functional rubric, and the local ones cost zero. But fidelity is a separate axis, and it's where cloud still wins. The thirty-billion coder drew the wrong invader icons and hid the game behind a start menu; the eighty-billion rendered the invaders as plain rectangles; only Opus four-eight gave a high-fidelity match to the original. So local ties on the logic, cloud still wins the polish, even on a clean build.\"\n\nCUE: Don't oversell 'all playable' - say out loud that only Opus actually looks like Space Invaders. The honest split: function is basically solved locally, asset/visual fidelity isn't yet. Let it loop, invite clone-and-play.")
 
 table_slide("Concrete: real DSG tasks, local vs cloud wall-clock",
-    ["Task (internal-web-app stack)", "Type", "Cloud", "Local", "Slower"],
+    ["Task (typical web-app stack)", "Type", "Cloud", "Local", "Slower"],
     [["Write an ECR Terraform module", "bounded", "**19 s**", "**186 s**", "**~10x**"],
      ["Scaffold an ECS Fargate service module", "build", "**36 s**", "**256 s**", "**~7x**"],
      ["Fix an ALB OIDC header parser (failing test)", "debug", "**29 s**", "**154 s**", "**~5x**"]],

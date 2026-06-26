@@ -117,7 +117,7 @@ CUE: This is the thesis. Land it slowly, point bounded then open-ended. Everythi
 <div style="font-size:17px">
 
 - **Lead Product Engineer @ Data Society**, since Jan 2025
-- Day-to-day: rapid prototypes · enabling engineering across the org · plugging the gaps (internal CMS & co.)
+- Day-to-day: rapid prototypes · enabling engineering across the org · plugging the gaps across the org
 - CS degree; member of Stony Brook's **Group for Logic & Formal Semantics**; contributed to a paper in MIT's *Artificial Life* journal
 - Shipping software since **2007**. Learn by doing, not reading spec sheets (which is how this talk happened)
 - My personal projects include: OpenWRT home network, home automation, a personal-finance app, Raspberry Pi projects with my daughter
@@ -131,7 +131,7 @@ CUE: This is the thesis. Land it slowly, point bounded then open-ended. Everythi
 
 <!--
 [0:40]
-SAY: "Quick bit about me. Lead Product Engineer at Data Society, started January of last year. Day to day I build prototypes, enable engineering across the org, and plug gaps wherever they show up, a lot of that on internal CMS. CS degree, been shipping software since 2007. I learn by getting my hands on things, which is exactly how this talk happened. And I recently moved my own coding from Cursor to Claude Code, which is part of why I wanted to know if I could run it at home."
+SAY: "Quick bit about me. Lead Product Engineer at Data Society, started January of last year. Day to day I build prototypes, enable engineering across the org, and plug gaps wherever they show up, a lot of it across the org. CS degree, been shipping software since 2007. I learn by getting my hands on things, which is exactly how this talk happened. And I recently moved my own coding from Cursor to Claude Code, which is part of why I wanted to know if I could run it at home."
 
 CUE: 30-40 seconds, don't over-share. The "learn by doing" + "switched to Claude Code" lines set up the whole talk.
 -->
@@ -621,7 +621,7 @@ CUE: Don't oversell 'all playable' — say out loud that only Opus actually look
 
 ## Concrete: real DSG tasks, local vs cloud wall-clock
 
-| Task (internal-web-app stack) | Type | Cloud | Local | Slower |
+| Task (typical web-app stack) | Type | Cloud | Local | Slower |
 |---|---|---|---|---|
 | Write an ECR Terraform module | bounded | **19 s** | **186 s** | **~10x** |
 | Scaffold an ECS Fargate service module | build | **36 s** | **256 s** | **~7x** |

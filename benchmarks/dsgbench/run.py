@@ -1,7 +1,7 @@
 """dsgbench — concrete wall-clock on REAL-shaped DSG infra tasks: LOCAL vs cloud.
 
 Three tasks chosen to span the bounded -> open-ended axis, all modeled on
-internal-web-app's stack (ECS/ALB/Cognito-OIDC, Terraform):
+a typical internal web-app stack (ECS/ALB/Cognito-OIDC, Terraform):
 
   1. ecr_module     bounded   — write a small self-contained ECR TF module
   2. ecs_service    build     — scaffold a multi-file ECS Fargate service module
