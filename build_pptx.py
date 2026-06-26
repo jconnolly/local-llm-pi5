@@ -290,6 +290,15 @@ _title = title_slide(
     notes="[0:30]\nSAY: \"Three weeks ago I asked a simple question: could I stop paying for cloud Claude Code and run the whole thing on hardware in my house? I spent the price of a used Mac Studio finding out. The short answer is a qualified yes, and the qualification is the whole talk: for bounded coding, local ties the frontier, and it's free; for open-ended repo work, you still want cloud.\"\n\nCUE: Open cold, don't read the title. Point at the TL;DR box on 'bounded' then 'open-ended.' A measurement talk, not a vibes talk.")
 _tldr_two_gif(_title)
 
+bullets_slide("whoami",
+    [B("**Lead Product Engineer @ Data Society**, since Jan 2025"),
+     B("Day-to-day: rapid prototypes, enabling engineering across the org, plugging the gaps (internal CMS & co.)"),
+     B("CS degree; shipping software since **2007**"),
+     B("Learn by doing, not reading spec sheets, which is exactly how this talk happened"),
+     B("Off the clock: OpenWRT home network, home automation, a personal-finance app, Raspberry Pi projects with my daughter"),
+     B("Recently moved my own coding from **Cursor to Claude Code** (receipts are in this deck)")],
+    "[0:40]\nSAY: \"Quick bit about me. Lead Product Engineer at Data Society, started January of last year. Day to day I build prototypes, enable engineering across the org, and plug gaps wherever they show up, a lot of that on internal CMS. CS degree, been shipping software since 2007. I learn by getting my hands on things, which is exactly how this talk happened. And I recently moved my own coding from Cursor to Claude Code, which is part of why I wanted to know if I could run it at home.\"\n\nCUE: 30-40 seconds, don't over-share. The 'learn by doing' + 'switched to Claude Code' lines set up the whole talk.")
+
 bullets_slide("Agenda, where we're going (~30m)",
     [B("**The route:** Raspberry Pi, Air, Studio"),
      B("**Reality check:** you can't buy parity, the hardware call"),
@@ -529,10 +538,11 @@ bullets_slide("Caveats & gotchas",
      B("16GB too small, 96GB+ overkill for one dev. Benchmarks saturate, measure your task mix."),
      B("**Swapping models mid-session = instant `API Error: 400`**, /clear or a fresh session."),
      B("**Low quant (q4) silently breaks tool-calling**, q6 is the agentic sweet spot."),
-     B("**Forgetting `think:false`** = a silent ~3-8x tax. **A stale model IS the instability**, re-bench monthly."),
+     B("**Forgetting `think:false`** = a silent ~3-8x token tax."),
+     B("**The 'instability' was a stale model:** my year-old qwen3-coder:30b spiralled 4-41 turns on a one-line fix; a current Qwen3.6 / gpt-oss does it in 7. Re-bench monthly."),
      B("Ollama traps: restart kills an in-flight `pull`; `ollama ps` shows empty (check `ps aux | grep llama-server`).")],
-    "[1:30]\nSAY: \"Let me name my own weaknesses first. 'Local SOTA at home' is true only if you append 'narrowly, bounded coding'; on open-ended engineering it's not. Sixteen gigs is too small to live on, ninety-six-plus is overkill for one person, and benchmarks saturate, the only one that matters is your task mix. Then the operational potholes: swap the model mid-conversation and you get an instant four-hundred error, just clear the session. Low quant quietly breaks tool-calling, run q6 not q4. Forgetting think-false is a silent tax. And a stale model was the instability, re-bench monthly.\"\n\nCUE: Q&A insurance plus the practical warnings in one. None are dealbreakers, they're potholes, now you know where they are.",
-    font=16)
+    "[1:30]\nSAY: \"Let me name my own weaknesses first. 'Local SOTA at home' is true only if you append 'narrowly, bounded coding'; on open-ended engineering it's not. Sixteen gigs is too small to live on, ninety-six-plus is overkill for one person, and benchmarks saturate, the only one that matters is your task mix. Then the operational potholes: swap the model mid-conversation and you get an instant four-hundred error, just clear the session. Low quant quietly breaks tool-calling, run q6 not q4. Forgetting think-false is a silent tax. And to be specific about the instability from earlier: that was a stale model, my year-old coder-30b spiralling four to forty-one turns on a one-line fix, while a current model like Qwen three-six or gpt-oss does the same task in seven, stable. Re-bench monthly.\"\n\nCUE: Q&A insurance plus the practical warnings in one. None are dealbreakers, they're potholes, now you know where they are.",
+    font=15)
 
 bullets_slide("What's next",
     [B("**Auto-router on the Pi:** classify each prompt, send bounded work to the Studio + hard repo work to cloud, per-prompt."),
