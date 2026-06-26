@@ -98,26 +98,6 @@ CUE: Don't dwell. If you're running long, Part 1 is the part to compress.
 
 ---
 
-## Got a question? Tell me live.
-
-<div style="text-align:center">
-
-![h:330](viz/slido-qr.png)
-
-</div>
-
-<div class="sub" style="text-align:center; margin-top:10px">Scan to ask anything, upvote, or drop feedback in real time</div>
-<div class="cap" style="text-align:center">app.sli.do/event/9YznQ5rvRQcGAqDi2v8jaW &nbsp;·&nbsp; I'll check it at every part break</div>
-
-<!--
-[0:40]
-SAY: "This whole talk is about measuring instead of vibing, so hold me to it. Scan this, it's a Slido, ask questions, drop feedback, upvote whatever you want answered, any time, you don't have to wait for the end. I'll check it at every part break and read the top one aloud."
-
-CUE: Before Part One, while people settle. Leave the QR up a beat for the back row.
--->
-
----
-
 <!-- _class: section -->
 <div class="kicker">PART ONE</div>
 
@@ -127,7 +107,7 @@ CUE: Before Part One, while people settle. Leave the QR up a beat for the back r
 [0:05]
 SAY: "Part one, the route. How I got from a thirty-five-dollar Raspberry Pi to a gray-market Mac Studio, and what each machine taught me."
 
-CUE: Quick beat, don't linger. SLIDO: glance at the feed, read any new question first.
+CUE: Quick beat, don't linger.
 -->
 
 ---
@@ -310,7 +290,7 @@ CUE: Audience beat, "guess how much all my fancy tuning bought me, versus this o
 [0:05]
 SAY: "Part two. I've got a working setup, now the uncomfortable part: how good can local actually get, and can you just buy your way to the top? Short answer, no."
 
-CUE: Quick beat. SLIDO: glance at the feed, read any new question first.
+CUE: Quick beat.
 -->
 
 ---
@@ -375,7 +355,7 @@ CUE: Breather, tell it like a story. Gesture at the photo, that's the box runnin
 [0:05]
 SAY: "Part three. Enough story, enough vibes. Here are the actual benchmarks, and this is where it surprised me."
 
-CUE: Build energy here, this is the best part. SLIDO: glance at the feed, read any new question first.
+CUE: Build energy here, this is the best part.
 -->
 
 ---
@@ -557,7 +537,7 @@ CUE: The part-end synthesis, land it slowly. This is the verdict the whole part 
 [0:05]
 SAY: "Part four. So what does this actually cost, and what should you do on Monday morning?"
 
-CUE: Quick beat. SLIDO: glance at the feed, read any new question first.
+CUE: Quick beat.
 -->
 
 ---

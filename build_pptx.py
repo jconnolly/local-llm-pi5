@@ -275,8 +275,6 @@ def section_slide(kicker, title, notes=""):
     _no_autofit(tb.text_frame)
     tr = tb.text_frame.paragraphs[0].add_run()
     tr.text = title; tr.font.size = Pt(40); tr.font.bold = True; tr.font.color.rgb = WHITE
-    if notes:
-        notes = notes.rstrip() + "  ||  SLIDO CHECK: glance at the live feed (app.sli.do/event/9YznQ5rvRQcGAqDi2v8jaW), read any new question aloud before you start the part."
     _notes(s, notes)
     return s
 
@@ -299,13 +297,8 @@ bullets_slide("Agenda, where we're going (~30m)",
      B("**Economics, recommendation, honest caveats**")],
     "[0:30]\nSAY: \"Four parts. Part one is the route across three machines. Part two, the uncomfortable truth that you can't buy your way to parity. Part three is the heart, the benchmarks, and it's the part that changed my mind. Part four, the money and the recommendation. I'll leave time for questions.\"\n\nCUE: Don't dwell. If running long, Part 1 is the part to compress.")
 
-_sl = image_slide("Got a question? Tell me live.",
-    REPO / "viz" / "slido-qr.png", width_in=3.4,
-    sub="**Scan** to ask anything, upvote, or drop feedback in real time   ·   app.sli.do/event/9YznQ5rvRQcGAqDi2v8jaW",
-    notes="[0:40]\nSAY: \"This whole talk is about measuring instead of vibing, so hold me to it. Scan this, it's a Slido, ask questions, drop feedback, upvote whatever you want answered, any time, you don't have to wait for the end. I'll check it at every part break and read the top one aloud.\"\n\nCUE: Before Part One, while people settle. Leave the QR up a beat for the back row.")
-
 section_slide("PART ONE", "The route: three machines",
-    notes="[0:05]\nSAY: \"Part one, the route. How I got from a thirty-five-dollar Raspberry Pi to a gray-market Mac Studio, and what each machine taught me.\"\n\nCUE: Quick beat, don't linger. SLIDO: glance at the feed, read any new question first.")
+    notes="[0:05]\nSAY: \"Part one, the route. How I got from a thirty-five-dollar Raspberry Pi to a gray-market Mac Studio, and what each machine taught me.\"\n\nCUE: Quick beat, don't linger.")
 
 bullets_slide("The question: how capable could a home LLM get?",
     [B("\"I want to run an LLM at home. How capable could it actually be?\""),
@@ -408,7 +401,7 @@ bullets_slide("The single best tuning knob: kill the thinking tax",
     "[1:30]\nSAY: \"If you remember one config line, it's this. Qwen3 is a reasoning model, it writes a hidden think-trace before every answer. Great for chat, pure overhead for an agent doing lots of tiny tool calls, an eighty-token edit was costing six hundred. One environment variable turns it off, and you get about a three-times real-world speedup.\"\n\nCUE: Audience beat, 'guess how much all my fancy tuning bought me, versus this one line.' Everything else was a rounding error.")
 
 section_slide("PART TWO", "Reality check & the hardware call",
-    notes="[0:05]\nSAY: \"Part two. I've got a working setup, now the uncomfortable part: how good can local actually get, and can you just buy your way to the top? Short answer, no.\"\n\nCUE: Quick beat. SLIDO: glance at the feed, read any new question first.")
+    notes="[0:05]\nSAY: \"Part two. I've got a working setup, now the uncomfortable part: how good can local actually get, and can you just buy your way to the top? Short answer, no.\"\n\nCUE: Quick beat.")
 
 _rc = table_slide("Reality check: you can't buy frontier parity",
     ["Tier", "Best open weight", "SWE-bench Verified", "Gap to Opus 4.8"],
@@ -444,7 +437,7 @@ _cr = _cap.text_frame.paragraphs[0].add_run()
 _cr.text = "the box running the LLM"; _cr.font.size = Pt(12); _cr.font.italic = True; _cr.font.color.rgb = DK2
 
 section_slide("PART THREE", "The measured verdict",
-    notes="[0:05]\nSAY: \"Part three. Enough story, enough vibes. Here are the actual benchmarks, and this is where it surprised me.\"\n\nCUE: Build energy here, this is the best part. SLIDO: glance at the feed, read any new question first.")
+    notes="[0:05]\nSAY: \"Part three. Enough story, enough vibes. Here are the actual benchmarks, and this is where it surprised me.\"\n\nCUE: Build energy here, this is the best part.")
 
 table_slide("The verdict: local ties cloud on coding",
     ["Model", "Score", "Speed"],
@@ -521,7 +514,7 @@ table_slide("The reconciliation",
     col_w=[4, 5])
 
 section_slide("PART FOUR", "Economics & the call",
-    notes="[0:05]\nSAY: \"Part four. So what does this actually cost, and what should you do on Monday morning?\"\n\nCUE: Quick beat. SLIDO: glance at the feed, read any new question first.")
+    notes="[0:05]\nSAY: \"Part four. So what does this actually cost, and what should you do on Monday morning?\"\n\nCUE: Quick beat.")
 
 bullets_slide("The call: economics + the setup",
     [B("Cloud ~$200/mo forever; box = one-time, then **$0/mo**. **Breakeven ~2 years.**"),
