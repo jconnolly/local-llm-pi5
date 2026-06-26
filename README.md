@@ -2,6 +2,8 @@
 
 Goal: run a SOTA local LLM, usable as a Claude Code backend over LAN.
 
+Full write-up (the investigation log, dead ends and all): [presentation.md](presentation.md). Talk deck: [slides.md](slides.md).
+
 Two-track investigation:
 1. **Pi 5 16GB + Hailo-10H AI HAT+ 2** — original target. Ceiling: qwen3:8b at ~2 tok/s, ~50% SWE-bench Verified. Hailo unusable for Claude Code (2k ctx, broken tool-use shim, ≤2B HEF ceiling).
 2. **Spare MacBook Air M2 16GB ("Maral")** — pivot. Ceiling: qwen3:14b at ~10 tok/s, ~65-70% SWE-bench Verified. **5x faster, better model, $0 cost.** See [maral-mac-server.md](maral-mac-server.md).
