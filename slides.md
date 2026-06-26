@@ -48,7 +48,7 @@ section.section h1 { color:#fff; font-size:50px; }
 .dim { color:var(--dk2); font-size:20px; }
 .cols { display:flex; gap:34px; align-items:center; }
 .cols .txt { flex:1.2; } .cols .pic { flex:1; text-align:center; }
-.cap { color:var(--dk2); font-style:italic; font-size:17px; }
+.cap { color:var(--dk2); font-style:italic; font-size:14px; }
 .fn { font-size:11px !important; color:var(--dk2); font-style:italic; line-height:1.6; display:block; }
 .tldrbox { display:inline-flex !important; align-items:center; gap:30px;
   background:#f1ecf7; border-radius:16px; padding:16px 28px; }
@@ -63,8 +63,6 @@ section.center { text-align:center; }
 
 <div class="sub">Three weeks, three machines: from a Raspberry Pi to a gray-market used Mac Studio.</div>
 
-<div class="tldrbox"><span class="tldrlab">TL;DR</span><div class="tldrcol">bounded coding<br><img src="viz/not-bad-slow.gif" /><br><span class="tldrcap">functionally equivalent, 10x slower</span></div><div class="tldrcol">Open-ended repos:<br><img src="viz/conceited.gif" /><br><span class="tldrcap">(not quite)</span></div></div>
-
 <div class="byline">John Connolly, Lead Product Engineer &amp; tinkerer<br>June 2026</div>
 
 <!--
@@ -75,21 +73,61 @@ DS-branded: white content slides + purple ACT dividers, logo footer, gifs animat
 -->
 <!--
 [0:30]
-SAY: "Three weeks ago I asked a simple question: could I stop paying for cloud Claude Code and run the whole thing on hardware in my house? I spent the price of a used Mac Studio finding out. The short answer is a qualified yes, and the qualification is the whole talk: for bounded coding, local ties the frontier, and it's free; for open-ended repo work, you still want cloud."
+SAY: "Three weeks ago I asked a simple question: how much LLM work can I do on my own hardware? I spent the price of a used Mac Studio finding out. Could I get a toy conversational model running? How far could I push it? The journey is the talk: for bounded coding, a local LLM can functionally tie the frontier, and it's free; for open-ended repo work, spoiler, you still want cloud."
 
-CUE: Open cold, don't read the title. Point at the TL;DR box on "bounded" then "open-ended." Set the tone: a measurement talk, not a vibes talk.
+CUE: Open cold, don't read the title. Set the tone: a measurement talk, not a vibes talk. The one-slide answer is two slides away (after the "No." gag) — don't preview it here.
+-->
+
+---
+
+<!-- _class: center -->
+
+<div style="font-size:210px; font-weight:900; color:var(--purple); line-height:0.9; margin:18px 0 0 0">No.</div>
+
+![w:280](viz/rageface.png)
+
+<div style="font-size:32px; color:var(--dk2); font-style:italic">Thank you for coming to my Ted Talk.</div>
+
+<!--
+[0:15]
+SAY: (deadpan, pause) "...No. Thank you for coming to my Ted Talk." (beat, let it land, then break) "...okay. The honest answer is more interesting than that. It's 'it depends,' and the where-it-depends is the whole talk. Let's go."
+
+CUE: Deliver totally straight. Long pause after 'No.' Pretend you're wrapping up, then smile and move on. Resets the room, buys goodwill for the next 30 minutes.
+-->
+
+---
+
+<!-- _class: center -->
+
+## No, but seriously…
+
+<div class="tldrbox"><span class="tldrlab">TL;DR</span><div class="tldrcol">Bounded coding:<br><img src="viz/not-bad-slow.gif" /><br><span class="tldrcap">functionally equivalent, ~10x slower</span></div><div class="tldrcol">Open-ended repos:<br><img src="viz/conceited.gif" /><br><span class="tldrcap">(not quite)</span></div></div>
+
+<!--
+[0:40]
+SAY: "Okay. Seriously. Here's the honest one-slide answer, and the rest of the talk is me earning it. For bounded coding, write-this-function, fix-this-bug, a local model on my own hardware is functionally equivalent to frontier cloud, it just runs about ten times slower, and it's free. For open-ended repo work, multi-file, vague bug report, sprawling context, it's not quite there, cloud still wins. Two regimes, one line each. Now let me show you how I know."
+
+CUE: This is the thesis. Land it slowly, point bounded then open-ended. Everything after this slide is evidence for these two lines.
 -->
 
 ---
 
 ## whoami
 
-- **Lead Product Engineer @ Data Society** — since Jan 2025
+<div style="font-size:17px">
+
+- **Lead Product Engineer @ Data Society**, since Jan 2025
 - Day-to-day: rapid prototypes · enabling engineering across the org · plugging the gaps (internal CMS & co.)
-- CS degree; shipping software since **2007**
-- Learn by doing, not reading spec sheets — which is exactly how this talk happened
-- Off the clock: OpenWRT home network, home automation, a personal-finance app, Raspberry Pi projects with my daughter
-- Recently moved my own coding from **Cursor → Claude Code** (receipts are in this deck)
+- CS degree; member of Stony Brook's **Group for Logic & Formal Semantics**; contributed to a paper in MIT's *Artificial Life* journal
+- Shipping software since **2007**. Learn by doing, not reading spec sheets (which is how this talk happened)
+- My personal projects include: OpenWRT home network, home automation, a personal-finance app, Raspberry Pi projects with my daughter
+- Not-programming: sourdough from scratch, surfing when the swell allows, and a ~10-acre subsistence farm someday (Adirondacks / Catskills / coastal Maine)
+- Recently moved my own coding from **Cursor to Claude Code** (receipts below)
+
+</div>
+
+![w:880](viz/activity.png)
+<div class="cap">My dev activity, last 52 weeks. <b>Incomplete but directionally accurate</b> — Claude Code keeps only ~6 weeks of logs, so its purple band is thin on the left.</div>
 
 <!--
 [0:40]
@@ -264,9 +302,76 @@ CUE: Corrected since I first built this, own that. Let the gif play. Sources on 
 
 ---
 
-## Maral: a spare 16GB Air, punching above its weight
+## Why memory bandwidth is the ceiling (one bit of theory)
+
+- Generating a token = **read every active weight from memory, once**. The arithmetic is trivial; the *reading* is the job.
+- Speed limit, full stop: **tokens/sec ≈ memory bandwidth ÷ bytes read per token**.
+- At batch 1 the chip is **starved, not busy** — idling on the memory bus (low arithmetic intensity = the memory-bound side of the roofline). More teraflops buy nothing.
+- So the Pi's **40 TOPS was never the problem** — TOPS is compute; the bus is the wall.
+
+| Reading a 30B dense model (q8, ~30 GB) | Bandwidth | Speed ceiling |
+|---|---|---|
+| Raspberry Pi 5 (LPDDR4X) | ~17 GB/s | **< 1 tok/s** |
+| Mac Studio M3 Ultra | **819 GB/s** | **~27 tok/s** |
+
+- **MoE escape hatch:** activate only ~3B of 30B per token → bytes-read drops ~10x → fast *and* smart. (Real numbers in Part 3.)
+
+<div class="cap">Napkin math (bandwidth ÷ bytes-per-token); real throughput is lower (KV cache, overhead) but the <b>ratios hold</b> — same model, ~48x the bus. This is why the next two machines exist.</div>
+
+<!--
+[1:00]
+SAY: "One bit of theory, because it explains every machine in this talk. When a model generates a token, it reads every active weight out of memory, once. The math is trivial; the reading is the whole job. So the speed limit is almost embarrassingly simple: tokens per second is roughly memory bandwidth divided by how many bytes you read per token. At batch one the chip isn't busy, it's starved, sitting idle waiting on the memory bus. That's the punchline for Part One: the Pi's forty TOPS was never the problem, because TOPS is compute, and the wall is the bus. Reading a thirty-gig model, the Pi tops out under one token a second; the Studio I end up buying does about twenty-seven, same model, forty-eight times the bandwidth. The one escape hatch is mixture-of-experts: activate only a few billion of the thirty billion per token, so you read less and go faster without getting dumber. Hold that thought, real numbers in Part Three."
+
+CUE: Load-bearing concept slide for the whole hardware arc. Say it once, slowly. Don't read the table, point at the two numbers. Land "bandwidth, not teraflops." Foreshadow MoE, don't explain it yet.
+-->
+
+---
+
+## Anatomy of one token (30B, q4, on the Studio)
+
+**Setup:** 30B params at 4-bit ≈ **15 GB** of weights resident in unified memory; ~48 transformer layers. Emitting *one* token = walk all 48, once.
+
+<div class="cols">
+<div class="txt" style="font-size:17px">
+
+**Each layer (×48):**
+1. **Attention** — multiply the current token-vector by the Q / K / V / O weight matrices.
+   - *Memory:* stream those weights once; read the **KV cache** (every past token), append this token's K/V.
+   - *Cores:* a few multiply-adds, then **idle**.
+2. **FFN** — multiply by the two big matrices (~⅔ of the layer's weights).
+   - *Memory:* stream once. *Cores:* multiply-add, then **idle**.
+
+Then: final vector × **LM-head** → logits → sample token N+1.
+
+</div>
+<div class="txt" style="font-size:17px">
+
+**Tally — one token**
+- **Read:** ~15 GB (every weight, once) + KV cache
+- **Math:** ~2 × params ≈ **60 GFLOP**
+- Memory: 15 GB ÷ 819 GB/s ≈ **18 ms**
+- Cores: ≈ **2 ms** of actual math
+- → idle **~8×** longer than computing
+- → **~55 tok/s**, set by the bus
+
+</div>
+</div>
+
+<div class="cap">Every weight: read once, one multiply-add, discarded — at batch 1 nothing to reuse, so intensity ~2-4 FLOP/byte sits deep in the memory-bound zone. Attention's matrices are a small slice; the FFN dominates the bytes. (q4 reads half of q8 → ~2× the prior slide's q8 ceiling.)</div>
+
+<!--
+[1:15]
+SAY: "Here's that 'read every weight once' claim made concrete. A thirty-billion model at four-bit is about fifteen gigs of weights sitting in the Mac's unified memory, roughly forty-eight layers. To produce a single token, the chip walks all forty-eight, once. In each layer, two things. Attention: it multiplies the current token's vector by the query, key, value, and output matrices, and it reads the KV cache, the saved keys and values for every previous token, so it never recomputes the past. Then the feed-forward block, two big matrices, two-thirds of the weights, a couple more multiplies. Across the whole token the cores stream all fifteen gigs through once, do about sixty billion multiply-adds, and here's the kicker: the reading takes about eighteen milliseconds, the math about two. The cores sit idle several times longer than they work. That's memory-bound, and it lands around fifty-five tokens a second, set entirely by the bus."
+
+CUE: The 'show your work' slide for the bandwidth claim. Walk the per-layer loop once, then hammer the 18ms-vs-2ms split. Land it: weights have no reuse at batch 1, so every byte read is on the critical path. Don't recite the tally, point at 18 vs 2.
+-->
+
+---
+
+## Maral: a spare 16GB M2 Air, punching above its weight
 
 - qwen3:8b / :14b via Ollama's Anthropic endpoint, wired into Claude Code with one env block
+- **Why it clears the Pi:** the M2's unified memory runs **~100 GB/s, ~6× the Pi's ~17** (same theory as the last slide), and 16GB shared RAM (vs 8GB) actually holds an 8-14B model
 - Plot twists:
   - Tool-use was already at parity with cloud.
   - Real pain wasn't the model, it was memory bandwidth and the WiFi driver crashing under load (rude)
@@ -276,7 +381,7 @@ CUE: Corrected since I first built this, own that. Let the gif play. Sources on 
 
 <!--
 [1:30]
-SAY: "A spare sixteen-gig MacBook Air carried the whole proof of concept, and it only ran about five hours total. The big surprise: tool-use just worked. Claude Code isn't a chatbot, it drives tools through strict function-calling, and my fear was that a small model would faceplant on the mechanics, malformed JSON, the wrong tool. It didn't, it was at parity with cloud out of the box. The real pain was never the model, it was slow memory and the WiFi driver crashing under pressure."
+SAY: "A spare sixteen-gig M2 MacBook Air carried the whole proof of concept, and it only ran about five hours total. Why it cleared the bar the Pi couldn't: the M2's memory bus is about six times faster, a hundred gigabytes a second versus seventeen, and sixteen gigs of unified RAM actually fits a useful model. The big surprise: tool-use just worked. Claude Code isn't a chatbot, it drives tools through strict function-calling, and my fear was that a small model would faceplant on the mechanics, malformed JSON, the wrong tool. It didn't, it was at parity with cloud out of the box. The real pain was never the model, it was slow memory and the WiFi driver crashing under pressure."
 
 CUE: Be precise, it nailed the MECHANICS of tool-calling, separate from driving a long loop to the finish, that convergence problem is Part Three. Takeaway: sixteen gigs proves the idea, can't host it. Sets up "what do I buy?"
 -->
@@ -295,6 +400,15 @@ CUE: Be precise, it nailed the MECHANICS of tool-calling, separate from driving 
 SAY: "If you remember one config line, it's this. Qwen3 is a reasoning model, it writes a hidden think-trace before every answer. Great for chat, pure overhead for an agent doing lots of tiny tool calls, an eighty-token edit was costing six hundred. One environment variable turns it off, and you get about a three-times real-world speedup."
 
 CUE: Audience beat, "guess how much all my fancy tuning bought me, versus this one line." Everything else was a rounding error.
+
+ALSO TRIED (if asked "what else did you tune?" — the rest of the ladder, all $0, all secondary):
+- KV-cache quant: `OLLAMA_KV_CACHE_TYPE=q8_0` + flash-attn → 16k-token cache 1.2 GiB (vs ~2.4 at f16), stays 100% on GPU.
+- Context window: `OLLAMA_CONTEXT_LENGTH` 4k → 16k → 4x usable context, still fits memory.
+- Quant sweep: qwen3:8b q4 vs q8 vs 14b-q4 → q4 won for routine (17.7 tok/s, tied on correctness; bigger/higher-precision bought no quality on bounded tasks, only cost speed).
+- Prompt slim: skillOverrides + `ENABLE_TOOL_SEARCH=auto:5` → Claude Code system prompt 28k → 9.7k tokens on a cold turn.
+- Keep it warm: `OLLAMA_KEEP_ALIVE=5-10m`, `MAX_LOADED_MODELS`, `NUM_PARALLEL=1` (avoid cold reloads mid-session).
+- Three-layer think-kill: `{"think":false}` (Ollama native), `{"thinking":{"type":"disabled"}}` (Anthropic shim), `CLAUDE_CODE_DISABLE_THINKING=1` (Claude Code) — NOT on claude-cloud, Opus thinking is worth paying for.
+Each shaved a little; think:false dwarfed the lot combined.
 -->
 
 ---
@@ -490,17 +604,17 @@ CUE: The most hopeful data, lift the energy. The bigger local model beat the sma
 
 ---
 
-## Same task, three models, all playable
+## Same task, three models: all run, only one looks right
 
 ![w:1080](viz/appbench/side_by_side_2x.gif)
 
-<div class="cap">The actual games the agents built. Polish climbs left to right. coder-30b gatekept its own game behind a START menu.</div>
+<div class="cap">All three are <b>functionally</b> playable (move, shoot, no crash) — but fidelity is a separate axis. coder-30b drew the <b>wrong invader sprites</b> (and hid its game behind a START menu); next-80b rendered invaders as <b>bare rectangles</b>; only Opus 4.8 matched the real Space Invaders look.</div>
 
 <!--
 [1:00]
-SAY: "These are the actual games the three agents built, being played by a script. The polish climbs left to right and maps exactly to the table, but the point is all three are real, runnable, in the repo, and the local ones cost zero dollars."
+SAY: "These are the actual games the three agents built, played by a script. Let me be honest about 'playable.' All three run, you move, shoot, nothing crashes, that's the functional rubric, and the local ones cost zero. But fidelity is a separate axis, and it's where cloud still wins. The thirty-billion coder drew the wrong invader icons and hid the game behind a start menu; the eighty-billion rendered the invaders as plain rectangles; only Opus four-eight gave a high-fidelity match to the original. So local ties on the logic, cloud still wins the polish, even on a clean build."
 
-CUE: Show, don't tell, let it loop. Left = small local (shipped behind a START menu, its one miss); middle = eighty-billion; right = Opus, richest. Invite them to clone and play.
+CUE: Don't oversell 'all playable' — say out loud that only Opus actually looks like Space Invaders. The honest split: function is basically solved locally, asset/visual fidelity isn't yet. Let it loop, invite clone-and-play.
 -->
 
 ---
@@ -619,7 +733,7 @@ CUE: End on momentum. The router is the callback, the dead-end Pi gets redeemed.
 <!-- _class: section center -->
 # Repo + full write-up
 
-<div class="sub" style="color:#fff">github.com/jconnolly/local-llm-pi5</div>
+<div class="sub"><a href="https://github.com/jconnolly/local-llm-pi5" style="color:#fff">github.com/jconnolly/local-llm-pi5</a></div>
 
 <!--
 [0:30]

@@ -1,9 +1,16 @@
 .DS_Store
 *.swp
-local/
-secrets/
-__pycache__/
 *.pyc
+__pycache__/
 ~$*
 *.bak
-.DS_Store
+
+# secrets / local-only
+local/
+secrets/
+
+# internal session state (flight-recorder, host/SSH notes) — not for the public repo
+.claude/
+
+# large regenerable artifact (base64-inlined mobile deck, ~10MB)
+local-llm-slides-mobile.html

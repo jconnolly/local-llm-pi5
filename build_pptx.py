@@ -287,17 +287,44 @@ _title = title_slide(
     "Can a local LLM replace cloud Claude Code?",
     "Three weeks, three machines: from a Raspberry Pi to a gray-market used Mac Studio.",
     byline="John Connolly, Lead Product Engineer & tinkerer\nJune 2026",
-    notes="[0:30]\nSAY: \"Three weeks ago I asked a simple question: could I stop paying for cloud Claude Code and run the whole thing on hardware in my house? I spent the price of a used Mac Studio finding out. The short answer is a qualified yes, and the qualification is the whole talk: for bounded coding, local ties the frontier, and it's free; for open-ended repo work, you still want cloud.\"\n\nCUE: Open cold, don't read the title. Point at the TL;DR box on 'bounded' then 'open-ended.' A measurement talk, not a vibes talk.")
-_tldr_two_gif(_title)
+    notes="[0:30]\nSAY: \"Three weeks ago I asked a simple question: how much LLM work can I do on my own hardware? I spent the price of a used Mac Studio finding out. Could I get a toy conversational model running? How far could I push it? The journey is the talk: for bounded coding, a local LLM can functionally tie the frontier, and it's free; for open-ended repo work, spoiler, you still want cloud.\"\n\nCUE: Open cold, don't read the title. Point at the TL;DR box on 'bounded' then 'open-ended.' A measurement talk, not a vibes talk.")
+# --- slide 2: the "No." gag (deadpan answer to the title question) ---
+_joke = prs.slides.add_slide(LAY["TITLE_ONLY"])  # keep the DS logo
+_joke.placeholders[0].text = ""                  # no title
+_jnb = _joke.shapes.add_textbox(Inches(0), Inches(1.0), SW, Inches(2.5))
+_no_autofit(_jnb.text_frame); _jnp = _jnb.text_frame.paragraphs[0]; _jnp.alignment = PP_ALIGN.CENTER
+_jnr = _jnp.add_run(); _jnr.text = "No."
+_jnr.font.size = Pt(180); _jnr.font.bold = True; _jnr.font.color.rgb = PURPLE
+_jrp = _joke.shapes.add_picture(str(REPO / "viz" / "rageface.png"), 0, 0, height=Inches(2.0))
+_jrp.left = int((SW - _jrp.width) // 2); _jrp.top = Inches(3.65)
+_jsb = _joke.shapes.add_textbox(Inches(0), Inches(6.0), SW, Inches(0.7))
+_no_autofit(_jsb.text_frame); _jsp = _jsb.text_frame.paragraphs[0]; _jsp.alignment = PP_ALIGN.CENTER
+_jsr = _jsp.add_run(); _jsr.text = "Thank you for coming to my Ted Talk."
+_jsr.font.size = Pt(26); _jsr.font.italic = True; _jsr.font.color.rgb = DK2
+_notes(_joke, "[0:15]\nSAY: (deadpan, pause) \"...No. Thank you for coming to my Ted Talk.\" (beat, let it land, then break) \"...okay. The honest answer is more interesting than that. It's 'it depends,' and the where-it-depends is the whole talk. Let's go.\"\n\nCUE: Deliver totally straight. Long pause after 'No.' Pretend you're wrapping up, then smile and move on. Resets the room, buys goodwill for the next 30 minutes.")
 
-bullets_slide("whoami",
+# --- slide 3: "No, but seriously..." -> the real TL;DR ---
+_seriously = _title_only("No, but seriously…")
+_tldr_two_gif(_seriously)
+_notes(_seriously, "[0:40]\nSAY: \"Okay. Seriously. Here's the honest one-slide answer, and the rest of the talk is me earning it. For bounded coding, write-this-function, fix-this-bug, a local model on my own hardware is functionally equivalent to frontier cloud, it just runs about ten times slower, and it's free. For open-ended repo work, multi-file, vague bug report, sprawling context, it's not quite there, cloud still wins. Two regimes, one line each. Now let me show you how I know.\"\n\nCUE: This is the thesis. Land it slowly, point bounded then open-ended. Everything after this slide is evidence for these two lines.")
+
+_who = bullets_slide("whoami",
     [B("**Lead Product Engineer @ Data Society**, since Jan 2025"),
      B("Day-to-day: rapid prototypes, enabling engineering across the org, plugging the gaps (internal CMS & co.)"),
-     B("CS degree; shipping software since **2007**"),
-     B("Learn by doing, not reading spec sheets, which is exactly how this talk happened"),
-     B("Off the clock: OpenWRT home network, home automation, a personal-finance app, Raspberry Pi projects with my daughter"),
-     B("Recently moved my own coding from **Cursor to Claude Code** (receipts are in this deck)")],
-    "[0:40]\nSAY: \"Quick bit about me. Lead Product Engineer at Data Society, started January of last year. Day to day I build prototypes, enable engineering across the org, and plug gaps wherever they show up, a lot of that on internal CMS. CS degree, been shipping software since 2007. I learn by getting my hands on things, which is exactly how this talk happened. And I recently moved my own coding from Cursor to Claude Code, which is part of why I wanted to know if I could run it at home.\"\n\nCUE: 30-40 seconds, don't over-share. The 'learn by doing' + 'switched to Claude Code' lines set up the whole talk.")
+     B("CS degree; member of Stony Brook's **Group for Logic & Formal Semantics**; contributed to a paper in MIT's *Artificial Life* journal"),
+     B("Shipping software since **2007**. Learn by doing, not reading spec sheets (which is how this talk happened)"),
+     B("My personal projects include: OpenWRT home network, home automation, a personal-finance app, Raspberry Pi projects with my daughter"),
+     B("Not-programming: sourdough from scratch, surfing when the swell allows, and a ~10-acre subsistence farm someday (Adirondacks / Catskills / coastal Maine)"),
+     B("Recently moved my own coding from **Cursor to Claude Code** (receipts below)")],
+    "[0:40]\nSAY: \"Quick bit about me. Lead Product Engineer at Data Society, started January of last year. Day to day I build prototypes, enable engineering across the org, and plug gaps wherever they show up, a lot of that on internal CMS. CS degree, did time in Stony Brook's logic and formal semantics group, even have a paper in MIT's Artificial Life journal from way back. Shipping software since 2007, I learn by getting my hands on things, which is how this talk happened. Off the clock it's home networking, home automation, sourdough, surfing, and someday a little subsistence farm. And I recently moved my own coding from Cursor to Claude Code, part of why I wanted to know if I could run it at home. That heatmap at the bottom is my last year of dev activity, three sources stacked. It's incomplete but directionally honest.\"\n\nCUE: 40 seconds, don't over-share. Point at the heatmap on 'incomplete but directionally honest.' Sets up the whole talk.",
+    font=14)
+_wp = _who.shapes.add_picture(str(REPO / "viz" / "activity.png"), 0, 0, width=Inches(7.4))
+_wp.left = int((SW - _wp.width) // 2); _wp.top = Inches(4.95)
+_wc = _who.shapes.add_textbox(Inches(0.6), _wp.top + _wp.height + Inches(0.05), SW - Inches(1.2), Inches(0.55))
+_no_autofit(_wc.text_frame); _wcp = _wc.text_frame.paragraphs[0]; _wcp.alignment = PP_ALIGN.CENTER
+_wcr = _wcp.add_run()
+_wcr.text = "My dev activity, last 52 weeks (Claude Code / Cursor / Bitbucket, stacked). An incomplete but directionally accurate snapshot - Claude Code keeps only ~6 weeks of logs, so its band is thin on the left."
+_wcr.font.size = Pt(11); _wcr.font.color.rgb = DK2
 
 bullets_slide("Agenda, where we're going (~30m)",
     [B("**The route:** Raspberry Pi, Air, Studio"),
@@ -393,21 +420,45 @@ for _i, (_n, _label, _url) in enumerate(_SRCS):
     if _i < len(_SRCS) - 1:
         _sp = _de1p.add_run(); _sp.text = "    "; _sp.font.size = Pt(9)
 
-bullets_slide("Maral: a spare 16GB Air, punching above its weight",
+bullets_slide("Why memory bandwidth is the ceiling (one bit of theory)",
+    [B("Generating a token = **read every active weight from memory, once**. The arithmetic is trivial; the *reading* is the job."),
+     B("Speed limit, full stop: **tokens/sec ≈ memory bandwidth ÷ bytes read per token**."),
+     B("At batch 1 the chip is **starved, not busy** - idling on the memory bus (memory-bound side of the roofline). More teraflops buy nothing."),
+     B("So the Pi's **40 TOPS was never the problem** - TOPS is compute; the bus is the wall."),
+     B("Reading a 30B model (q8, ~30GB): Pi ~17 GB/s -> **<1 tok/s**; Mac Studio **819 GB/s -> ~27 tok/s**. Same model, ~48x the bus."),
+     B("**MoE escape hatch:** activate only ~3B of 30B per token -> bytes-read drops ~10x -> fast *and* smart. (Real numbers in Part 3.)")],
+    "[1:00]\nSAY: \"One bit of theory, because it explains every machine in this talk. When a model generates a token, it reads every active weight out of memory, once. The math is trivial; the reading is the whole job. So the speed limit is almost embarrassingly simple: tokens per second is roughly memory bandwidth divided by how many bytes you read per token. At batch one the chip isn't busy, it's starved, sitting idle waiting on the memory bus. That's the punchline for Part One: the Pi's forty TOPS was never the problem, because TOPS is compute, and the wall is the bus. Reading a thirty-gig model, the Pi tops out under one token a second; the Studio I end up buying does about twenty-seven, same model, forty-eight times the bandwidth. The escape hatch is mixture-of-experts: activate only a few billion of the thirty billion per token, read less, go faster without getting dumber. Real numbers in Part Three.\"\n\nCUE: Load-bearing concept slide for the hardware arc. Say it once, slowly. Point at the two numbers, don't read them. Land 'bandwidth, not teraflops.' Foreshadow MoE, don't explain it yet.",
+    font=16)
+
+bullets_slide("Anatomy of one token (30B, q4, on the Studio)",
+    [B("**Setup:** 30B params at 4-bit ≈ **15GB** of weights in unified memory; ~48 transformer layers. One token = walk all 48, once."),
+     B("**Each layer - Attention:** multiply the current token-vector by the Q/K/V/O weight matrices."),
+     B1("Memory: stream those weights once; read the KV cache (every past token) + append this token's K/V. Cores: a few multiply-adds, then idle."),
+     B("**Each layer - FFN:** multiply by the two big matrices (~2/3 of the layer's weights)."),
+     B1("Memory: stream once. Cores: multiply-add, then idle."),
+     B("Then: final vector x **LM-head** -> logits -> sample the next token."),
+     B("**Tally, one token:** read ~15GB (every weight, once) + KV cache; ~2 x params ≈ **60 GFLOP**."),
+     B1("Memory 15GB ÷ 819 GB/s ≈ **18ms**; cores ≈ **2ms** of math -> idle ~8x longer than computing -> **~55 tok/s**, set by the bus."),
+     B("Every weight: read once, one multiply-add, discarded. At batch 1 nothing to reuse -> memory-bound. Attention is a small slice; FFN dominates the bytes. (q4 reads half of q8 -> ~2x the q8 ceiling.)")],
+    "[1:15]\nSAY: \"Here's that 'read every weight once' claim made concrete. A thirty-billion model at four-bit is about fifteen gigs of weights in the Mac's unified memory, roughly forty-eight layers. To produce a single token the chip walks all forty-eight, once. Each layer, two things. Attention multiplies the current token's vector by the query, key, value, and output matrices, and reads the KV cache, the saved keys and values for every previous token, so it never recomputes the past. Then the feed-forward block, two big matrices, two-thirds of the weights. Across the token the cores stream all fifteen gigs through once, do about sixty billion multiply-adds, and the kicker: the reading takes about eighteen milliseconds, the math about two. The cores sit idle several times longer than they work. Memory-bound, about fifty-five tokens a second, set by the bus.\"\n\nCUE: The 'show your work' slide. Walk the loop once, hammer the 18ms-vs-2ms split. Weights have no reuse at batch 1, so every byte read is on the critical path.",
+    font=14)
+
+bullets_slide("Maral: a spare 16GB M2 Air, punching above its weight",
     [B("qwen3:8b / :14b via Ollama's Anthropic endpoint, wired into Claude Code with one env block"),
+     B("**Why it clears the Pi:** the M2's unified memory runs **~100 GB/s, ~6x the Pi's ~17** (same theory as the last slides), and 16GB shared RAM (vs 8GB) actually holds an 8-14B model"),
      B("Plot twists:"),
      B1("Tool-use was already at parity with cloud."),
      B1("Real pain wasn't the model, it was memory bandwidth and the WiFi driver crashing under load (rude)"),
      B("16GB is the floor, not a platform. Ran on vibes and about 5 hours of uptime."),
      B("**Takeaway:** the model was never the weak link, the hardware was. 16GB is enough to prove the idea, not to live on it.")],
-    "[1:30]\nSAY: \"A spare sixteen-gig MacBook Air carried the whole proof of concept, and it only ran about five hours total. The big surprise: tool-use just worked. Claude Code isn't a chatbot, it drives tools through strict function-calling, and my fear was that a small model would faceplant on the mechanics, malformed JSON, the wrong tool. It didn't, it was at parity with cloud out of the box. The real pain was never the model, it was slow memory and the WiFi driver crashing under pressure.\"\n\nCUE: Be precise, it nailed the MECHANICS of tool-calling, separate from driving a long loop to the finish, that convergence problem is Part Three. Takeaway: sixteen gigs proves the idea, can't host it. Sets up 'what do I buy?'")
+    "[1:30]\nSAY: \"A spare sixteen-gig M2 MacBook Air carried the whole proof of concept, and it only ran about five hours total. Why it cleared the bar the Pi couldn't: the M2's memory bus is about six times faster, a hundred gigabytes a second versus seventeen, and sixteen gigs of unified RAM actually fits a useful model. The big surprise: tool-use just worked. Claude Code isn't a chatbot, it drives tools through strict function-calling, and my fear was that a small model would faceplant on the mechanics, malformed JSON, the wrong tool. It didn't, it was at parity with cloud out of the box. The real pain was never the model, it was slow memory and the WiFi driver crashing under pressure.\"\n\nCUE: Be precise, it nailed the MECHANICS of tool-calling, separate from driving a long loop to the finish, that convergence problem is Part Three. Takeaway: sixteen gigs proves the idea, can't host it. Sets up 'what do I buy?'")
 
 bullets_slide("The single best tuning knob: kill the thinking tax",
     [B("Qwen3 emits a <think> trace before every answer."),
      B("A coding answer needing 80 tokens cost 600, 8x the work."),
      B("`CLAUDE_CODE_DISABLE_THINKING=1`   (or {\"think\": false})"),
      B("**~3x speedup from one env var.** Everything else I tuned for a week? Secondary.")],
-    "[1:30]\nSAY: \"If you remember one config line, it's this. Qwen3 is a reasoning model, it writes a hidden think-trace before every answer. Great for chat, pure overhead for an agent doing lots of tiny tool calls, an eighty-token edit was costing six hundred. One environment variable turns it off, and you get about a three-times real-world speedup.\"\n\nCUE: Audience beat, 'guess how much all my fancy tuning bought me, versus this one line.' Everything else was a rounding error.")
+    "[1:30]\nSAY: \"If you remember one config line, it's this. Qwen3 is a reasoning model, it writes a hidden think-trace before every answer. Great for chat, pure overhead for an agent doing lots of tiny tool calls, an eighty-token edit was costing six hundred. One environment variable turns it off, and you get about a three-times real-world speedup.\"\n\nCUE: Audience beat, 'guess how much all my fancy tuning bought me, versus this one line.' Everything else was a rounding error.\n\nALSO TRIED (if asked 'what else did you tune?' - the rest of the ladder, all $0, all secondary):\n- KV-cache quant: OLLAMA_KV_CACHE_TYPE=q8_0 + flash-attn -> 16k-token cache 1.2 GiB (vs ~2.4 at f16), stays 100% on GPU.\n- Context window: OLLAMA_CONTEXT_LENGTH 4k -> 16k -> 4x usable context, still fits memory.\n- Quant sweep: qwen3:8b q4 vs q8 vs 14b-q4 -> q4 won for routine (17.7 tok/s, tied on correctness; bigger/higher-precision bought no quality on bounded tasks, only cost speed).\n- Prompt slim: skillOverrides + ENABLE_TOOL_SEARCH=auto:5 -> Claude Code system prompt 28k -> 9.7k tokens on a cold turn.\n- Keep it warm: OLLAMA_KEEP_ALIVE=5-10m, MAX_LOADED_MODELS, NUM_PARALLEL=1 (avoid cold reloads mid-session).\n- Three-layer think-kill: think:false (Ollama native), thinking:disabled (Anthropic shim), CLAUDE_CODE_DISABLE_THINKING=1 (Claude Code) - NOT on claude-cloud, Opus thinking is worth paying for.\nEach shaved a little; think:false dwarfed the lot combined.")
 
 section_slide("PART TWO", "Reality check & the hardware call",
     notes="[0:05]\nSAY: \"Part two. I've got a working setup, now the uncomfortable part: how good can local actually get, and can you just buy your way to the top? Short answer, no.\"\n\nCUE: Quick beat.")
@@ -498,10 +549,10 @@ table_slide("But on open-ended building, the gap collapses",
     "[1:30]\nSAY: \"Remember the eight-times tax was specifically about debugging, chasing a failing test, where instability compounds. So I tried the opposite: build a playable Space Invaders in one HTML file, scored by an automated browser rubric. On a build-from-scratch task the gap nearly closes, the local eighty-billion gets a perfect seven out of seven, same as Opus, at twice the wall-clock and zero dollars.\"\n\nCUE: The most hopeful data, lift the energy. The bigger local model beat the smaller one on speed AND quality AND tokens. Takeaway: route by task type, build is great for local, debug-a-repo is where cloud earns its keep.",
     col_w=[3.4, 1.6, 1.8, 1.2, 1.4])
 
-image_slide("Same task, three models, all playable",
+image_slide("Same task, three models: all run, only one looks right",
     REPO / "viz" / "appbench" / "side_by_side_2x.gif", width_in=11.2,
-    sub="The actual games the three agents built, being played. Polish climbs left to right. coder-30b gatekept its own game behind a START menu.",
-    notes="[1:00]\nSAY: \"These are the actual games the three agents built, being played by a script. The polish climbs left to right and maps exactly to the table, but the point is all three are real, runnable, in the repo, and the local ones cost zero dollars.\"\n\nCUE: Show, don't tell, let it loop. Left = small local (shipped behind a START menu, its one miss); middle = eighty-billion; right = Opus, richest. Invite them to clone and play.")
+    sub="All three are functionally playable (move, shoot, no crash) - but fidelity is a separate axis. coder-30b drew the wrong invader sprites (and hid its game behind a START menu); next-80b rendered invaders as bare rectangles; only Opus 4.8 matched the real Space Invaders look.",
+    notes="[1:00]\nSAY: \"These are the actual games the three agents built, played by a script. Let me be honest about 'playable.' All three run, you move, shoot, nothing crashes, that's the functional rubric, and the local ones cost zero. But fidelity is a separate axis, and it's where cloud still wins. The thirty-billion coder drew the wrong invader icons and hid the game behind a start menu; the eighty-billion rendered the invaders as plain rectangles; only Opus four-eight gave a high-fidelity match to the original. So local ties on the logic, cloud still wins the polish, even on a clean build.\"\n\nCUE: Don't oversell 'all playable' - say out loud that only Opus actually looks like Space Invaders. The honest split: function is basically solved locally, asset/visual fidelity isn't yet. Let it loop, invite clone-and-play.")
 
 table_slide("Concrete: real DSG tasks, local vs cloud wall-clock",
     ["Task (internal-web-app stack)", "Type", "Cloud", "Local", "Slower"],
@@ -551,9 +602,12 @@ bullets_slide("What's next",
      B("Instability may be software, not model-size. The fix might be code, not a $10k box.")],
     "[1:00]\nSAY: \"This is live research, not a post-mortem. The one I'm most excited about: an auto-router running on the Pi, the same Pi that was a dead end in Part One, classifying each prompt and sending bounded work to the local Studio, hard repo work to cloud, automatically, prompt by prompt. Beyond that, cut my agents fully over to local, and add verification-loop scaffolding. Published results show guardrails took an eight-billion model from fifty-three to ninety-nine percent. So the instability might be a software problem, the fix could be code, not a ten-thousand-dollar box.\"\n\nCUE: End on momentum. The router is the callback, the dead-end Pi gets redeemed. The last reframe turns the weakness into something solvable.")
 
-title_slide("Repo + full write-up",
+_repo = title_slide("Repo + full write-up",
     "github.com/jconnolly/local-llm-pi5",
     notes="[0:30]\nSAY: \"The win is real, and the caveat is real too. Everything's in the repo, reproducible, the benchmarks are real code you can clone and run. Let's open it up.\"\n\nCUE: Say the thesis slowly. Q&A to expect: why not vLLM/MLX, why not always run the 80B, would guardrails fix it, ROI if already paying cloud. Answers in Parts Three and Four. ~30 min here = nailed the pacing.")
+# make the repo URL a real hyperlink
+for _r in _repo.placeholders[1].text_frame.paragraphs[0].runs:
+    _r.hyperlink.address = "https://github.com/jconnolly/local-llm-pi5"
 
 prs.save(str(OUT))
 print(f"saved {OUT}  ({len(prs.slides.__iter__.__self__._sldIdLst)} slides)")
