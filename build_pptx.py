@@ -534,17 +534,15 @@ bullets_slide("Caveats & gotchas",
     "[1:30]\nSAY: \"Let me name my own weaknesses first. 'Local SOTA at home' is true only if you append 'narrowly, bounded coding'; on open-ended engineering it's not. Sixteen gigs is too small to live on, ninety-six-plus is overkill for one person, and benchmarks saturate, the only one that matters is your task mix. Then the operational potholes: swap the model mid-conversation and you get an instant four-hundred error, just clear the session. Low quant quietly breaks tool-calling, run q6 not q4. Forgetting think-false is a silent tax. And a stale model was the instability, re-bench monthly.\"\n\nCUE: Q&A insurance plus the practical warnings in one. None are dealbreakers, they're potholes, now you know where they are.",
     font=16)
 
-bullets_slide("What's next (this is being measured)",
-    [B("**Auto-router on the Pi:** classify each prompt, send bounded work to the Studio + hard repo work to cloud, per-prompt. The dead-end Pi finally earns its keep."),
+bullets_slide("What's next",
+    [B("**Auto-router on the Pi:** classify each prompt, send bounded work to the Studio + hard repo work to cloud, per-prompt."),
      B("Cut my agents fully over to local; measure on real tasks (tokens, latency, TTFT, success)"),
      B("Verification-loop scaffolding: guardrails took an 8B from 53% to 99% (Forge, Show HN, news.ycombinator.com/item?id=48192383)"),
      B("Instability may be software, not model-size. The fix might be code, not a $10k box.")],
     "[1:00]\nSAY: \"This is live research, not a post-mortem. The one I'm most excited about: an auto-router running on the Pi, the same Pi that was a dead end in Part One, classifying each prompt and sending bounded work to the local Studio, hard repo work to cloud, automatically, prompt by prompt. Beyond that, cut my agents fully over to local, and add verification-loop scaffolding. Published results show guardrails took an eight-billion model from fifty-three to ninety-nine percent. So the instability might be a software problem, the fix could be code, not a ten-thousand-dollar box.\"\n\nCUE: End on momentum. The router is the callback, the dead-end Pi gets redeemed. The last reframe turns the weakness into something solvable.")
 
-title_slide("Thank you",
-    "The win is real. So is the caveat.\n"
-    "Repo + full write-up: github.com/jconnolly/local-llm-pi5\n"
-    "Benchmarks: minibench, repobench, appbench",
+title_slide("Repo + full write-up",
+    "github.com/jconnolly/local-llm-pi5",
     notes="[0:30]\nSAY: \"The win is real, and the caveat is real too. Everything's in the repo, reproducible, the benchmarks are real code you can clone and run. Let's open it up.\"\n\nCUE: Say the thesis slowly. Q&A to expect: why not vLLM/MLX, why not always run the 80B, would guardrails fix it, ROI if already paying cloud. Answers in Parts Three and Four. ~30 min here = nailed the pacing.")
 
 prs.save(str(OUT))

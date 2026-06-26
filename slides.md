@@ -581,9 +581,9 @@ CUE: Q&A insurance plus the practical warnings in one. None are dealbreakers, th
 
 ---
 
-## What's next (this is being measured)
+## What's next
 
-- **Auto-router on the Pi:** classify each prompt, send bounded work to the Studio + hard repo work to cloud, per-prompt. The dead-end Pi finally earns its keep.
+- **Auto-router on the Pi:** classify each prompt, send bounded work to the Studio + hard repo work to cloud, per-prompt.
 - Cut my agents fully over to local; measure on real tasks (tokens, latency, TTFT, success)
 - Verification-loop scaffolding: guardrails took an 8B from 53% to 99% ([Forge, Show HN](https://news.ycombinator.com/item?id=48192383))
 - Instability may be software, not model-size. The fix might be code, not a $10k box.
@@ -598,10 +598,9 @@ CUE: End on momentum. The router is the callback, the dead-end Pi gets redeemed.
 ---
 
 <!-- _class: section center -->
-# The win is real. So is the caveat.
+# Repo + full write-up
 
-<div class="sub" style="color:#fff">Repo + full write-up: github.com/jconnolly/local-llm-pi5</div>
-<div class="dim" style="color:#FFED4C">Benchmarks: minibench · repobench · appbench</div>
+<div class="sub" style="color:#fff">github.com/jconnolly/local-llm-pi5</div>
 
 <!--
 [0:30]
