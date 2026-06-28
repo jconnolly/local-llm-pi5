@@ -14,3 +14,26 @@ secrets/
 
 # large regenerable artifact (base64-inlined mobile deck, ~10MB)
 local-llm-slides-mobile.html
+
+# ---------------------------------------------------------------------------
+# home-infra / server configs — NEVER commit to this public repo.
+# These leaked a personal email, home-service map, and live API keys once;
+# block the whole class so it can't happen by accident again.
+# ---------------------------------------------------------------------------
+*Caddyfile
+*caddy*
+*compose*.yml
+*compose*.yaml
+docker-compose*
+*.plist
+
+# credentials / keys / private config
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+*.tfvars
+*secrets*
